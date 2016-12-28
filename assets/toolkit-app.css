@@ -1,0 +1,115 @@
+
+
+
+
+.tiles{
+    background-color: #f5f7f7;
+}
+.tiles .webix_template{
+    margin-top:8px;
+    padding:0 5px 0 5px;
+}
+.flex_tmp{
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row wrap;
+    -webkit-flex-flow: row wrap;
+    justify-content: space-around;
+}
+.flex_tmp .item{
+    border-radius: 2px;
+    position: relative;
+    min-width: 150px;
+    height: 105px;
+    padding-top: 10px;
+    margin: 11px 5.5px 0px 5.5px;
+    color: #fff;
+    -ms-box-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;               /* Firefox 19- */
+    -ms-flex: 1 auto;                    /* TWEENER - IE 10 */
+    -webkit-flex: 1 auto;                /* NEW - Chrome */
+    flex: 1 auto;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+.flex_tmp .item .icon{
+    padding-left:10px;
+    height: 73px;
+    padding-top:7px;
+    display: block;
+    width: 30%;
+    font-size: 77px;
+
+    color:rgba(255, 255, 255, 0.17);
+}
+.flex_tmp .item .details{
+    position: absolute;
+    top:10px;
+    right: 10px;
+    width: 150px;
+}
+.flex_tmp .item .value{
+    font-size: 27px;
+    text-align: right;
+}
+.flex_tmp .item .text{
+    width: 100%;
+    font-size: 18px;
+    text-align: right;
+}
+.tiles .orders{
+    background-color: #a693eb;
+}
+.tiles .users{
+    background-color: #63b4ea;
+}
+.tiles .item.profit{
+    background-color: #49cd81;
+}
+.tiles .feedbacks{
+    background-color: #f19b60;
+}
+
+.flex_tmp .footer{
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    font-size: 13px;
+    background:rgba(0, 0, 0, 0.05);
+}
+.flex_tmp .footer .webix_icon{
+    font-size: 14px;
+}
+
+
+
+/*** /
+.numberCircle {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
+
+
+.work-flow-cell-step1,
+.work-flow-cell-step2,
+.work-flow-cell-step3
+{
+    padding-top: 10px !important;
+}
+
+.carter-toolkit-name .webix_accordionitem_header{
+    height:50px !important;
+}
