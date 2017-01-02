@@ -85,7 +85,45 @@
     font-size: 14px;
 }
 
+/*** Checkbox ***/
 
+.center{
+    text-align:center;
+}
+.webix_hcell.center input[type=checkbox]{
+    width:22px;
+    height:22px;
+    margin-top:12px;
+}
+.webix_table_checkbox{
+    width:22px;
+    height:22px;
+    margin-top:5px;
+}
+
+*:focus {
+    outline: none;
+}
+*{
+    outline: 0 !important;
+}
+
+
+.carter-grid-meta-selection-list-header,
+.carter-grid-meta-shortlist-header{
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #adadad;
+}
+
+.carter-user-selected-list-for-validation >.webix_hcell ,
+carter-user-selected-list-of-meta-components >.webix_hcell
+{
+    padding: 0px !important;
+}
+
+
+/*****/
 
 /*** /
 .numberCircle {

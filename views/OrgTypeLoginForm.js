@@ -10,7 +10,7 @@ define([
 
     var layout =  {
         rows:[{
-            template:'Login',
+            template:'<div class="carter-login-org-select-title">Login</div>',
             height:50
         },
             {
@@ -19,15 +19,16 @@ define([
             {
                 cols:[{},{
                     id:'sourceOrgType',
+                    css:'carter-source-org-selection-radios',
                     value:'source:login',
                     view:"radio" , options:[
-                        { id:"source:login" , value:"Production" } , //the initially selected item
-                        { id:"source:test" , value:"Sanbox" }
+                        { id:"source:login" , value:"Production" , css:'carter-source-org-prod-text'} , //the initially selected item
+                        { id:"source:test" , value:"Sanbox" , css:'carter-source-org-sand-text'}
                     ] , vertical:true
                 },{}]
             },{
 
-                cols:[{},{ view:"button", css: "button_primary button_raised", id:"my_button", value:"Sign In",  inputWidth:100 ,click:function (  ) {
+                cols:[{},{ view:"button", css: "button_primary button_raised carter-source-org-sing-in-btn", id:"my_button", value:"Sign In",  inputWidth:100 ,click:function (  ) {
 
 
                     var clickedMenuKey=$$('sourceOrgType').getValue();

@@ -10,7 +10,7 @@ define([
 
 
     var layout = {rows:[
-        {template:"Source Login", height:50},
+        {template:'<div class="carter-source-login-header">Source Login</div>', height:50},
         OrgTypeLoginForm
         ]
     };

@@ -38,11 +38,17 @@ define([
         var identityServiceUrl=objSourceLoginObj.source_info.id;
         var identityOrgId=identityServiceUrl.split("/id/")[1].split("/")[0];
 
+
+        webix.proxy.indexdb.create(identityOrgId, {}, null, function (  ) {
+            
+        });
+        
+
     }else{
         cmpToRender={
             cols:[
                 CarterHomeViewLeftBar,
-                { view:"resizer"},
+                /*{ view:"resizer"},*/
                 {
                     gravity:4,
                     rows:[

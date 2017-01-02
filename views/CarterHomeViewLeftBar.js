@@ -5,13 +5,13 @@ define([
     "app",
 ],function(app){
 
-
-
+/*
+    header:'<div class="carter-toolkit-title">CARTER</div>',
+        css:'carter-toolkit-name',*/
 
     var layout = {rows:[
-        {template:"CARTER", height:50},
-        {template:"Description of Carter"},
-
+        {template:'<div class="carter-toolkit-title">CARTER</div>', height:50},
+        {template:'<div class="carter-toolkit-desc">Description of Carter</div>'}
     ]};
 
     return {

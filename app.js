@@ -17,7 +17,23 @@ define([
 		name:       "Toolkit",
 		version:    "0.1.0",
 		debug:      true,
-		start:      "/top/start"
+		start:      "/top/start",
+		appConfig:{
+			apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/'
+		},
+		urlList:{
+
+		},
+		sfdcLogins:{
+
+		},
+		sessionData:{
+
+		},
+		getApiUrl:function ( suffix ) {
+			return this.appConfig.apiServer+suffix
+
+        }
 	});
 
 	app.use(menu);

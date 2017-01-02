@@ -22,7 +22,7 @@ function sourceLogin(params)
     auth0.login( {}  );*/
 
 
-        var url="http://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
+        var url="https://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
 
         window.location=url;
 
@@ -61,7 +61,7 @@ function targetLogin(params)
 
     localStorage.setItem('target_status',JSON.stringify({appStateUrl:window.location.href,target_clicked:true}));
 
-    var url="http://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
+    var url="https://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
 
     window.location=url;
 }
