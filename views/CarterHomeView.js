@@ -9,6 +9,10 @@ define([
     "views/CarterUserObjectSelection"
 ],function(app,CarterHomeViewLeftBar,CarterHomeSourceLogin,MetaDataTypesList,CarterUserObjectSelection){
 
+    /*webix.proxy.indexdb.create('carterdb', {UserSelectionForValidate:[]}, 3, function (  ) {
+        debugger;
+
+    });*/
 
     var lsSourceLoginObj=localStorage.getItem('source_status');
     var objSourceLoginObj=JSON.parse(lsSourceLoginObj);

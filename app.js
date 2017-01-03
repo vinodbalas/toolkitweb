@@ -11,6 +11,9 @@ define([
 	core, menu, theme, locale
 ){
 
+
+
+
 	//configuration
 	var app = core.create({
 		id:         "toolkitweb",
