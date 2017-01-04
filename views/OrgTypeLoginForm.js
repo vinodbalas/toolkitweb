@@ -2,7 +2,7 @@
  * Created by prakash on 12/25/16.
  */
 define([
-    "app",
+    "app"
 ],function(app){
 
 

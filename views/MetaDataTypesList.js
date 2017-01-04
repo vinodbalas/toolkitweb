@@ -1,19 +1,15 @@
 define([
     "app",
-	"models/records"
-],function(app,records){
+    "models/AppSharedState"
+],function(app,AppSharedState){
 
 
+        var identityOrgId = AppSharedState.STATE.SOURCE_LOGIN.identityOrgId;
+        var sessionId = AppSharedState.STATE.SOURCE_LOGIN.sessionId;
+        var instanceUrl = AppSharedState.STATE.SOURCE_LOGIN.instanceUrl;
+        var loginStatus=true;
 
-
-    var loginStatus=webix.storage.local.get('source_status');
-    if(loginStatus && loginStatus.source_info.id) {
-        var sourceLoginDetails = loginStatus.source_info;
-        var identityServiceUrl = sourceLoginDetails.id;
-        var identityOrgId = identityServiceUrl.split( "/id/" )[1].split( "/" )[0];
-        var sessionId = sourceLoginDetails.access_token;
-        var instanceUrl = sourceLoginDetails.instance_url;
-    }
+        debugger;
 
 	var ui = {
         header:'<div class="carter-toolkit-title">CARTER</div>',

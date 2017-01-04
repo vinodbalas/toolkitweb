@@ -3,7 +3,12 @@
  */
 define([
     "app",
-],function(app){
+    "views/CarterHomeView",
+    "views/MetaDataTypesList",
+    "views/CarterUserObjectSelection",
+    "views/CarterLoggedInView",
+    "models/AppSharedState"
+],function(app,CarterHomeView,MetaDataTypesList,CarterUserObjectSelection,CarterLoggedInView,AppSharedState){
 
 
 

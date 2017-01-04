@@ -20,7 +20,10 @@ define([
 
 	return {
         type:"material",
-		$ui:layout
+		$ui:layout,
+        $init:function (  ) {
+            debugger;
+        }
 	};
 	
 });

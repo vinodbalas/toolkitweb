@@ -1,6 +1,10 @@
 define([
-	"app"
-],function(){
+	"app",
+    "models/AppSharedState",
+    "models/AppEventHandlers"
+],function(app,AppSharedState,AppEventHandlers){
 
-    return { type:"material",$subview:true};
+    return { $subview:true,$init:function (  ) {
+        debugger;
+    }};
 });

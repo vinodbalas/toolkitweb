@@ -27,16 +27,13 @@ define([
         },
         data: {
             items:[
-                {id:'CarterHomeView', text: "CARTER", value: '', icon: "check-square-o", css: "orders CarterHomeView"},
+                {id:'CarterNotLoggedInView', text: "CARTER", value: '', icon: "check-square-o", css: "orders CarterHomeView"},
                 {id:'codocs', text: "CODOCS", value: '', icon: "user", css: "users"},
                 {id:'analog', text: "ANALOG", value: '', icon: "quote-right", css: "feedbacks"}
             ]
         },
         onClick:{
             'item':function(e, id, trg){
-
-                //alert("Hello...");
-                //console.log();
 
                 var toolkitToLaunch=trg.id;
                 app.show("/top/"+toolkitToLaunch);

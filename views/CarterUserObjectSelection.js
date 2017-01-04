@@ -63,17 +63,39 @@ define([
                     {},  {view:"icon",width: 40, icon:"user", popup: "userLoginMenu" }
 
                 ]},
-                { height:60, borderless:true, type:"clean",cols:[
-                    { template:'<span class="numberCircle">1</span> Shortlist Metadata Components form Source Org',css:'work-flow-cell-step1'}, //here you place any component you like
-                    {template:'>',width:50},
-                    { template:'<span class="numberCircle">2</span> Preview ' ,css:'work-flow-cell-step2'},
-                    {template:'>',width:50},
-                    { template:'<span class="numberCircle">3</span> Login to Target' ,css:'work-flow-cell-step3'},
-                    {template:'>',width:50},
-                    { template:'<span class="numberCircle">4</span> Validate and Deploy' ,css:'work-flow-cell-step4'}
-                ]},
+                { height:70, borderless:true, type:"clean",cols:[
+
+                    {
+                        template:('<ul class="progressbar">' +
+                                    '<li id="step1" class="progress_step_item active">Select from Source</li>' +
+                                    '<li id="step2" class="progress_step_item">Preview </li>' +
+                                    '<li id="step3" class="progress_step_item">Retrieve </li>' +
+                                    '<li id="step4" class="progress_step_item">Login to Target</li>' +
+                                    '<li id="step5" class="progress_step_item">Validate and Deploy</li>' +
+                                '</ul>'
+                                ),
+                        css:'carter-workflow-bar',
+                        onClick:{
+                            'progress_step_item':function ( e , id , trg ) {
+
+                                //objectSelectionPreView
+                                //carterLoggedInUserWorkFlowViews
+                                //$$('objectSelectionPreView').show();
+
+                                var stepClicked=trg.id;
+                                if(stepClicked){
+                                    app.callEvent('CARTER_STEP_CLICKED', [stepClicked]);
+                                }
+
+                                //TODO
+                            }
+                        }
+                    }
+                ]
+                },
             {
                 view:"multiview" ,
+                id:'carterLoggedInUserWorkFlowViews',
                 fitBiggest:true,
                 keepViews:true,
                 cells:[
@@ -101,7 +123,14 @@ define([
                             }
                         ]
                     }
-                ]
+                ],
+                $onevent:{
+                    CARTER_STEP_CLICKED:function ( prefix ) {
+                        debugger;
+                        //app.show('top/CarterLoggedInView');
+
+                    }
+                }
             }
                 //,
                 /*{height:50,

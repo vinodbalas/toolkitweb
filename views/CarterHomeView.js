@@ -3,80 +3,22 @@
  */
 define([
     "app",
-    "views/CarterHomeViewLeftBar",
-    "views/CarterHomeSourceLogin",
-    "views/MetaDataTypesList",
-    "views/CarterUserObjectSelection"
-],function(app,CarterHomeViewLeftBar,CarterHomeSourceLogin,MetaDataTypesList,CarterUserObjectSelection){
-
-    /*webix.proxy.indexdb.create('carterdb', {UserSelectionForValidate:[]}, 3, function (  ) {
-        debugger;
-
-    });*/
-
-    var lsSourceLoginObj=localStorage.getItem('source_status');
-    var objSourceLoginObj=JSON.parse(lsSourceLoginObj);
-    //app.objSourceLoginObj=objSourceLoginObj;
-
-    var access_token=(objSourceLoginObj&& objSourceLoginObj.source_info && objSourceLoginObj.source_info.access_token)?objSourceLoginObj.source_info['access_token']:null;
-
-    var cmpToRender={};
-
-    if(access_token)
-    {
-        cmpToRender={
-            css:'bg_clean',
-            cols:[
-                MetaDataTypesList,
-                { view:"resizer"},
-                {
-                    gravity:4,
-                    rows:[
-                        CarterUserObjectSelection
-                    ]
-                }
-            ],
-            responsive:"carterHomeInitial"
-        };
-
-        var identityServiceUrl=objSourceLoginObj.source_info.id;
-        var identityOrgId=identityServiceUrl.split("/id/")[1].split("/")[0];
+    "models/AppSharedState"
+],function(app,AppSharedState){
 
 
-        webix.proxy.indexdb.create(identityOrgId, {}, null, function (  ) {
-            
-        });
-        
-
-    }else{
-        cmpToRender={
-            cols:[
-                CarterHomeViewLeftBar,
-                /*{ view:"resizer"},*/
-                {
-                    gravity:4,
-                    rows:[
-                        CarterHomeSourceLogin
-                    ]
-                }
-            ],
-            responsive:"carterHomeInitial"
-        };
-    }
 
 
     var layout = {
         type: "clean",
-        id:'carterHomeInitial',
-        rows:[
-            cmpToRender
+        $subview:true
 
-        ]
     };
 
     return {
         type:"material",
-        $ui:layout
+        $ui:layout,
+
     };
 
 });
