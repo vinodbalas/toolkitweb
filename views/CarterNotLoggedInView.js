@@ -27,12 +27,8 @@ define([
 
     return {
         $ui:cmpToRender,
-        $init:function (  ) {
-          debugger;
-        },
         $onevent:{
             LOGIN_STATUS_CHANGED:function ( prefix ) {
-                debugger;
                 app.show('top/CarterLoggedInView');
 
             }

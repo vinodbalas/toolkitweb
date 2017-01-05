@@ -3,8 +3,9 @@
  */
 
 define([
-    'app'
-],function(app){
+    'app',
+    "models/AppSharedState"
+],function(app,AppSharedState){
 
 
     var toolkits={
@@ -27,7 +28,7 @@ define([
         },
         data: {
             items:[
-                {id:'CarterNotLoggedInView', text: "CARTER", value: '', icon: "check-square-o", css: "orders CarterHomeView"},
+                {id:'CarterNotLoggedInView', loggedInView:'CarterLoggedInView', text: "CARTER", value: '', icon: "check-square-o", css: "orders CarterHomeView"},
                 {id:'codocs', text: "CODOCS", value: '', icon: "user", css: "users"},
                 {id:'analog', text: "ANALOG", value: '', icon: "quote-right", css: "feedbacks"}
             ]
@@ -35,7 +36,17 @@ define([
         onClick:{
             'item':function(e, id, trg){
 
+                debugger;
+
                 var toolkitToLaunch=trg.id;
+                if(toolkitToLaunch==="CarterNotLoggedInView"){
+
+                   var loggedIn=AppSharedState.isLoggedIn('SOURCE_LOGIN');
+                   if(loggedIn){
+                       toolkitToLaunch="CarterLoggedInView";
+                   }
+
+                }
                 app.show("/top/"+toolkitToLaunch);
             }
         }

@@ -4,7 +4,44 @@ define([
     "models/AppEventHandlers"
 ],function(app,AppSharedState,AppEventHandlers){
 
-    return { $subview:true,$init:function (  ) {
-        debugger;
-    }};
+
+/** View Template
+    define([], function(){
+        return {
+            $ui:{
+            ui config
+            },
+            $oninit:function(view, $scope){
+
+            //each time when a view is created
+            after creating
+
+            $scope.on(app, "detailsModeChanged", function(mode){
+                view.showColumnBatch(mode);
+            });
+
+
+            },
+            $onurlchange:function(config, url, $scope){
+
+            after navigation
+
+            },
+            $ondestroy:function(){
+
+            before destroy
+            },
+            //Shortcut t
+            $onevent:{
+            <CUSTOM_EVENT_NAME>:handler
+
+            },
+            //Define Custom Methods
+            getActiveRecord:function(){
+            }
+        }
+    });
+/**/
+
+    return { $subview:true};
 });

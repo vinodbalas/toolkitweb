@@ -15,6 +15,7 @@ define([
 
     var layout = {
         type:'plain' ,
+        id:'userSelectedMetaDataComponentsView',
         rows:[
             {
                 type:'line' ,

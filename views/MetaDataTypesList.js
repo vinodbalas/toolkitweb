@@ -52,6 +52,7 @@ define([
                             //debugger;
                             this.hideOverlay();
                             if (!this.count()) {
+                                app.show('top/CarterNotLoggedInView');
                                 this.showOverlay( "Sorry, there is no data. Please logout and login again. " );
                             }
 
