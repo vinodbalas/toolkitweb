@@ -91,7 +91,7 @@ if(tgtObj) {
 
         }
 
-        localStorage.setItem("TARGET_LOGIN" , JSON.stringify( { source_clicked:true , appStateUrl:tgtUrl,target_info:oauthResponse,loggedInTime:new Date()  } ) );
+        localStorage.setItem("TARGET_LOGIN" , JSON.stringify( { target_clicked:true , appStateUrl:tgtUrl,source_info:oauthResponse,loggedInTime:new Date()  } ) );
 
 
         window.opener.Toolkit.handleLoginResult("TARGET_LOGIN");

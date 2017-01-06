@@ -4,8 +4,11 @@
 define([
     "app",
     "views/CarterSourceMetaDataComponentsList",
-    "views/CarterUserSelectedMetaDataComponents"
-],function(app,CarterSourceMetaDataComponentsList,CarterUserSelectedMetaDataComponents){
+    "views/CarterUserSelectedMetaDataComponents",
+    "models/AppSharedState",
+    "models/CarterRetrieveValidateDeployProcess"
+
+],function(app,CarterSourceMetaDataComponentsList,CarterUserSelectedMetaDataComponents,AppSharedState,CarterRetrieveValidateDeployProcess){
 
 
 
@@ -126,7 +129,19 @@ define([
                 ],
                 $onevent:{
                     CARTER_STEP_CLICKED:function ( prefix ) {
-                        debugger;
+
+                        if(prefix==="step3") {
+                           // debugger;
+                            //TODO Promise API
+                            CarterRetrieveValidateDeployProcess.doRetrieve( function ( finalData ) {
+                                //debugger;
+                                CarterRetrieveValidateDeployProcess.doDeploy( function ( finalData ) {
+                                    //debugger;
+                                } )
+                            } );
+                        }else if(prefix==="step2") {
+                            window.targetLogin({orgTypeKey:'login'});
+                        }
                         //app.show('top/CarterLoggedInView');
 
                     }

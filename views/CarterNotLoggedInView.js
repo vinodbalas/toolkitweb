@@ -29,7 +29,11 @@ define([
         $ui:cmpToRender,
         $onevent:{
             LOGIN_STATUS_CHANGED:function ( prefix ) {
-                app.show('top/CarterLoggedInView');
+
+                //debugger;
+                if(prefix==="SOURCE_LOGIN") {
+                    app.show( 'top/CarterLoggedInView' );
+                }
 
             }
         }};

@@ -2,7 +2,8 @@ define(["app"],function(app){
 
 	var state={
 	    SOURCE_LOGIN:{},
-	    TARGET_LOGIN:{}
+	    TARGET_LOGIN:{},
+        validateAsyncProcessId:null
     };
 
 	function  loadLoginState ( prefix ) {
@@ -31,8 +32,8 @@ define(["app"],function(app){
 
     return {
         STATE:state ,
+        loadLoginState:loadLoginState,
         isLoggedIn:function ( prefix ) {
-            debugger;
             var me=this;
             var returnValue = false;
             var loginStatus = me.STATE[prefix];
@@ -40,6 +41,15 @@ define(["app"],function(app){
                 returnValue = true;
             }
             return returnValue;
+        },
+        getOrgLogInInfo:function ( prefix ) {
+
+            if(!prefix){
+                prefix="SOURCE_LOGIN";
+            }
+            var me=this;
+            var orgLoginInfo = me.STATE[prefix];
+            return orgLoginInfo;
         }
     }
 

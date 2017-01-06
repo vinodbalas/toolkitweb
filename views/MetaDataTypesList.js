@@ -4,9 +4,11 @@ define([
 ],function(app,AppSharedState){
 
 
-        var identityOrgId = AppSharedState.STATE.SOURCE_LOGIN.identityOrgId;
-        var sessionId = AppSharedState.STATE.SOURCE_LOGIN.sessionId;
-        var instanceUrl = AppSharedState.STATE.SOURCE_LOGIN.instanceUrl;
+        var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
+
+        var identityOrgId = sourceOrgInfo.identityOrgId;
+        var sessionId = sourceOrgInfo.sessionId;
+        var instanceUrl = sourceOrgInfo.instanceUrl;
         var loginStatus=true;
 
         debugger;
@@ -91,6 +93,7 @@ define([
 	return {
 		$ui: ui,
 		$oninit:function(view){
+		    debugger;
 		}
 	};
 	

@@ -99,12 +99,16 @@ define([
                         if ( !state ) {
 
                             var sourceItem = sourceGrid.getItem( row );
-                            sourceItem.selectedByUser = false;
-                            sourceGrid.unselect( row );
+                            if(sourceItem) {
+                                sourceItem.selectedByUser = false;
+                                sourceGrid.unselect( row );
+                            }
 
                             var selectedItem=userSelectionGrid.getItem(row);
-                            selectedItem.selectedByUser = false;
-                            userSelectionGrid.remove( row );
+                            if(selectedItem) {
+                                selectedItem.selectedByUser = false;
+                                userSelectionGrid.remove( row );
+                            }
 
                             /*me.unselect( row );
 

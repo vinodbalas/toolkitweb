@@ -24,7 +24,7 @@
 
     ]};
 
-    var toParams=Object.keys(objectsByType).map(function ( key ) {
+    Object.keys(objectsByType).map(function ( key ) {
         var selectedType={members:objectsByType[key],name:key};
         paramsObj.types.push(selectedType);
     });
