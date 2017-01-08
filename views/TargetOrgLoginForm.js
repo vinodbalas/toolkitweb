@@ -5,17 +5,34 @@ define([
     "app",
 ],function(app){
 
-
     var layout =  {
-        rows:[{
-            template:'<div class="carter-login-org-select-title"> Target Login</div>',
-            height:50
-        },
+        type:'plain',
+        css:'carter_login_target_org',
+        rows:[
             {
+                borderless:true,
+                height:50,
+                cols:[
+                    {},
+                    {
+                        borderless:true,
+                        type:'plain',
+                        template:'<div class="carter_login_target_org_select_title">Select Org Type to login to Target</div>',
+                        css:'carter_login_target_org_panel_header'
+                    },
+                    {}
+                ]
+            },
+            {
+                css:'carter_login_target_org_select_org',
+                type:'plain',
+
                 template:''
             },
             {
-                cols:[{},{
+
+                cols:[{},{},{
+                    borderless:true,
                     id:'targetOrgType',
                     css:'carter-target-org-selection-radios',
                     value:'target:login',
@@ -26,7 +43,7 @@ define([
                 },{}]
             },{
 
-                cols:[{},{ view:"button", css: "button_primary button_raised carter-target-org-sing-in-btn", id:"my_button", value:"Sign In",  inputWidth:100 ,click:function (  ) {
+                cols:[{},{},{ view:"button", css: "button_primary button_raised carter-target-org-sing-in-btn", id:"target_org_sing_in_btn", value:"Sign In",  inputWidth:100 ,click:function (  ) {
 
 
                     var clickedMenuKey=$$('targetOrgType').getValue();
@@ -36,16 +53,13 @@ define([
                     var orgTypeKey=loginHostTypeArray[1];
 
 
-                    //sourceLoginProduction
-                    if(loginTypeKey==='target'){
+                     if(loginTypeKey==='target'){
                         window.targetLogin({orgTypeKey:orgTypeKey});
                     }
-                    /*else if(loginTypeKey==='source'){
-                        window.sourceLogin({orgTypeKey:orgTypeKey});
-                    }*/
                 }},{}]
             },
             {
+                css:'carter_login_target_org_bottom_row_space',
                 template:''
             }
         ]

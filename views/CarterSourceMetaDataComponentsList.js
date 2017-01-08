@@ -7,27 +7,28 @@ define([
     "views/MetaDataTypesList",
     "views/CarterUserObjectSelection",
     "views/CarterLoggedInView",
-    "models/AppSharedState"
-],function(app,CarterHomeView,MetaDataTypesList,CarterUserObjectSelection,CarterLoggedInView,AppSharedState){
-
+    "models/AppSharedState",
+    "models/AppDataFormattingUtils"
+],function(app,CarterHomeView,MetaDataTypesList,CarterUserObjectSelection,CarterLoggedInView,AppSharedState,AppDataFormattingUtils){
 
 
     var layout = {
-        type:'line' ,
+        type:'head' ,
         rows:[
             {
                 template:'Metadata Selection From Source' ,
-                height:35 ,
+                height:25 ,
                 css:'carter-grid-meta-selection-list-header'
             } ,
             {
                 height:35 , type:"line" , cols:[
                 {
                     view:"combo" ,
+                    icon:'user',
                     id:'filterbylastmodifiedcombo',
                     type:"material" ,
                     css:'carter-filter-modified-by' ,
-                    placeholder:"Modified By" ,
+                    placeholder:"Last Modified By" ,
                     borderless:true ,
                     options:[
                     ]
@@ -38,7 +39,7 @@ define([
                     id:'filterByLmdFrom',
                     borderless:true ,
                     css:'carter-filter-datepicker-from' ,
-                    placeholder:"Last Modified From: dd/mm/yyy hh:mm" ,
+                    placeholder:"From: dd-mm-yyy hh:mm" ,
                     timepicker:true
                 } ,
                 {
@@ -47,12 +48,14 @@ define([
                     id:'filterByLmdTo',
                     borderless:true ,
                     css:'carter-filter-datepicker-to' ,
-                    placeholder:"To:  dd/mm/yyy hh:mm" ,
+                    placeholder:"To: dd-mm-yyy hh:mm" ,
                     timepicker:true
                 },
                  {
                  view:'button',
-                 css:"webix_icon fa-filter",
+                 type:"icon",
+                 icon:"filter",
+                 css:'components_list_filter_btn',
                  width:40,
                  click:function (  ) {
                      var sourceGrid=$$('sourceGrid')
@@ -123,6 +126,8 @@ define([
                 scrollAlignY:true ,
                 checkboxRefresh:true ,
                 select:"row" ,
+                rowLineHeight:35,
+                rowHeight:35,
                 gravity:5 ,
                 headerRowHeight:45 ,
                 multiselect:true ,
@@ -144,16 +149,14 @@ define([
                     } ,
                     {
                         id:"name" ,
-                        header:["Meta Data Components" , { content:"textFilter" }] ,
+                        header:["Meta Data Components" , {
+                            content:"textFilter" ,
+                            compare:AppDataFormattingUtils.carterDefaultSearchComparator
+                        }] ,
                         fillspace:2 ,
-                        template:function ( obj ) {
-
-                            //return "<span style='color:green;'>"+obj.votes+"</span>";
-                            var myformat = webix.Date.dateToStr( "%m/%d/%y %H:%i:%s" );
-                            //myformat(obj.start)
-                            return "<div class='carter-source-grid-row-for-selection'> <span class='arter-source-grid-row-obj-name'>" + obj.name + "</span> <span class='arter-source-grid-row-obj-modby'>" + obj.modifiedBy + "</span>  <span class='arter-source-grid-row-obj-mod-date'>" + myformat( new Date( obj.modifiedOn ) ) + "</span></div>"
-                        }
-                    } ,
+                        sort:'string' ,
+                        template:AppDataFormattingUtils.carterDefaultColumnTemplateFn
+                    },
                     { id:"modifiedBy" , header:"" , hidden:true } ,
                     { id:"modifiedOn" , header:"" , hidden:true } ,
                     { id:"itemType" , header:"" , hidden:true } ,
@@ -164,6 +167,7 @@ define([
                     if ( !this.count() ) { //if no data is available
                         webix.extend( this , webix.OverlayBox );
                         this.showOverlay( "<div style='...'>There is no data</div>" );
+                        this.refresh();
                     }
                 } ,
                 on:{
@@ -287,7 +291,7 @@ define([
                     //debugger;
                     var start = data.page * data.size;
                     var end = start + data.size;
-                    var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + "</div> ";
+                    var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " +common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last() +"</div> ";
                     return html;
                 }
                 //group:5

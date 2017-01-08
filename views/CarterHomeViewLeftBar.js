@@ -5,13 +5,19 @@ define([
     "app",
 ],function(app){
 
-/*
-    header:'<div class="carter-toolkit-title">CARTER</div>',
-        css:'carter-toolkit-name',*/
 
-    var layout = {rows:[
-        {template:'<div class="carter-toolkit-title">CARTER</div>', height:50},
-        {template:'<div class="carter-toolkit-desc">Description of Carter</div>'}
+    var layout = {
+        type:'plain',
+        css:'carter_not_logged_in_left_container',
+        rows:[
+        {type:'plain',
+
+            borderless:true,
+            template:'<div class="carter-toolkit-title">CARTER</div>', height:50,css:'carter_not_logged_in_left_title'},
+        {type:'plain',
+            borderless:true,
+            template:'<div class="carter-toolkit-desc">' +
+            '“The bottom line is this: Peace will come to Israel and the Middle East only when the Israeli government is willing to compadmap for Peace, with ohes of a majotments--by accepting its legal borders. All Arab neighbors must pledge to honor Israel\'s right to global ae Israeli confiscation and colonization of Palestinian territories."</div>',css:'carter_not_logged_in_left_description_container'}
     ]};
 
     return {

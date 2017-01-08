@@ -22,7 +22,7 @@ define([
         type:"material",
 		$ui:layout,
         $init:function (  ) {
-            debugger;
+            //debugger;
         }
 	};
 	

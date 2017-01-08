@@ -9,15 +9,33 @@ define([
 
 
     var layout =  {
-        rows:[{
-            template:'<div class="carter-login-org-select-title">Login</div>',
-            height:50
-        },
+        type:'plain',
+        css:'carter_login_source_org',
+        rows:[
             {
+                borderless:true,
+                height:50,
+                cols:[
+                    {},
+                    {
+                        borderless:true,
+                        type:'plain',
+                        template:'<div class="carter_login_source_org_select_title">Select Org Type to login to source</div>',
+                        css:'carter_login_source_org_panel_header'
+                    },
+                    {}
+                ]
+            },
+            {
+                css:'carter_login_source_org_select_org',
+                type:'plain',
+
                 template:''
             },
             {
-                cols:[{},{
+
+                cols:[{},{},{
+                    borderless:true,
                     id:'sourceOrgType',
                     css:'carter-source-org-selection-radios',
                     value:'source:login',
@@ -28,7 +46,7 @@ define([
                 },{}]
             },{
 
-                cols:[{},{ view:"button", css: "button_primary button_raised carter-source-org-sing-in-btn", id:"my_button", value:"Sign In",  inputWidth:100 ,click:function (  ) {
+                cols:[{},{},{ view:"button", css: "button_primary button_raised carter-source-org-sing-in-btn", id:"my_button", value:"Sign In",  inputWidth:100 ,click:function (  ) {
 
 
                     var clickedMenuKey=$$('sourceOrgType').getValue();
@@ -47,6 +65,7 @@ define([
                 }},{}]
             },
             {
+                css:'carter_login_source_org_bottom_row_space',
                 template:''
             }
         ]

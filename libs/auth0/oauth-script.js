@@ -48,8 +48,9 @@ if(sourceObj) {
         localStorage.setItem( "SOURCE_LOGIN" , JSON.stringify( { source_clicked:true ,appStateUrl:curLoc, source_info:oauthResponse,loggedInTime:new Date() } ) );
 
 
-
-        window.opener.Toolkit.handleLoginResult("SOURCE_LOGIN");
+        if(window.opener) {
+            window.opener.Toolkit.handleLoginResult( "SOURCE_LOGIN" );
+        }
         window.close();
         //window.location = appStateUrl;
     }
@@ -93,8 +94,9 @@ if(tgtObj) {
 
         localStorage.setItem("TARGET_LOGIN" , JSON.stringify( { target_clicked:true , appStateUrl:tgtUrl,source_info:oauthResponse,loggedInTime:new Date()  } ) );
 
-
-        window.opener.Toolkit.handleLoginResult("TARGET_LOGIN");
+        if(window.opener) {
+            window.opener.Toolkit.handleLoginResult( "TARGET_LOGIN" );
+        }
         window.close();
 
     }

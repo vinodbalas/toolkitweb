@@ -9,12 +9,12 @@ define(["app"],function(app){
 	function  loadLoginState ( prefix ) {
 
         var loginStatus=webix.storage.local.get(prefix);
-        if(loginStatus && loginStatus.source_info.id) {
+        if(loginStatus && loginStatus.source_info && loginStatus.source_info.id) {
             var sourceLoginDetails = loginStatus.source_info;
             var identityServiceUrl = sourceLoginDetails.id;
             var identityOrgId = identityServiceUrl.split( "/id/" )[1].split( "/" )[0];
-            var sessionId = sourceLoginDetails.access_token;
-            var instanceUrl = sourceLoginDetails.instance_url;
+            var sessionId = sourceLoginDetails["access_token"];
+            var instanceUrl = sourceLoginDetails["instance_url"];
 
             state[prefix]={
                 identityOrgId:identityOrgId,
@@ -43,11 +43,11 @@ define(["app"],function(app){
             return returnValue;
         },
         getOrgLogInInfo:function ( prefix ) {
-
+            var me=this;
             if(!prefix){
                 prefix="SOURCE_LOGIN";
             }
-            var me=this;
+
             var orgLoginInfo = me.STATE[prefix];
             return orgLoginInfo;
         }

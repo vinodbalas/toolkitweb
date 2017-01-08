@@ -9,11 +9,14 @@ define([
 ],function(app,CarterHomeView,CarterHomeViewLeftBar,CarterHomeSourceLogin){
 
     var cmpToRender={
+        type:'plain',
         id:'carterNotLoggedInView',
+        css:'carter_not_logged_in_container',
         cols:[
             CarterHomeViewLeftBar,
             /*{ view:"resizer"},*/
             {
+                type:'plain',
                 gravity:4,
                 rows:[
                     CarterHomeSourceLogin

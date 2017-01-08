@@ -42,6 +42,7 @@ define([
         }
     });
 /**/
+        webix.detachEvent(webix.debug_load_event);
 
     return { $subview:true};
 });

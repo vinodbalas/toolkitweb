@@ -27,10 +27,15 @@ define([
             return finalParams;
 
         },
-        doUntilFinalStatus:function ( url, resolveDefOnLastCall,statusFieldToCheck, finalStatusValue, params,processPrefix, pollInterval ,finalCallback) {
+        doUntilFinalStatus:function ( url, resolveDefOnLastCall,statusFieldToCheck, finalStatusValue, params,processPrefix, pollInterval ,finalCallback,progressStatusCallback) {
 
 
             var stepCounter=1;
+
+            function  upDateProgress (progressStatus  ) {
+
+                progressStatusCallback && progressStatusCallback(progressStatus);
+            }
             function runProcess(processUrl){
 
 
@@ -46,21 +51,29 @@ define([
                                 console.log( processPrefix + " Response has:" + statusFieldToCheck + " with Value:" + finalStatusValue );
                                 console.log( processPrefix + " Response Counter Coming to end:" );
                                 finalCallback && finalCallback( jsonResponse );
+
+                                upDateProgress(responseFinalFieldValue);
                                 //resolveDefOnLastCall.resolve('');with final response
                             } else {
                                 console.log( processPrefix + " Response does not have:" + statusFieldToCheck + " with Value:" + finalStatusValue );
                                 //setInterval(, pollInterval)
+
+                                upDateProgress(responseFinalFieldValue);
                                 runProcess( processUrl )
                             }
+
                         }
+                        //upDateProgress('Still Working...');
                         stepCounter++;
                     }catch (err){
                         console.log(processPrefix+"Failed ... Step:"+stepCounter,err);
+                        upDateProgress('Failed...');
                         finalCallback && finalCallback( {msg:'parsing response failed',data:resData} );
                     }
                 });
                 promise.fail(function(err){
                     console.log(processPrefix+"Failed ... Step:"+stepCounter,err);
+                    progressStatusCallback && progressStatusCallback('Failed...');
                     finalCallback && finalCallback({status:false,msg:'failed to get final status'});
 
                 });
@@ -84,7 +97,7 @@ define([
             return statusUrl;
         },
 
-        doRetrieve:function ( finalStatusCallback ) {
+        doRetrieve:function ( finalStatusCallback ,progressStatusCallback) {
 
             //var stopPromise = new Promise(function () {});
 
@@ -100,14 +113,19 @@ define([
                     var asyncProcessId =jsonResponse.id;
                     AppSharedState.validateAsyncProcessId=asyncProcessId;
                     var retrieveStatusUrl=me.getRetrieveStatusUrl(asyncProcessId);
-                    me.doUntilFinalStatus( retrieveStatusUrl , null , "status" , "Succeeded" , {} , ":RetrieveFromSource:",null, finalStatusCallback );
+                    me.doUntilFinalStatus( retrieveStatusUrl , null , "status" , "Succeeded" , {} , ":RetrieveFromSource:",null, finalStatusCallback,progressStatusCallback );
                 }else
                 {
+                    finalStatusCallback && finalStatusCallback('Failed to Get Async Id');
+                    progressStatusCallback && progressStatusCallback('Failed to Get Async Id');
+
                     console.log("No Data returned");
                 }
 
             });
             promise.fail(function(err){
+                finalStatusCallback && finalStatusCallback('Failed to Get Async Id');
+                progressStatusCallback && progressStatusCallback('Failed to Get Async Id');
                 console.log("No Data returned");
             });
 

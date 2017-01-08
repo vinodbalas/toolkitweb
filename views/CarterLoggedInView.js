@@ -11,7 +11,7 @@ define([
 
     var cmpToRender={
         id:'carterLoggedInview',
-        css:'bg_clean',
+        type:'line',
         cols:[
             MetaDataTypesList,
             { view:"resizer"},

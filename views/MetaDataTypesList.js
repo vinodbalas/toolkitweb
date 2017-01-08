@@ -11,8 +11,6 @@ define([
         var instanceUrl = sourceOrgInfo.instanceUrl;
         var loginStatus=true;
 
-        debugger;
-
 	var ui = {
         header:'<div class="carter-toolkit-title">CARTER</div>',
         css:'carter-toolkit-name',
@@ -30,6 +28,7 @@ define([
                     css:'carter-available-meta-data-types-list',
                     scroll:'platform-y',
                     adjust:true ,
+                    pager:'pagerMetaDataTypeList',
                     scrollAlignY:true,
                     select:"row" ,
                     multiselect:false ,
@@ -54,7 +53,7 @@ define([
                             //debugger;
                             this.hideOverlay();
                             if (!this.count()) {
-                                app.show('top/CarterNotLoggedInView');
+                               // app.show('top/CarterNotLoggedInView');
                                 this.showOverlay( "Sorry, there is no data. Please logout and login again. " );
                             }
 
@@ -84,6 +83,17 @@ define([
                         }
                     },
                     url:loginStatus?app.config.getApiUrl('getMetadataObjects?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }'):""
+                },{
+                    view:"pager" , id:"pagerMetaDataTypeList" ,
+                    animate:true ,
+                    size:30 ,
+                    height:25 ,
+                    template:function ( data , common ) {
+                        var start = data.page * data.size;
+                        var end = start + data.size;
+                        var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> "+common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last()+"</div> ";
+                        return html;
+                    }
                 }
             ]
         }

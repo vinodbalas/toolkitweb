@@ -170,7 +170,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     position: relative;
     text-align: center;
     text-transform: uppercase;
-    color: #7d7d7d;
+    color: #f19700;
     z-index: 3;
 }
 .progressbar li:before {
@@ -179,7 +179,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     content: counter(step);
     counter-increment: step;
     line-height: 27px;
-    border: 2px solid #7d7d7d;
+    border: 2px solid #f19700;
     display: block;
     text-align: center;
     margin: 0 auto 1px auto;
@@ -191,12 +191,16 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     height: 2px;
     content: '';
     position: absolute;
-    background-color: #7d7d7d;
+    background-color: #f19700;
     top: 33%;
     left: -41%;
     z-index: -1;
 }
 
+
+.review_btn_container {
+    border: 1px solid #DDDDDD;
+}
 
 .progressbar li:first-child:after {
     content: none;
@@ -213,7 +217,360 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 
 
 .carter-workflow-bar .webix_template {
-    padding-top: 3px !important;
+    padding-top: 9px !important;
 }
 
 /***/
+.carter_not_logged_in_left_container,
+.carter_not_logged_in_left_description_container
+{
+
+    background: #000000 !important;
+}
+.carter_not_logged_in_left_title {
+    background: #F19700 !important;;
+    color: #f7f2f2;
+}
+
+.carter-toolkit-title
+{
+    line-height: 37px;
+    text-align: center;
+
+}
+
+.carter_app_toolbar{
+
+    background: #EBEBEB !important;
+}
+.user_login_profile{
+    color: #ffffff;
+    background: #000000;
+    padding-left: 16px;
+    margin-top: -2px;
+}
+.user_login_profile_icon{
+    padding-right: 5px;
+    font-size: 24px;
+}
+
+.user_login_profile_arrow{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.carter-toolkit-desc
+{
+    line-height: 37px;
+}
+
+.carter_not_logged_in_center_container_title
+{
+ background: #EBEBEB !important;
+
+}
+
+.carter_not_logged_in_center_container_title {
+    background: #EBEBEB !important;
+    line-height: 34px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.carter_login_source_org_select_title{
+    line-height: 34px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.webixbutton:hover{
+    background-color: red !important;
+}
+
+
+
+.webix_accordionitem .webix_accordionitem_header .webix_accordionitem_button:before {
+    content: '\f0c9';
+}
+
+
+
+.webix_accordionitem .webix_accordionitem_header .webix_accordionitem_button {
+    color: #ffffff;
+    background-image: none;
+    font-family: FontAwesome;
+    font-size: 24px;
+    text-align: center;
+    width: 24px;
+    height: 45px;
+    margin: 0 10.5px 0 10.5px;
+    float: left;
+}
+
+.webix_accordionitem_header {
+
+    background: #f19700;
+}
+
+.carter-toolkit-title {
+    line-height: 46px;
+    text-align: center;
+}
+
+.webix_resizer_vx {
+
+    /*width: 2px !important;*/
+
+}
+.webix_placeholder,
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+   font-size: 11px !important;
+}
+.webix_placeholder,
+::-moz-placeholder { /* Firefox 19+ */
+    font-size: 11px !important;
+}
+.webix_placeholder,
+:-ms-input-placeholder { /* IE 10+ */
+    font-size: 11px !important;
+}
+.webix_placeholder,
+:-moz-placeholder { /* Firefox 18- */
+    font-size: 11px !important;
+}
+
+.webix_vscroll_y{
+
+    /*width: 9px !important;*/
+}
+
+.webix_ss_vscroll_header{
+    display: none !important;
+}
+
+.webix_input_icon{
+    background-color: #f19700 !important;
+}
+
+.webix_view .webix_pager
+{
+    background: #FFFFFF !important;
+}
+
+.webix_ss_header td {
+     border-right: 0px solid #EBEBEB;
+    border-bottom: 0px solid #EBEBEB;
+}
+
+.webix_ss_header, .webix_ss_header TD, .webix_ss_vscroll_header, .webix_dd_drag_column {
+    font-size: 15px;
+    background: #EBEBEB !important;
+}
+
+.webix_ss_sort_asc, .webix_ss_sort_desc{
+
+    width: 15px !important;
+}
+
+.webix_ss_sort_desc:before {
+    content: '\f15e' !important;
+}
+
+.webix_ss_sort_asc:before {
+    content: "\f15d" !important;
+}
+
+.toolkit-grid-header-meta-type-text{
+
+
+    font-size: 18px !important;
+}
+.review_step_btn .webix_el_box .webix_img_btn{
+    color: #FFFFFF;
+}
+
+
+.target_logout_menu_icon {
+    padding-right: 5px;
+    font-size: 30px;
+    color: #f19700;
+}
+
+.target_logout_menu_icon ,
+.source_logout_menu_icon
+{
+    padding-right: 5px;
+    font-size: 30px;
+    color: #f19700;
+}
+.target_logout_menu_text,
+.source_logout_menu_text
+{
+    padding-left: 6px;
+    position: absolute;
+}
+.webix_dtable .webix_ss_filter input {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #f19700 !important;
+}
+
+.webix_el_search input, .webix_el_text input, .webix_el_combo input, .webix_el_colorpicker input, .webix_el_datepicker input {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #f19700 !important;
+    font-size: 11px !important;
+}
+
+
+.webix_el_richselect .webix_inp_static, .webix_el_datepicker .webix_inp_static, .webix_el_colorpicker .webix_inp_static, .webix_el_dbldatepicker .webix_inp_static {
+    -webkit-border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+    padding-right: 28px !important;
+    white-space: nowrap !important;
+    border: 1px solid #f19700 !important;
+}
+
+
+.webix_accordionitem_header{
+    border: 0px !important;
+}
+.webix_el_radio .webix_custom_radio {
+    border: 1px solid #f19700;
+    background-color: #FEFEFE;
+}
+
+.webix_el_radio .webix_custom_radio:before {
+    background-color: #f19700;
+}
+
+
+
+.webix_el_button input, .webix_el_toggle input, .webix_el_button button, .webix_el_toggle button, .webixbutton {
+
+    border: 1px solid #f19700;
+    color: #000000;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.webixtype_base, .webixtype_prev, .webixtype_next, .webixbutton {
+    background: #f19700;
+}
+
+
+.components_list_filter_btn .webix_el_box .webix_img_btn {
+    line-height: 29px;
+    border: 1px solid #f19700;
+    padding: 0px;
+    margin: 0px !important;
+    text-align: center;
+    background: #f19700 !important;
+}
+
+.components_list_filter_btn .webix_el_box .webix_img_btn .webix_icon_btn{
+    color: #FFFFFF;
+}
+
+.webix_column > div.webix_cell_select, .webix_column > div.webix_column_select, .webix_column > div.webix_row_select {
+    color: #ffffff;
+    background: #666666;
+}
+.webix_view .webix_pager_item:hover {
+    background-color: #ffffff;
+}
+.webix_view .webix_pager_item {
+    padding: auto 6px;
+    /* font-family: 'PT Sans', Tahoma; */
+    border: 0px solid #f19700;
+    outline: none;
+    color: #000000;
+    background: #ffffff;
+    font-size: 15px;
+    padding: 0px;
+}
+
+
+.carter-user-login-menu-list .webix_list_item:hover ,
+.carter-user-login-menu-list .webix_list_item:hover
+{
+    background: #ebebeb !important;
+}
+.carter-source-grid-row-obj-name{
+    font-size: 12px;
+    line-height: 26px;
+}
+.carter-grid-sub-info
+{
+    margin-top: -16px;
+    font-size: 10px;
+    height: 10px;
+    float: right;
+}
+
+
+.carter-source-grid-row-obj-modby{
+    font-size: 11px;
+}
+
+.carter-source-grid-row-obj-mod-date
+{
+    padding-left: 10px;
+}
+
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% { opacity: 0; }
+}
+
+
+
+.centering_outer{
+    width:100% !important;
+
+    /* Firefox */
+    display:-moz-box !important;
+    -moz-box-pack:center !important;
+    -moz-box-align:center !important;
+
+    /* Safari and Chrome */
+    display:-webkit-box !important;
+    -webkit-box-pack:center !important;
+    -webkit-box-align:center !important;
+
+    /* W3C */
+    display:box !important;
+    box-pack:center !important;
+    box-align:center !important;
+}
+.centering_inner{
+    width:100% !important;
+}
+
+
+.retrieve_progress_bar_container,
+.retrieve_progress_status_text_container,
+.retrieve_progress_status_btn_container
+{
+
+    border-right: 0px !important;
+}
+.retrieve_progress_bar_container .webix_template,
+.retrieve_progress_status_text_container .webix_template,
+.retrieve_progress_status_btn_container .webix_template
+{
+
+
+    display:-webkit-box !important;
+    -webkit-box-pack:center !important;
+    -webkit-box-align:center !important;
+    /* W3C */
+    display:box !important;
+    box-pack:center !important;
+    box-align:center !important;
+}
