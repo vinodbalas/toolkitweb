@@ -29,15 +29,13 @@ define([
         data: {
             items:[
                 {id:'CarterNotLoggedInView', loggedInView:'CarterLoggedInView', text: "CARTER", value: '', icon: "check-square-o", css: "orders CarterHomeView"},
-                {id:'codocs', text: "CODOCS", value: '', icon: "user", css: "users"},
-                {id:'analog', text: "ANALOG", value: '', icon: "quote-right", css: "feedbacks"}
+                {id:'Auditor', text: "AUDITOR", value: '', icon: "user", css: "users"},
+                {id:'Analyser', text: "ANALYSER", value: '', icon: "quote-right", css: "feedbacks"},
+                {id:'Documenter', text: "DOCUMENTER", value: '', icon: "quote-right", css: "feedbacks"}
             ]
         },
         onClick:{
             'item':function(e, id, trg){
-
-                debugger;
-
                 var toolkitToLaunch=trg.id;
                 if(toolkitToLaunch==="CarterNotLoggedInView"){
 
@@ -46,6 +44,12 @@ define([
                        toolkitToLaunch="CarterLoggedInView";
                    }
 
+                }
+                // Bad hack, discuss with Prakash
+                if(toolkitToLaunch == 'Auditor'){
+                  toolkitToLaunch = toolkitToLaunch + "/" + trg.id
+                }else if(toolkitToLaunch == 'Analyser'){
+                  toolkitToLaunch = toolkitToLaunch + "/" + trg.id
                 }
                 app.show("/top/"+toolkitToLaunch);
             }
