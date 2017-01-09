@@ -7,7 +7,7 @@ define([
 			return render_sub_stack(this, path);
 		if (this._subs[path])
 			return render_sub_stack(this._subs[path], config);
-		
+
 
 		var scope = get_app_scope(this);
 		var index = this.index;
@@ -62,7 +62,7 @@ define([
 				str.push(":");
 			str.push(key+"="+obj[key]);
 		}
-		
+
 		return str.join("");
 	}
 
@@ -76,7 +76,7 @@ define([
 			this.on = create_temp_event;
 			this.show = show;
 			this.module = ui;
-			
+
 			destroy.call(this);
 
 			//collect init and destory handlers
@@ -92,7 +92,7 @@ define([
 				subview.$scope = this;
 
 			create.call(this, subview);
-		
+
 			//prepare layout for view loading
 			if (this.$layout){
 				var subname = this.name+":subview";
@@ -114,7 +114,7 @@ define([
 	function parse_parts(url){
 		//split url by "/"
 		var chunks = url.split("/");
-		
+
 		//use optional default layout page
 		if (!chunks[0]){
 			if (app.config.layout)
@@ -146,7 +146,7 @@ define([
 					result = params;
 				}
 			}
-			
+
 			//store parsed values
 			chunks[i] = { page: (pos > -1 ? test.substr(0, pos) : test), params:result };
 		}
@@ -170,7 +170,7 @@ define([
 		if (obj.$subview){
 			if (typeof obj.$subview == "string"){
 				var tname = (config.name + ":subview:"+obj.$subview);
-				var tobj = config._subs[obj.$subview] = { 
+				var tobj = config._subs[obj.$subview] = {
 					parent:this,
 					root: tname,
 					sub:subui,
@@ -189,7 +189,7 @@ define([
 		if (obj.$init){
 			return obj;
 		}
-	
+
 		target = target || (webix.isArray(obj)?[]:{});
 		for (var method in obj){
 			if(obj[method] && typeof obj[method] == "object" && !webix.isDate(obj[method])){
@@ -236,6 +236,12 @@ define([
 					webix.ui.resize();
 				}
 			};
+
+			// Bad hack, discuss with Prakash
+			if(url == "Auditor" || url == "Analyser" || url == "Documenter"){
+				url = url + "/" + url;
+			}
+
 			require(["views/" + url], function(ui){
 				if (ui.then)
 					ui.then(next_step);
@@ -297,7 +303,7 @@ define([
 			if (title)
 				title.innerHTML = app.config.name;
 
-			
+
 			var node = app.config.container;
 			webix.html.addCss(node, "webixappstart");
 			setTimeout(function(){
@@ -423,7 +429,7 @@ define([
 
 		if (ui.id)
 			view = $$(ui.id);
-			
+
 		if (!view){
 			//create linked windows
 			for (var i=0; i<temp._windows.length; i++)
@@ -452,7 +458,7 @@ define([
 		//create linked windows
 		for (var i=0; i<this._windows.length; i++)
 			this.ui(this._windows[i]);
-		
+
 		this._ui = webix.ui(subview, this.root);
 
 		if (this.parent)
