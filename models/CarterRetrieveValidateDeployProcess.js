@@ -31,6 +31,7 @@ define([
 
 
             var stepCounter=1;
+            var intervalId=null;
 
             function  upDateProgress (progressStatus  ) {
 
@@ -51,6 +52,9 @@ define([
                                 console.log( processPrefix + " Response has:" + statusFieldToCheck + " with Value:" + finalStatusValue );
                                 console.log( processPrefix + " Response Counter Coming to end:" );
                                 finalCallback && finalCallback( jsonResponse );
+                                if(intervalId) {
+                                    clearInterval( intervalId );
+                                }
 
                                 upDateProgress(responseFinalFieldValue);
                                 //resolveDefOnLastCall.resolve('');with final response
@@ -59,7 +63,8 @@ define([
                                 //setInterval(, pollInterval)
 
                                 upDateProgress(responseFinalFieldValue);
-                                runProcess( processUrl )
+                                runProcess( processUrl );
+
                             }
 
                         }
@@ -69,12 +74,18 @@ define([
                         console.log(processPrefix+"Failed ... Step:"+stepCounter,err);
                         upDateProgress('Failed...');
                         finalCallback && finalCallback( {msg:'parsing response failed',data:resData} );
+                        if(intervalId) {
+                            clearInterval( intervalId );
+                        }
                     }
                 });
                 promise.fail(function(err){
                     console.log(processPrefix+"Failed ... Step:"+stepCounter,err);
                     progressStatusCallback && progressStatusCallback('Failed...');
                     finalCallback && finalCallback({status:false,msg:'failed to get final status'});
+                    if(intervalId) {
+                        clearInterval( intervalId );
+                    }
 
                 });
 
@@ -111,7 +122,8 @@ define([
                 var jsonResponse=resData.json();
                 if(jsonResponse) {
                     var asyncProcessId =jsonResponse.id;
-                    AppSharedState.validateAsyncProcessId=asyncProcessId;
+                    AppSharedState.retrieveAsyncProcessId=asyncProcessId;
+                    console.log("Retrieve Status Id:"+asyncProcessId);
                     var retrieveStatusUrl=me.getRetrieveStatusUrl(asyncProcessId);
                     me.doUntilFinalStatus( retrieveStatusUrl , null , "status" , "Succeeded" , {} , ":RetrieveFromSource:",null, finalStatusCallback,progressStatusCallback );
                 }else
@@ -151,37 +163,36 @@ define([
             var sessionId = sourceOrgInfo.sessionId;
             var instanceUrl = sourceOrgInfo.instanceUrl;
 
-            if(!asyncProcessId)
-            {
-                asyncProcessId=AppSharedState.validateAsyncProcessId;
-            }
             //if deploy
             var statusUrl=app.config.getApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"');
             return statusUrl;
         },
 
-        doDeploy:function ( deployFinalStatusCallback ) {
+        doDeploy:function ( deployFinalStatusCallback ,deployProgressCallback) {
 
             //var stopPromise = new Promise(function () {});
 
             var me=this;
-            var asyncId=AppSharedState.validateAsyncProcessId;
+            var asyncId= AppSharedState.retrieveAsyncProcessId;
             var deployUrl=me.getDeployUrl(asyncId);
 
 
             var promise = webix.ajax(deployUrl);
             promise.then(function(resData){
 
-                var jsonResponse=null;//resData.json();
-               // if(jsonResponse) {
-                    var asyncProcessId =null;
+
+                var jsonResponse=resData.json();
+                if(jsonResponse) {
+                    var asyncProcessId = jsonResponse.id;
+                    AppSharedState.deployStatusAsyncId = asyncProcessId;
+                    console.log("Deploy Status Id:"+asyncProcessId);
                    // var deployStatusUrl=this.getDeployStatusUrl(AppSharedState.validateAsyncProcessId);
-                    var deployStatusUrl=me.getDeployStatusUrl(asyncProcessId || AppSharedState.validateAsyncProcessId);
-                    me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,deployFinalStatusCallback);
-               /* }else
+                    var deployStatusUrl=me.getDeployStatusUrl(asyncProcessId || AppSharedState.deployStatusAsyncId);
+                    me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,deployFinalStatusCallback,deployProgressCallback);
+                }else
                 {
                     console.log("No Data returned");
-                }*/
+                }
 
             });
             promise.fail(function(err){
@@ -191,15 +202,72 @@ define([
 
         },
         getDeployUrl:function ( asyncProcessId ) {
+            var targetOrgInfo=AppSharedState.getOrgLogInInfo("TARGET_LOGIN");//TODO TARGET_LOGIN
+
+            var trgIdentityOrgId = targetOrgInfo.identityOrgId;
+            var trgSessionId = targetOrgInfo.sessionId;
+            var trgInstanceUrl = targetOrgInfo.instanceUrl;
+
+            var retrieveUrl=app.config.getApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"false"}');
+
+            return retrieveUrl;
+        },
+
+        getValidateStatusUrl:function ( asyncProcessId ) {
+
             var sourceOrgInfo=AppSharedState.getOrgLogInInfo("TARGET_LOGIN");//TODO TARGET_LOGIN
 
             var identityOrgId = sourceOrgInfo.identityOrgId;
             var sessionId = sourceOrgInfo.sessionId;
             var instanceUrl = sourceOrgInfo.instanceUrl;
 
-            var retrieveUrl=app.config.getApiUrl('deploy?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
+            //if deploy
+            var statusUrl=app.config.getApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
+            return statusUrl;
+        },
+        getValidateUrl:function (asyncProcessId  ) {
+
+            var targetOrgInfo=AppSharedState.getOrgLogInInfo("TARGET_LOGIN");//TODO TARGET_LOGIN
+
+            var trgIdentityOrgId = targetOrgInfo.identityOrgId;
+            var trgSessionId = targetOrgInfo.sessionId;
+            var trgInstanceUrl = targetOrgInfo.instanceUrl;
+
+            var retrieveUrl=app.config.getApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
 
             return retrieveUrl;
+
+
+        },
+        doValidate:function ( validateFinalStatusCallback ,validateProgressCallback ) {
+            //var stopPromise = new Promise(function () {});
+
+            var me=this;
+            var asyncId=AppSharedState.retrieveAsyncProcessId;
+            var validateUrl=me.getValidateUrl(asyncId);
+
+
+            var promise = webix.ajax(validateUrl);
+            promise.then(function(resData){
+
+                var jsonResponse=resData.json();
+                if(jsonResponse) {
+                    var asyncProcessId = jsonResponse.id;
+                    AppSharedState.validateAsyncProcessId = asyncProcessId;
+                    console.log("validateAsyncProcessId Status Id:"+asyncProcessId);
+                    // var deployStatusUrl=this.getDeployStatusUrl(AppSharedState.validateAsyncProcessId);
+                    var deployStatusUrl=me.getValidateStatusUrl(asyncProcessId || AppSharedState.validateAsyncProcessId);
+                    me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,validateFinalStatusCallback,validateProgressCallback);
+                }else
+                {
+                    console.log("No Data returned");
+                }
+
+            });
+            promise.fail(function(err){
+                console.log("No Data returned");
+            });
+
         }
 
 

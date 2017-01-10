@@ -201,7 +201,36 @@ define([
                         type:'line',
                         id:'validateAndDeployToTargetView',
                         rows:[
-                            {template:'Deploy to Target'}
+                            {
+                                view:'button' ,
+                                label:'Validate',
+                                click:function () {
+
+
+                                    CarterRetrieveValidateDeployProcess.doValidate( function ( finalData ) {
+                                            console.log("Validate : Final Status:"+finalData)
+                                        } ,
+                                        function ( statusData ) {
+                                            console.log("Validate : Progress:"+statusData)
+                                        });
+
+                                }
+                            },
+                            {
+                                view:'button' ,
+                                label:'Deploy',
+                                css:'components_list_filter_btn' ,
+                                click:function () {
+
+                                    CarterRetrieveValidateDeployProcess.doDeploy( function ( finalData ) {
+                                            console.log("Deploy : Final Status:"+finalData)
+                                        } ,
+                                        function ( statusData ) {
+                                            console.log("Deploy : Progress:"+statusData)
+                                        });
+
+                                }
+                            }
                         ]
                     }
                 ],
@@ -269,6 +298,16 @@ define([
                                 retrieveProgressTextTemplate.define("data",dataTobeUpdated);
                                 retrieveProgressTemplate.refresh();
                                 retrieveProgressTextTemplate.refresh();
+
+
+                                debugger;
+                              /*  CarterRetrieveValidateDeployProcess.doDeploy( function ( finalData ) {
+                                    //debugger;
+                                } ,
+                                function ( statusData ) {
+                                    console.log("Progress:"+statusData)
+                                });
+                                */
 
                                 //TODO Update Buttons
                                 //Show hide Buttons for Retrieve.

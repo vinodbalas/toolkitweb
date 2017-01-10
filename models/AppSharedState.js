@@ -3,7 +3,10 @@ define(["app"],function(app){
 	var state={
 	    SOURCE_LOGIN:{},
 	    TARGET_LOGIN:{},
-        validateAsyncProcessId:null
+        retrieveAsyncProcessId:null,
+        validateAsyncProcessId:null,
+        deployAsyncProcessId:null
+
     };
 
 	function  loadLoginState ( prefix ) {
