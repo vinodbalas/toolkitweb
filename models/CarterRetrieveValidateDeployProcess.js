@@ -121,7 +121,7 @@ define([
 
                 var jsonResponse=resData.json();
                 if(jsonResponse) {
-                    var asyncProcessId =jsonResponse.id;
+                    var asyncProcessId =jsonResponse.data.id;
                     AppSharedState.retrieveAsyncProcessId=asyncProcessId;
                     console.log("Retrieve Status Id:"+asyncProcessId);
                     var retrieveStatusUrl=me.getRetrieveStatusUrl(asyncProcessId);
