@@ -5,8 +5,9 @@ define([
     "app",
     "views/CarterHomeView",
     "views/CarterHomeViewLeftBar",
-    "views/CarterHomeSourceLogin"
-],function(app,CarterHomeView,CarterHomeViewLeftBar,CarterHomeSourceLogin){
+    "views/CarterHomeSourceLogin",
+    "models/AppSharedState"
+],function(app,CarterHomeView,CarterHomeViewLeftBar,CarterHomeSourceLogin,AppSharedState){
 
     var cmpToRender={
         type:'plain',
@@ -34,6 +35,9 @@ define([
             LOGIN_STATUS_CHANGED:function ( prefix ) {
 
                 //debugger;
+                AppSharedState.loadLoginState('SOURCE_LOGIN');
+                AppSharedState.loadLoginState('TARGET_LOGIN');
+
                 if(prefix==="SOURCE_LOGIN") {
                     app.show( 'top/CarterLoggedInView' );
                 }

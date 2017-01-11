@@ -104,7 +104,7 @@ define([
         getRetrieveStatusUrl:function ( asyncProcessId ) {
 
             //if deploy
-            var statusUrl=app.config.getApiUrl('retrieveStatus?asyncProcessId="'+asyncProcessId+'"');
+            var statusUrl=app.config.getCarterApiUrl('retrieveStatus?asyncProcessId="'+asyncProcessId+'"');
             return statusUrl;
         },
 
@@ -149,7 +149,7 @@ define([
             var sessionId = sourceOrgInfo.sessionId;
             var instanceUrl = sourceOrgInfo.instanceUrl;
 
-            var retrieveUrl=app.config.getApiUrl('retrieve?sourceSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&deployRequest='+escape(finalParams));
+            var retrieveUrl=app.config.getCarterApiUrl('retrieve?sourceSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&deployRequest='+escape(finalParams));
 
             return retrieveUrl;
         },
@@ -164,7 +164,7 @@ define([
             var instanceUrl = sourceOrgInfo.instanceUrl;
 
             //if deploy
-            var statusUrl=app.config.getApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"');
+            var statusUrl=app.config.getCarterApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"');
             return statusUrl;
         },
 
@@ -208,7 +208,7 @@ define([
             var trgSessionId = targetOrgInfo.sessionId;
             var trgInstanceUrl = targetOrgInfo.instanceUrl;
 
-            var retrieveUrl=app.config.getApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"false"}');
+            var retrieveUrl=app.config.getCarterApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"false"}');
 
             return retrieveUrl;
         },
@@ -222,7 +222,7 @@ define([
             var instanceUrl = sourceOrgInfo.instanceUrl;
 
             //if deploy
-            var statusUrl=app.config.getApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
+            var statusUrl=app.config.getCarterApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
             return statusUrl;
         },
         getValidateUrl:function (asyncProcessId  ) {
@@ -233,7 +233,7 @@ define([
             var trgSessionId = targetOrgInfo.sessionId;
             var trgInstanceUrl = targetOrgInfo.instanceUrl;
 
-            var retrieveUrl=app.config.getApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
+            var retrieveUrl=app.config.getCarterApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
 
             return retrieveUrl;
 

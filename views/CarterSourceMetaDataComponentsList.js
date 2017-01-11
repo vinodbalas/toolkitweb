@@ -268,7 +268,7 @@ define([
                         //for json data
                         var userSelectionGrid = $$( 'userSelectionsForValidation' );
                         //var selectedItemTypeComponentIds=userSelectionGrid.collectValues('id');
-                        data = data.map( function ( item ) {
+                        data = data.data.map( function ( item ) {
                             var itemType = me.config.currentType;
                             item.itemType = itemType
                             var itemId = itemType + "~~" + item["name"];

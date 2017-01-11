@@ -22,7 +22,10 @@ define([
 		debug:      true,
 		start:      "/top/start",
 		appConfig:{
-			apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/'
+			apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/',
+			CARTER:{
+                apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/'
+			}
 		},
 		urlList:{
 
@@ -36,6 +39,10 @@ define([
 		getApiUrl:function ( suffix ) {
 			return this.appConfig.apiServer+suffix
 
+        },
+		getCarterApiUrl:function ( suffix ) {
+
+            return this.appConfig.CARTER.apiServer+suffix
         }
 	});
 

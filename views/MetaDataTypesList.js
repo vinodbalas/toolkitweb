@@ -19,20 +19,49 @@ define([
         headerAlt:'<div class="carter-header-collapsed"> <span class="carter-header-collapsed-title">CARTER </span>&nbsp;-&nbsp;<span class="carter-header-collapsed-user-text">Click to Expand and see Available Meta Data Types</span> </div>',
         type:'material',
         body:{
+            css:'carter-left-bar-container',
             rows:[
-                /*{ template:'Meta Data Types' , height:35 , css:'bg_clean' } ,*/
-                /*{ view:"search", placeholder:"Search here",height:35 ,id:'metaDataTypeListSearch' },*/
+                { template:'Meta Data Types' , height:28 ,css:'carter-left-bar-container meta-data-type-title' } ,
+
+                {
+                    view:"pager" , id:"pagerMetaDataTypeList" ,
+                    css:'pager-meta-data-type-list',
+                    animate:true ,
+                    size:30 ,
+                    height:25 ,
+                    template:function ( data , common ) {
+                        var start = data.page * data.size;
+                        var end = start + data.size;
+                        var html = " <div class='metadata-type-list-pager' style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> "+common.first() + common.prev() + "<span class='pager-info-text'>" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "</span>" + common.next() + common.last()+"</div> ";
+                        return html;
+                    }
+                },
+                { view:"search",
+                    icon:"search", placeholder:"Search here",height:55 ,id:'metaDataTypeListSearch',
+                    css:'carter-left-bar-container meta-data-search-input',
+                    on:{
+                        onTimedKeyPress:function (  ) {
+                           var value = this.getValue().toLowerCase();
+
+                            $$("metaDataTypesList").filter(function(obj){ //here it filters data!
+                                return obj['xmlName'].toLowerCase().indexOf(value)>=0;
+                            })
+                        }
+                    }
+                },
                 {
                     view:"datatable" ,
                     id:'metaDataTypesList',
-                    css:'carter-available-meta-data-types-list',
+                    css:'carter-left-bar-container carter-available-meta-data-types-list',
                     scroll:'platform-y',
                     adjust:true ,
+                    fillspace:true,
+                    hover:"meta-data-type-list-hover",
                     pager:'pagerMetaDataTypeList',
                     scrollAlignY:true,
                     select:"row" ,
                     multiselect:false ,
-                    header:true ,
+                    header:false ,
                     columns:[
                         { id:"xmlName" , header:["<div class='toolkit-grid-header-meta-type-text'>Available Meta Data Types</div>",
                                                     {
@@ -46,6 +75,8 @@ define([
                     //data:collection,
                     on:{
                         onBeforeLoad:function(){
+                            AppSharedState.loadLoginState('SOURCE_LOGIN');
+                            AppSharedState.loadLoginState('TARGET_LOGIN');
                            // debugger;
                             this.showOverlay("Loading...");
                         },
@@ -66,7 +97,7 @@ define([
                             var me=this;
                            // alert("you have clicked an item");
                             var selectedType=me.getItem(id).xmlName;
-                            var metaDataTypesComponentsListUrl=loginStatus?app.config.getApiUrl('getMetadataObjectDetails?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" } &metadataType="'+selectedType+'"'):""
+                            var metaDataTypesComponentsListUrl=loginStatus?app.config.getCarterApiUrl('getMetadataObjectDetails?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" } &metadataType="'+selectedType+'"'):""
                             //sourceGrid
                             $$('sourceGrid').clearAll();
                             //$$('sourceGrid').
@@ -82,18 +113,7 @@ define([
                            //TODO debugger;
                         }
                     },
-                    url:loginStatus?app.config.getApiUrl('getMetadataObjects?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }'):""
-                },{
-                    view:"pager" , id:"pagerMetaDataTypeList" ,
-                    animate:true ,
-                    size:30 ,
-                    height:25 ,
-                    template:function ( data , common ) {
-                        var start = data.page * data.size;
-                        var end = start + data.size;
-                        var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> "+common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last()+"</div> ";
-                        return html;
-                    }
+                    url:''
                 }
             ]
         }
@@ -103,7 +123,17 @@ define([
 	return {
 		$ui: ui,
 		$oninit:function(view){
-		    debugger;
+
+
+
+		    var metaDataTypesListUrl=app.config.getCarterApiUrl('getMetadataObjects?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }');
+
+            var result = webix.ajax().get(metaDataTypesListUrl, function (text) {
+                debugger;
+                $$("metaDataTypesList").parse(text);
+            });
+
+            $$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
 		}
 	};
 	

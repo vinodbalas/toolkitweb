@@ -443,7 +443,10 @@ define([
         $ui:layout,
         type:"material",
         $oninit:function(view, $scope){
-            $$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
+           // $$('userSelectionsForValidation').data.sync($$('sourceGrid'));
+
+
+
 
         }
     };
