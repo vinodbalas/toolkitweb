@@ -4,7 +4,6 @@ define([
     "models/AppEventHandlers"
 ],function(app,AppSharedState,AppEventHandlers){
 
-
 /** View Template
     define([], function(){
         return {
@@ -44,5 +43,5 @@ define([
 /**/
         webix.detachEvent(webix.debug_load_event);
 
-    return { $subview:true};
+    return { $subview:true,css:'abstract_app'};
 });

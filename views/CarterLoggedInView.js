@@ -11,6 +11,7 @@ define([
 
     var cmpToRender={
         id:'carterLoggedInview',
+        css:'carter_logged_in_container carter_app_wrapper',
         type:'line',
         cols:[
             MetaDataTypesList,
@@ -27,6 +28,7 @@ define([
 
     var layout = {
         type: "clean",
+        css:'carter_logged_in_view carter_abstract_container',
         id:'carterHomeInitialLoggedInview',
         rows:[
             cmpToRender
@@ -37,6 +39,7 @@ define([
 
     return {
         type:"material" ,
+        css:'carter_logged_in_view_top carter_abstract_container_top',
         $ui:layout
     }
 });

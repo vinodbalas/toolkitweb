@@ -6,12 +6,12 @@ define([
 
 
     var layout = {
-        type: "clean",
+        css:'abstract_container',
         rows:[
-            {template:'Title',height:'50px'},
-            {template:'Sub Title',height:'50px'},
+            {template:'Forceput',height:'50px',css:'app_container_toolkits_landing_title'},
+            {template:'Salesforce Toolkit Services',height:'50px',css:'app_container_toolkits_landing_sub_title'},
             ToolkitsList,
-			{$subview:true}
+			{$subview:true,css:'app_container_toolkits_container'}
 
         ]
     };
@@ -19,8 +19,8 @@ define([
 
 
 	return {
-        type:"material",
 		$ui:layout,
+        css:'abstract_container_top',
         $init:function (  ) {
             //debugger;
         }

@@ -8,7 +8,72 @@ define([
 ],function(app,AppSharedState){
 
 
-    var toolkits={
+
+    var toolkitsList=[
+        {id:'CarterNotLoggedInView', loggedInView:'CarterLoggedInView', name: "CARTER"},
+        {id:'Auditor', name: "AUDITOR", },
+        {id:'Analyser', name: "ANALYSER", },
+        {id:'Documenter', name: "DOCUMENTER", }
+    ];
+
+    function createToolkitItem(toolKitInfo){
+
+        var toolkitConfig=JSON.stringify(toolKitInfo);
+        return {
+            minWidth:200, height:300,
+            css:'toolkit_item',
+            rows:[{
+                onClick:{
+                    'toolkit_item_wrapper':function(e, id, trg){
+
+                        AppSharedState.loadLoginState('SOURCE_LOGIN');
+                        AppSharedState.loadLoginState('TARGET_LOGIN');
+                        var toolkitToLaunch=trg.id;
+                        if(toolkitToLaunch==="CarterNotLoggedInView"){
+
+                            var loggedIn=AppSharedState.isLoggedIn('SOURCE_LOGIN');
+                            if(loggedIn){
+                                toolkitToLaunch="CarterLoggedInView";
+                            }
+
+                        }
+                        // Bad hack, discuss with Prakash
+                        if(toolkitToLaunch == 'Auditor'){
+                            toolkitToLaunch = toolkitToLaunch + "/" + trg.id
+                        }else if(toolkitToLaunch == 'Analyser'){
+                            toolkitToLaunch = toolkitToLaunch + "/" + trg.id
+                        }
+                        app.show("/top/"+toolkitToLaunch);
+                    }
+                },
+                template:('<div id="'+toolKitInfo.id+'" class="toolkit_item_wrapper">' +
+                '<div class="toolkit_item_img_wrapper">' +
+                '<img class="toolkit_item_img" src="assets/images/design/white_circle.png" alt="'+toolKitInfo['name']+'">' +
+                '<div class="toolkit_item_desc"  >' + toolKitInfo['name'] + '</div>' +
+                '</div>' +
+                '</div>')
+            }]
+        }
+    };
+
+
+var toolKitUiList=toolkitsList.map(function ( toolkitConfig ) {
+
+    return createToolkitItem(toolkitConfig);
+
+});
+
+    var toolkits = {
+        align:'center',
+        css:'toolkit_item_container',
+        view:"flexlayout",
+        cols:toolKitUiList
+    };
+
+    //var toolkits=flex;
+
+
+      /*  {
         height: 136,
         id:'toolkits-list',
         css: "tiles",
@@ -54,12 +119,12 @@ define([
                 app.show("/top/"+toolkitToLaunch);
             }
         }
-    };
+    };*/
 
 
 
     return {
-        type:"material",
+        type:"toolkits_list",
         $ui:toolkits
     }
 

@@ -12,7 +12,7 @@ define([
         var loginStatus=true;
 
 	var ui = {
-        header:'<div class="carter-toolkit-title">CARTER</div>',
+        header:'<div class="carter-toolkit-title">FORCEPUT</div>',
         css:'carter-toolkit-name',
         width:310,
         collapsed:false,

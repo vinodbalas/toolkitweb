@@ -1,9 +1,71 @@
 
 body{
     font-family: Gotham !important;
+    background: url(images/design/body_bg.jpg) !important;
 }
 
 
+.webix_view {
+ background: transparent;
+}
+
+.abstract_container {
+    overflow-y: auto;
+}
+
+
+
+.app_container_toolkits_landing_title {
+    text-align: center;
+    padding-top: 130px !important;
+    padding-bottom: 30px !important;
+    line-height: 20px;
+    color: #faa541;
+    font-size: 30px !important;
+    text-transform: uppercase;
+    font-family: 'Gotham';
+    font-weight: bold;
+    border: none;
+    border-width: 0px !important;
+    letter-spacing: 4px;
+}
+
+
+.app_container_toolkits_landing_sub_title {
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 30px;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-width: 0px !important;
+    padding-bottom: 85px !important;
+}
+
+/* Responsive Tiles */
+.toolkit_item_img_wrapper {
+    text-align: center;
+}
+
+.toolkit_item_img {
+    max-height: 190px;
+    max-width: 190px;
+}
+.toolkit_item_desc {
+    text-align: center;
+    padding-top: 30px;
+    color: #faa541;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.carter_logged_in_view
+{
+    background: #ffffff;
+}
+/*Responsive */
 .tiles{
     background-color: #f5f7f7;
 }
