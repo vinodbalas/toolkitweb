@@ -1,9 +1,10 @@
 define(["app"],function(app){
 
 
-    var defaultDateFormatFn=webix.Date.dateToStr( "%m-%d-%y %H:%i:%s" );
+    var defaultDateFormatFn=webix.Date.dateToStr( "%m/%d/%y" );//"%m-%d-%y %H:%i:%s"
+    //AppDataFormattingUtils.carterDefaultSearchComparator
 
-    function filterCarterMetaDataTypeComponents(value, filter, obj){
+    function filterCarterMetaDataTypeComponents(filter, obj){
         filter=filter?filter.toLowerCase():"";
         var name=obj.name?obj.name.toString().toLowerCase():"";
         var modBy=obj.modifiedBy?obj.modifiedBy.toLowerCase():"";
@@ -13,6 +14,32 @@ define(["app"],function(app){
         if (modBy.indexOf(filter)!=-1) return true;
         if (mOn.indexOf(filter)!=-1) return true;
 
+        return false;
+    }
+
+    function filterByDateRange(startDate, endDate, obj){
+
+        var objModifiedOn=moment(obj.modifiedOn)//.getDate();
+        if(!objModifiedOn.isValid()){
+
+            return false;
+
+        }else if(!startDate && !endDate)
+        {
+            return false
+
+        }else{
+            //var objDate=new Date( objModifiedOn );
+            //var mObjDate=moment(objDate);
+            objModifiedOn=moment(obj.modifiedOn).startOf('day');
+            var mStartDate=moment(startDate).startOf('day');
+            var mEndDate=moment(endDate).endOf('day');
+
+            if(objModifiedOn.isSameOrAfter(mStartDate) && objModifiedOn.isSameOrBefore(mEndDate)){
+                return true;
+            }
+
+        }
         return false;
     }
 
@@ -35,7 +62,8 @@ define(["app"],function(app){
 	var returnObject={
 	    defaultDateFormatFunction:defaultDateFormatFn,
         carterDefaultSearchComparator:filterCarterMetaDataTypeComponents,
-        carterDefaultColumnTemplateFn:carterDefaultColumnTemplate
+        carterDefaultColumnTemplateFn:carterDefaultColumnTemplate,
+        filterByDateRange:filterByDateRange,
     };
 
 

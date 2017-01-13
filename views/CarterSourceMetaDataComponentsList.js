@@ -13,25 +13,47 @@ define([
 
 
     var layout = {
-        type:'head' ,
+        type:'plain' ,
         rows:[
             {
-                template:'Metadata Selection From Source' ,
+                template:'Source' ,
                 height:25 ,
                 css:'carter-grid-meta-selection-list-header'
             } ,
             {
+                view:"pager" , id:"pagerA" ,
+                animate:true ,
+                size:15 ,
+                height:32 ,
+                template:function ( data , common ) {
+                    //debugger;
+                    var start = data.page * data.size;
+                    var end = start + data.size;
+                    var html = " <div class='usr-sel-metadata-type-list-pager' style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " +common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last() +"</div> ";
+                    return html;
+                }
+                //group:5
+            },
+            {
                 height:35 , type:"line" , cols:[
                 {
-                    view:"combo" ,
-                    icon:'user',
+                    view:"search" ,
                     id:'filterbylastmodifiedcombo',
-                    type:"material" ,
                     css:'carter-filter-modified-by' ,
-                    placeholder:"Last Modified By" ,
+                    placeholder:"search" ,
                     borderless:true ,
-                    options:[
-                    ]
+                    on:{
+                        onTimedKeyPress:function (  ) {
+                            var value = this.getValue().trim().toLowerCase();
+
+                           /* function(obj){ //here it filters data!
+                                return obj['xmlName'].toLowerCase().indexOf(value)>=0;
+                            }*/
+                            $$("sourceGrid").filter(function(obj) {
+                                return AppDataFormattingUtils.carterDefaultSearchComparator( value ,obj);
+                            });
+                        }
+                    }
                 } ,
                 {
                     view:"datepicker" ,
@@ -39,8 +61,9 @@ define([
                     id:'filterByLmdFrom',
                     borderless:true ,
                     css:'carter-filter-datepicker-from' ,
-                    placeholder:"From: dd-mm-yyy hh:mm" ,
-                    timepicker:true
+                    placeholder:"From: mm/dd/yyyy" ,
+                    timepicker:false,
+                    icon:''
                 } ,
                 {
                     view:"datepicker" ,
@@ -48,8 +71,23 @@ define([
                     id:'filterByLmdTo',
                     borderless:true ,
                     css:'carter-filter-datepicker-to' ,
-                    placeholder:"To: dd-mm-yyy hh:mm" ,
-                    timepicker:true
+                    placeholder:"To: mm/dd/yyyy" ,
+                    timepicker:false,
+                    on:{
+                        onChange:function (  ) {
+                            //debugger;
+                            var toDateValue = this.getValue();//.toLowerCase();
+                            var fromDateValue=$$('filterByLmdFrom').getValue();
+                            if(!fromDateValue) return;
+
+                            /* function(obj){ //here it filters data!
+                             return obj['xmlName'].toLowerCase().indexOf(value)>=0;
+                             }*/
+                            $$("sourceGrid").filter(function(obj) {
+                                return AppDataFormattingUtils.filterByDateRange( fromDateValue,toDateValue ,obj);
+                            });
+                        }
+                    }
                 },
                  {
                  view:'button',
@@ -119,7 +157,6 @@ define([
             /*{ view:"search", placeholder:"Search here" ,id:"sourceObjectSearch"},*/
             {
                 view:"datatable" ,
-                type:"material" ,
                 id:'sourceGrid' ,
                 css:'carter-user-selected-list-of-meta-components' ,
                 scroll:'native-y' ,
@@ -132,7 +169,7 @@ define([
                 headerRowHeight:45 ,
                 multiselect:true ,
                 currentType:null ,
-                //header:false,
+                header:false,
                 pager:"pagerA" ,
                 columns:[
                     {
@@ -142,8 +179,8 @@ define([
                             content:"masterCheckbox" ,
                             css:"center master_checkbox"
                         }] ,
-                        css:"left" ,
-                        template:"{common.checkbox()}",
+                        css:"checkcolumn" ,
+                        template:'<div class="rounded-checkbox">{common.checkbox()} <label for="rounded-checkbox"></label></div>',
                         checkValue:true,
                         uncheckValue:false
                     } ,
@@ -197,12 +234,12 @@ define([
 
                         metaDataTypeList.markSorting("xmlName", "asc");
 
-                        var sourceGrid=$$('sourceGrid');
+                        /*var sourceGrid=$$('sourceGrid');
 
                         var filterByCombo=$$('filterbylastmodifiedcombo');
                         filterByCombo.getList().clearAll();
                         filterByCombo.getList().parse( sourceGrid.collectValues("modifiedBy") );
-                        filterByCombo.refresh();
+                        filterByCombo.refresh();*/
 
 
 
@@ -281,21 +318,8 @@ define([
                         //webix.message("Count of records "+data.length);
                     }
                 }
-            } ,
-            {
-                view:"pager" , id:"pagerA" ,
-                animate:true ,
-                size:15 ,
-                height:25 ,
-                template:function ( data , common ) {
-                    //debugger;
-                    var start = data.page * data.size;
-                    var end = start + data.size;
-                    var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " +common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last() +"</div> ";
-                    return html;
-                }
-                //group:5
             }
+
         ]
     }
 

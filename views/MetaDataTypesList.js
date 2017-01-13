@@ -4,11 +4,7 @@ define([
 ],function(app,AppSharedState){
 
 
-        var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
 
-        var identityOrgId = sourceOrgInfo.identityOrgId;
-        var sessionId = sourceOrgInfo.sessionId;
-        var instanceUrl = sourceOrgInfo.instanceUrl;
         var loginStatus=true;
 
 	var ui = {
@@ -17,12 +13,12 @@ define([
         width:310,
         collapsed:false,
         headerAlt:'<div class="carter-header-collapsed"> <span class="carter-header-collapsed-title">CARTER </span>&nbsp;-&nbsp;<span class="carter-header-collapsed-user-text">Click to Expand and see Available Meta Data Types</span> </div>',
-        type:'material',
+        type:'plain',
         body:{
             css:'carter-left-bar-container',
             rows:[
-                { template:'Meta Data Types' , height:28 ,css:'carter-left-bar-container meta-data-type-title' } ,
-
+                { template:'CARTER' , type:'plain',height:28 ,css:'meta-data-type-header' } ,
+                { template:'<div><span class="meta-data-header-icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></span>Meta Data Types</div>' , type:'plain',height:28 ,css:'meta-data-type-title' } ,
                 {
                     view:"pager" , id:"pagerMetaDataTypeList" ,
                     css:'pager-meta-data-type-list',
@@ -75,8 +71,8 @@ define([
                     //data:collection,
                     on:{
                         onBeforeLoad:function(){
-                            AppSharedState.loadLoginState('SOURCE_LOGIN');
-                            AppSharedState.loadLoginState('TARGET_LOGIN');
+                            //AppSharedState.loadLoginState('SOURCE_LOGIN');
+                            //AppSharedState.loadLoginState('TARGET_LOGIN');
                            // debugger;
                             this.showOverlay("Loading...");
                         },
@@ -93,6 +89,12 @@ define([
 
                         },
                         onItemClick: function(id, e, node){
+
+                            var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
+
+                            var identityOrgId = sourceOrgInfo.identityOrgId;
+                            var sessionId = sourceOrgInfo.sessionId;
+                            var instanceUrl = sourceOrgInfo.instanceUrl;
 
                             var me=this;
                            // alert("you have clicked an item");
@@ -124,6 +126,14 @@ define([
 		$ui: ui,
 		$oninit:function(view){
 
+            AppSharedState.loadLoginState('SOURCE_LOGIN');
+            AppSharedState.loadLoginState('TARGET_LOGIN');
+
+            var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
+
+            var identityOrgId = sourceOrgInfo.identityOrgId;
+            var sessionId = sourceOrgInfo.sessionId;
+            var instanceUrl = sourceOrgInfo.instanceUrl;
 
 
 		    var metaDataTypesListUrl=app.config.getCarterApiUrl('getMetadataObjects?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }');

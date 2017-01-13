@@ -65,6 +65,15 @@ body{
 {
     background: #ffffff;
 }
+
+
+.webix_window, .webix_win_content, .webix_win_body, .webix_win_body > .webix_view {
+    border-radius: 0px;
+    background: #ffffff !important;
+}
+
+
+
 /*Responsive */
 .tiles{
     background-color: #f5f7f7;
@@ -184,7 +193,9 @@ body{
 .carter-grid-meta-shortlist-header{
     font-weight: 800;
     text-transform: uppercase;
-    color: #adadad;
+    color: #000000;
+    text-align: center;
+    border: 0px !important;
 }
 
 .carter-user-selected-list-for-validation >.webix_hcell ,
@@ -215,23 +226,85 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     padding: 0px !important;
 }
 
+
+.usr-sel-metadata-type-list-pager{
+
+
+    padding: 0px !important;
+    line-height: 30px !important;
+    padding-bottom: 0px;
+    background: #ffffff !important;
+    color: #000000;
+    border: 0px !important;
+    padding: 0px !important;
+    margin-left: 3px !important;
+}
+.usr-sel-metadata-type-list-pager .webix_pager_item{
+    color: #000000;
+    background: #ffffff !important;
+    border: 0px;
+}
+
+.usr-sel-metadata-type-list-pager .webix_pager_item:hover{
+    color: #000000;
+    background: #faa541 !important;
+    border: 0px;
+}
+
+
+.usr-sel-metadata-type-list-pager .webix_pager_item .pager-info-text {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.webix_column > div, .webix_table_cell {
+    border-right: 0px !important;
+    border-bottom: 0px !important;
+}
+
+
 /**/
+
+
+.meta-data-type-header {
+    border: none !important;
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 30px;
+    text-align: left;
+    padding-left: 18px;
+    height: 50px !important;
+    padding-top: 10px;
+}
 
 .meta-data-type-title
 {
     font-family: 'Gotham',Gotham;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 12px;
     text-transform: uppercase;
     padding: 10px;
     padding-left: 2px;
-    text-align: center;
+    padding-left: 18px;
+    border: none !important;
+    height: 40px !important;
+}
+.meta-data-header-icon {
+    padding-right: 10px;
+    color: #faa540;
+    font-size: 25px;
 }
 
 .meta-data-search-input {
     padding-bottom: 2px;
 }
 
+.carter-workflow-container{
+    border: 0px !important;
+    border-width: 0px !important;
+    padding: 2px !important;
+}
 
 
 .meta-data-search-input .webix_el_box input {
@@ -312,6 +385,14 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 .webix_input_icon{
     background: rgba(221, 221, 221, 0.2);
 }
+
+
+.checkcolumn >div {
+    padding: 0px !important;
+    padding-left: 4px !important;
+    padding-top: 2px !important;
+}
+
 
 /*****/
 
@@ -405,7 +486,9 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     background-color: #55b776;
 }
 
-
+.carter-workflow-bar{
+    border: 0px !important;border-width: 0px !important;
+}
 .carter-workflow-bar .webix_template {
     padding-top: 9px !important;
 }
@@ -459,9 +542,8 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 }
 
 
-
 .webix_accordionitem .webix_accordionitem_header .webix_accordionitem_button:before {
-    content: '\f0c9';
+    content: '\f0c5';
 }
 
 
@@ -577,14 +659,12 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    border: 1px solid #faa540 !important;
 }
 
 .webix_el_search input, .webix_el_text input, .webix_el_combo input, .webix_el_colorpicker input, .webix_el_datepicker input {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    border: 1px solid #faa540 !important;
     font-size: 11px !important;
 }
 
@@ -595,7 +675,6 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     border-radius: 3px !important;
     padding-right: 28px !important;
     white-space: nowrap !important;
-    border: 1px solid #faa540 !important;
 }
 
 
@@ -639,8 +718,8 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 }
 
 .webix_column > div.webix_cell_select, .webix_column > div.webix_column_select, .webix_column > div.webix_row_select {
-    color: #ffffff;
-    background: #666666;
+    color: #000000;
+    background: none !important;
 }
 
 
@@ -649,21 +728,22 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 {
     background: #ebebeb !important;
 }
-.carter-source-grid-row-obj-name{
+
+.carter-source-grid-row-obj-name {
     font-size: 12px;
     line-height: 26px;
 }
-.carter-grid-sub-info
-{
-    margin-top: -16px;
-    font-size: 10px;
+
+.carter-grid-sub-info {
+    margin-top: -18px;
+    font-size: 8px;
     height: 10px;
     float: right;
 }
 
 
 .carter-source-grid-row-obj-modby{
-    font-size: 11px;
+    font-size: 8px;
 }
 
 .carter-source-grid-row-obj-mod-date

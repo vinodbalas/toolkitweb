@@ -75,7 +75,7 @@ define([
         type:"plain",
         rows:[
             {view:"toolbar",
-                type:'head',
+                type:'plain',
                 height: 46,
                 css:'carter_app_toolbar',
                 elements:[
@@ -91,7 +91,9 @@ define([
                     {width:5}
 
                 ]},
-                { height:70, borderless:false, type:"head",cols:[
+                { height:70, borderless:true,
+                    css:'carter-workflow-container',
+                    type:"plain",cols:[
 
                     {
                         template:('<ul class="progressbar">' +
@@ -123,17 +125,18 @@ define([
                 },
             {
                 view:"multiview" ,
+                css:'carter-workflow-area-container',
                 id:'carterLoggedInUserWorkFlowViews',
                 fitBiggest:true,
                 activeStepIndex:1,
                 keepViews:true,
                 cells:[
                     {
-                        type:'line' ,
+                        type:'plain' ,
                         id:'objectSelectionView',
                         rows:[
                             {
-                                type:'line' ,
+                                type:'plain' ,
                                 cols:[
                                     CarterSourceMetaDataComponentsList,
                                     { view:"resizer" } ,
@@ -144,7 +147,7 @@ define([
                         ]
                     },
                     {
-                        type:'line',
+                        type:'plain',
                         id:'objectSelectionPreView',
                         rows:[
                             CarterUserSelectedMetaDataComponentsPreview
@@ -154,7 +157,7 @@ define([
                         type:'plain' ,
                         id:'retrieveFromSourceView' ,
                         rows:[{
-                            type:'line' ,
+                            type:'plain' ,
                             cols:[
                                 {
                                     template:(
@@ -191,14 +194,14 @@ define([
                         ]
                     } ,
                     {
-                        type:'line',
+                        type:'plain',
                         id:'loginToTargetOrgView',
                         rows:[
                             TargetOrgLoginForm
                         ]
                     },
                     {
-                        type:'line',
+                        type:'plain',
                         id:'validateAndDeployToTargetView',
                         rows:[
                             {

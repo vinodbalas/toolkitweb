@@ -4,6 +4,13 @@ define([
     "models/AppEventHandlers"
 ],function(app,AppSharedState,AppEventHandlers){
 
+
+    /*webix.protoUI( {
+        name:"resizer" ,
+        defaults:{
+            width:2 , height:2
+        }
+    });*/
 /** View Template
     define([], function(){
         return {
