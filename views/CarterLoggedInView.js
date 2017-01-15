@@ -14,8 +14,8 @@ define([
         css:'carter_logged_in_container carter_app_wrapper',
         type:'line',
         cols:[
-            MetaDataTypesList,
-            { view:"resizer"},
+            MetaDataTypesList,/*border: 1px solid #ffffff;*/
+            { view:"resizer" , css:'carter_left_resizer'},
             {
                 gravity:4,
                 rows:[

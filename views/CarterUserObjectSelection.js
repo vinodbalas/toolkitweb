@@ -8,9 +8,18 @@ define([
     "models/AppSharedState",
     "models/CarterRetrieveValidateDeployProcess",
     "views/CarterUserSelectedMetaDataComponentsPreview",
-    "views/TargetOrgLoginForm"
+    "views/TargetOrgLoginForm",
+    "models/CarterWorkFlowHandler",
+    "models/ValidateDeployStepHelper"
 
-],function(app,CarterSourceMetaDataComponentsList,CarterUserSelectedMetaDataComponents,AppSharedState,CarterRetrieveValidateDeployProcess,CarterUserSelectedMetaDataComponentsPreview,TargetOrgLoginForm){
+],function(app,CarterSourceMetaDataComponentsList,
+           CarterUserSelectedMetaDataComponents,
+           AppSharedState,
+           CarterRetrieveValidateDeployProcess,
+           CarterUserSelectedMetaDataComponentsPreview,
+           TargetOrgLoginForm,
+           CarterWorkFlowHandler,
+           ValidateDeployStepHelper){
 
 
 
@@ -92,6 +101,7 @@ define([
 
                 ]},
                 { height:70, borderless:true,
+                    id:'carterWorkAreaContainer',
                     css:'carter-workflow-container',
                     type:"plain",cols:[
 
@@ -139,7 +149,7 @@ define([
                                 type:'plain' ,
                                 cols:[
                                     CarterSourceMetaDataComponentsList,
-                                    { view:"resizer" } ,
+                                    { view:"resizer" , css:'carter_left_resizer_line'} ,
                                     CarterUserSelectedMetaDataComponents
 
                                 ]
@@ -162,11 +172,11 @@ define([
                                 {
                                     template:(
                                         '<div  class="cantering_inner c100 p#retrieveStatusValue# big">' +
-                                        '<span >#retrieveStatusValue#%</span>' +
-                                        '<div class="slice">' +
-                                        '<div class="bar"></div>' +
-                                        '<div class="fill"></div>' +
-                                        '</div>' +
+                                            '<span >#retrieveStatusValue#%</span>' +
+                                            '<div class="slice">' +
+                                            '<div class="bar"></div>' +
+                                            '<div class="fill"></div>' +
+                                            '</div>' +
                                         '</div>'
 
                                     ) ,
@@ -186,7 +196,7 @@ define([
                                     }]
                                 },
                                 {
-                                    css:' retrieve_progress_status_btn_container' ,
+                                    css:'retrieve_progress_status_btn_container' ,
                                     template:'<div class=" retrieve_progress_status_text">Buttons for next</div>'
                                 }
                             ]
@@ -203,37 +213,73 @@ define([
                     {
                         type:'plain',
                         id:'validateAndDeployToTargetView',
-                        rows:[
-                            {
-                                view:'button' ,
-                                label:'Validate',
-                                click:function () {
+                        rows:[{
+                            type:'plain' ,
+                            cols:[
+                                {
+                                    template:(
+                                        '<div  class="cantering_inner c100 p#statusValue# big">' +
+                                        '<span >#statusValue#%</span>' +
+                                        '<div class="slice">' +
+                                        '<div class="bar"></div>' +
+                                        '<div class="fill"></div>' +
+                                        '</div>' +
+                                        '</div>'
+
+                                    ) ,
+                                    data:[{ statusValue:0 , statusText:'Initializing...' }] ,
+                                    id:'validateDeployProgressTemplate' ,
+                                    css:'retrieve_progress_bar_container '
+                                },
+                                {
+                                    id:'validateDeployProgressTextTemplate' ,
+                                    align:'center' ,
+                                    css:' retrieve_progress_status_text_container' ,
+                                    template:('<div class=" retrieve_progress_status_text"><span class="blink_me"> #statusText# </span></div>') ,
+                                    data:[{
+                                        statusValue:0 ,
+                                        statusText:'Initializing...' ,
+                                        complete:false
+                                    }]
+                                },
+                                {
+                                    align:'center' ,
+                                    type:'plain',
+                                    fillspace:4,
+                                    css:'retrieve_progress_status_btn_container' ,
+                                    borderless:true,
+                                    rows:[{},{
+                                        view:'button' ,
+                                        label:'Validate',
+                                        click:function () {
 
 
-                                    CarterRetrieveValidateDeployProcess.doValidate( function ( finalData ) {
-                                            console.log("Validate : Final Status:"+finalData)
-                                        } ,
-                                        function ( statusData ) {
-                                            console.log("Validate : Progress:"+statusData)
-                                        });
+                                            if(ValidateDeployStepHelper.canValidate()) {
+                                                $$('carterHomeInitialLoggedInview').disable();
+                                                CarterRetrieveValidateDeployProcess.doValidate( ValidateDeployStepHelper.validateFinalCall,ValidateDeployStepHelper.validateProgressCall);
+                                            }
+                                            else{
+                                                //Alert to Retrieve
+                                            }
 
+                                        }
+                                    },
+                                        {
+                                            view:'button' ,
+                                            label:'Deploy',
+                                            css:'components_list_filter_btn' ,
+                                            click:function () {
+                                                if ( ValidateDeployStepHelper.canDeploy() ) {
+                                                    $$('carterHomeInitialLoggedInview').disable();
+                                                        CarterRetrieveValidateDeployProcess.doDeploy( ValidateDeployStepHelper.deployFinalCall,ValidateDeployStepHelper.deployProgressCall);
+                                                }else{
+                                                    //Alert to Retrieve
+                                                }
+                                            }
+                                        },{}]
                                 }
-                            },
-                            {
-                                view:'button' ,
-                                label:'Deploy',
-                                css:'components_list_filter_btn' ,
-                                click:function () {
-
-                                    CarterRetrieveValidateDeployProcess.doDeploy( function ( finalData ) {
-                                            console.log("Deploy : Final Status:"+finalData)
-                                        } ,
-                                        function ( statusData ) {
-                                            console.log("Deploy : Progress:"+statusData)
-                                        });
-
-                                }
-                            }
+                            ]
+                        }
                         ]
                     }
                 ],
@@ -244,154 +290,68 @@ define([
                         //$$('userSelectionsForValidationPreview').bind($$('userSelectionsForValidationPreview'));
                         //$$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
 
-                       // debugger;
                     }
                 },
                 $onevent:{
 
-                    CARTER_STEP_CLICKED:function ( prefix ,e,id, trg) {
+                    CARTER_USER_SELECTION_CHANGED:function ( id, index ) {
 
-                        var prevIndex=$$('carterLoggedInUserWorkFlowViews').config.activeStepIndex;
+                        var dataSource=AppSharedState.getUserSelection();
 
-                        if(prefix){
-                            $("#"+prefix).addClass('active');
+                        var sourceGrid=$$( 'sourceGrid' );
+                        var userSelectionGrid = $$( 'userSelectionsForValidation' );
+                        var userSelectionGridPreview = $$( 'userSelectionsForValidationPreview' );
+
+                        //$$("listB").data.importData($$("listA"));
+
+                        //Bind the data from App Shared State to all other components
+                        //1.Selected
+                        //2.Preview
+                        //3.Validate
+
+                        var isExistsAlready=sourceGrid.exists( id )
+                        if(isExistsAlready){
+                            //TODO
+                            var sourceItem=sourceGrid.getItem(id);
+                            sourceItem.selectedByUser=true;
+                            sourceGrid.select(id);
                         }
 
-                        var currentNumericIndex=parseInt(prefix.substr(4));
+                        //
 
-                        if(currentNumericIndex===0 || currentNumericIndex===1){
-                            currentNumericIndex=1;
+                        userSelectionGrid.sync(dataSource);
+                        userSelectionGridPreview.sync(dataSource);
+                        sourceGrid.refresh();
+                        userSelectionGrid.config.refreshFilterItems();
+                        userSelectionGridPreview.config.refreshFilterItems();
+
+
+                    },
+                    CARTER_USER_SELECTION_REMOVED:function ( id ,item) {
+
+                        var dataSource=AppSharedState.getUserSelection();
+                        var sourceGrid=$$( 'sourceGrid' );
+                        var isExistsAlready=sourceGrid.exists( id )
+                        if(isExistsAlready){
+                           //TODO
+                            var sourceItem=sourceGrid.getItem(id);
+                            sourceItem.selectedByUser=false;
+                            sourceGrid.unselect(id);
                         }
 
+                        var userSelectionGrid = $$( 'userSelectionsForValidation' );
+                        var userSelectionGridPreview = $$( 'userSelectionsForValidationPreview' );
+                        userSelectionGrid.sync(dataSource);
+                        userSelectionGridPreview.sync(dataSource);
+                        sourceGrid.refresh();
+                        userSelectionGrid.config.refreshFilterItems();
+                        userSelectionGridPreview.config.refreshFilterItems();
 
-                        if(prevIndex > currentNumericIndex){
-
-                            for(var i=(currentNumericIndex+1);i<=prevIndex;i++){
-                                $("#step"+i).removeClass('active');
-                            }
-                        }
-
-                        if (prefix==="step1"){
-                            //webix.html.addCss(trg, "active");
-                            $$('objectSelectionView').show();
-                        } else if(prefix==="step2") {
-                            //webix.html.addCss(trg, "active");
-                            $$('objectSelectionPreView').show();
-                        }else if(prefix==="step3") {
-                            //webix.html.addCss(trg, "active");
-                           // debugger;
-
-                            $$('retrieveFromSourceView').show();
-
-                            var progressPercent=0;
-                            function retrieveFinalCall ( finalStatus ) {
-
-                                //progressPercent=100;
-
-                                if(!finalStatus)
-                                {
-                                    finalStatus="Completed...";
-                                }
-                                var retrieveProgressTemplate=$$('retrieveProgressTemplate');
-                                var dataTobeUpdated=[{retrieveStatusValue:'100',retrieveStatusText:'Completed...',complete:true}];
-                                retrieveProgressTemplate.define("data",dataTobeUpdated);
-                                retrieveProgressTemplate.refresh();
-
-                                var retrieveProgressTextTemplate=$$('retrieveProgressTextTemplate');
-                                retrieveProgressTextTemplate.define("data",dataTobeUpdated);
-                                retrieveProgressTemplate.refresh();
-                                retrieveProgressTextTemplate.refresh();
-
-
-                                debugger;
-                              /*  CarterRetrieveValidateDeployProcess.doDeploy( function ( finalData ) {
-                                    //debugger;
-                                } ,
-                                function ( statusData ) {
-                                    console.log("Progress:"+statusData)
-                                });
-                                */
-
-                                //TODO Update Buttons
-                                //Show hide Buttons for Retrieve.
-
-                                /*
-                                console.log("Final Listener:"+finalStatus);
-                                webix.html.setValue('retrieveStatusValue', finalStatus);
-                                webix.html.removeCss('retrieveStatusValue',("p"+(progressPercent)-1));
-                                webix.html.addCss('retrieveStatusValue',("p"+progressPercent));*/
-
-                            }
-                            function retrieveProgressCall ( progressStatus ) {
-
-                                progressPercent++;
-                                //progressPercentCss
-                                //retrieveStatusValue
-                                //webix.html.setValue('retrieveStatusValue', progressStatus);
-                                //webix.html.removeCss('retrieveStatusValue',("p"+(progressPercent)-1));
-                                //webix.html.addCss('retrieveStatusValue',("p"+progressPercent));
-
-                                if(!progressStatus)
-                                {
-                                    progressStatus="Still Working...";
-                                }
-                                if(progressPercent>=100){
-                                    progressPercent=progressPercent-95;
-                                }
-
-                                if(progressStatus==="Succeeded"){
-                                    progressPercent=100;
-                                }
-                                var retrieveProgressTemplate=$$('retrieveProgressTemplate');
-                                var dataTobeUpdate=[{retrieveStatusValue:progressPercent,retrieveStatusText:progressStatus,complete:false}];
-                                retrieveProgressTemplate.define("data",dataTobeUpdate);
-
-                                var retrieveProgressTextTemplate=$$('retrieveProgressTextTemplate');
-                                retrieveProgressTextTemplate.define("data",dataTobeUpdate);
-                                retrieveProgressTemplate.refresh();
-                                retrieveProgressTextTemplate.refresh();
-
-                                console.log("Progress Listener:"+progressStatus);
-                            }
-
-                            CarterRetrieveValidateDeployProcess.doRetrieve(retrieveFinalCall,retrieveProgressCall);
-                            //TODO Promise API
-                            /*CarterRetrieveValidateDeployProcess.doRetrieve( function ( finalData ) {
-                                //debugger;
-                                CarterRetrieveValidateDeployProcess.doDeploy( function ( finalData ) {
-                                    //debugger;
-                                } )
-                            } );*/
-
-                            //retrieveFromSourceView
-
-
-
-                        }else if(prefix==="step4"){
-                            $$('carterLoggedInUserWorkFlowViews').config.confirmAlreadyLoggedInTarget(function ( result ) {
-
-
-                                if(result){
-                                    app.callEvent('CARTER_STEP_CLICKED', ["step5",null,null, null]);
-                                    //$$('loginToTargetOrgView').show()
-                                }else{
-                                    //app.callEvent('CARTER_STEP_CLICKED', ["step4",null,null, null]);
-                                    $("#step4").addClass('active');
-                                    $$('loginToTargetOrgView').show()
-                                }
-                            });
-                            //$$('loginToTargetOrgView').show();
-                        }else if(prefix==="step5"){
-                            //get the step5 and make it active..
-                            $$('validateAndDeployToTargetView').show();
-                        }
-
-                        $$('carterLoggedInUserWorkFlowViews').config.activeStepIndex=currentNumericIndex;
 
                     },
                     LOGIN_STATUS_CHANGED:function ( prefix ) {
 
-                        //debugger;
+
                         if(prefix==="TARGET_LOGIN") {
                             app.callEvent('CARTER_STEP_CLICKED', ["step5",null,null, null]);
                             //$$('validateAndDeployToTargetView').show();
@@ -405,9 +365,7 @@ define([
                     return loginStatus;
                 },
                 confirmAlreadyLoggedInTarget:function ( callback ) {
-
-
-                    if(this.isTargetAlreadyLoggedIn) {
+                    if(this.isTargetAlreadyLoggedIn()) {
                         webix.confirm( {
                             title:"Already logged in to Target." ,
                             ok:"Yes" ,

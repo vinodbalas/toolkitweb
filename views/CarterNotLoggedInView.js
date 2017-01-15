@@ -39,7 +39,7 @@ define([
                 AppSharedState.loadLoginState('TARGET_LOGIN');
 
                 if(prefix==="SOURCE_LOGIN") {
-                    app.show( 'top/CarterLoggedInView' );
+                    app.show( 'forceput/CarterLoggedInView' );
                 }
 
             }

@@ -50,5 +50,5 @@ define([
 /**/
         webix.detachEvent(webix.debug_load_event);
 
-    return { $subview:true,css:'abstract_app'};
+    return { id:'forceput_abstract_app',$subview:true,css:'abstract_app'};
 });

@@ -1,6 +1,5 @@
 define([
-    "app",
-	"models/records"
+    "app"
 ],function(app,records){
 
   debugger;

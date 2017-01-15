@@ -16,11 +16,11 @@ define([
 
 	//configuration
 	var app = core.create({
-		id:         "toolkitweb",
-		name:       "Toolkit",
+		id:         "forceput",
+		name:       "Forceput",
 		version:    "0.1.0",
 		debug:      true,
-		start:      "/top/start",
+		start:      "/forceput/toolkits",
 		appConfig:{
 			apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/',
 			CARTER:{

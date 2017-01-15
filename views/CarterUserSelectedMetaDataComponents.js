@@ -20,7 +20,7 @@ define([
                 fillspace:3,
                 cols:[
                     {
-                        template:'Shortlisted Metadata for Review' ,
+                        template:'To Target' ,
                         height:25 ,
                         css:'carter-grid-meta-shortlist-header'
                     }
@@ -28,25 +28,52 @@ define([
                 ]
             } ,
             {
-                height:43 ,
-                type:"line" ,
-                css:'review_btn_container',
-                border:true,
-                cols:[
-                {},
+                view:"pager" , id:"pagerB" ,
+                animate:true ,
+                size:15 ,
+                height:32 ,
+                template:function ( data , common ) {
+                    var start = data.page * data.size;
+                    var end = start + data.size;
+                    var html = " <div class='usr-sel-metadata-type-list-pager' style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " +common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last() +"</div> ";
+                    return html;
+                }
+            },
+            {
+                height:35 , type:"line" , cols:[
                 {
-                    view:'button',
-                    type:"icon",
-                    icon:"file-text",
-                    css:'components_list_filter_btn review_step_btn',
-                    label:"Review Selection >>",
-                    click:function(){
+                    view:"search" ,
+                    id:'userSelectedItemsFilter',
+                    css:'carter-filter-modified-by' ,
+                    placeholder:"search" ,
+                    borderless:true ,
+                    on:{
+                        onTimedKeyPress:function (  ) {
+                            var value = this.getValue().trim().toLowerCase();
 
-                        app.callEvent('CARTER_STEP_CLICKED', ["step2"]);
-
+                            /* function(obj){ //here it filters data!
+                             return obj['xmlName'].toLowerCase().indexOf(value)>=0;
+                             }*/
+                            $$("userSelectionsForValidation").filter(function(obj) {
+                                return AppDataFormattingUtils.carterDefaultSearchComparator( value ,obj);
+                            });
+                        }
                     }
-                },
-                    {width:5}
+                } ,
+                {view:"combo",id:'selectedItemsFilterByTypeCombo',
+                    css:'carter-filter-by-type-combo',
+                    placeholder:'type',
+                    options:[],
+                    on:{
+                        onChange:function (  )
+                        {
+                            var typeValue = this.getValue();
+                            $$("userSelectionsForValidation").filter('itemType',typeValue);
+
+                        }
+                    }
+
+                }
 
                 ]
             },
@@ -55,8 +82,9 @@ define([
                 id:'userSelectionsForValidation' ,
                 type:'material' ,
                 css:'carter-user-selected-list-for-validation' ,
-                scroll:'xy' ,
-                header:true ,
+                //scroll:'xy' ,
+                scroll:false,
+                header:false ,
                 pager:'pagerB' ,
                 headerRowHeight:45 ,
                 checkboxRefresh:true ,
@@ -74,7 +102,7 @@ define([
                             contentid:'masterCheckBoxUserSelection'
                         }] ,
                         css:"left" ,
-                        template:"{common.checkbox()}",
+                        template:'<div class="rounded-checkbox">{common.checkbox()} <label for="rounded-checkbox"></label></div>',
                         checkValue:true,
                         uncheckValue:false
                     } ,
@@ -89,75 +117,34 @@ define([
                     {
                         id:"itemType" ,
                         sort:'string',
-                        header:["Meta Data Type" , { content:"selectFilter" }] ,
-                        template:"#itemType#" ,
+                        template:"<div class='carter-source-grid-row-obj-name'>#itemType#</div>" ,
                         fillspace:1
                     }
                 ] ,
+                refreshFilterItems:function (  ) {
+
+                    var userSelectionGrid = $$( 'userSelectionsForValidation' );
+
+                    var selTypeCombo=$$('selectedItemsFilterByTypeCombo');
+                    selTypeCombo.getList().clearAll();
+                    var itemTypes=userSelectionGrid.collectValues("itemType");
+                    selTypeCombo.getList().parse( itemTypes );
+                    selTypeCombo.refresh();
+                },
                 on:{
                     onCheck:function ( row , col , state ) {
 
-
-
                         var me=this;
-                        var userSelectionGrid = $$( 'userSelectionsForValidation' );
                         var sourceGrid = $$( 'sourceGrid' );
-                        if ( !state ) {
-
-                            var sourceItem = sourceGrid.getItem( row );
-                            if(sourceItem) {
-                                sourceItem.selectedByUser = false;
-                                sourceGrid.unselect( row );
-                            }
-
-                            var selectedItem=userSelectionGrid.getItem(row);
-                            if(selectedItem) {
-                                selectedItem.selectedByUser = false;
-                                userSelectionGrid.remove( row );
-                            }
-
-                        }
-
-                        userSelectionGrid.refresh();
-                        sourceGrid.refresh();
-                        $$( "pagerB" ).refresh();
-                        $$( "pagerA" ).refresh();
-
-
+                        var sourceItem = sourceGrid.getItem( row );
+                        AppSharedState.removeUserSelection(sourceItem.id);
+                        return;
                     },
                     onItemClick:function ( id , e , node ) {
                         var me = this;
-                        /** Checkbox Selection **/
-                        var userSelectionToValidate = $$( 'userSelectionsForValidation' );
-                        var sourceGrid= $$( 'sourceGrid' );
-                        var currentItem = me.getItem( id );
-                        var isSelectedAlready = userSelectionToValidate.exists( id );
-
-                        if(isSelectedAlready) {
-                            currentItem.selectedByUser = false;
-                            userSelectionToValidate.remove( id.row );
-
-                            var sourceItem=sourceGrid.getItem(id.row);
-                            if(sourceItem) {
-                                sourceItem.selectedByUser = false;
-                            }
-                        }
-                           $$( 'sourceGrid' ).refresh();
-                        userSelectionToValidate.refresh();
-                        userSelectionToValidate.refreshFilter();
+                        AppSharedState.removeUserSelection(id.row);
+                        return;
                     }
-                }
-            } ,
-            {
-                view:"pager" , id:"pagerB" ,
-                animate:true ,
-                size:15 ,
-                height:28 ,
-                template:function ( data , common ) {
-                    var start = data.page * data.size;
-                    var end = start + data.size;
-                    var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> "+common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last()+"</div> ";
-                    return html;
                 }
             }
         ]

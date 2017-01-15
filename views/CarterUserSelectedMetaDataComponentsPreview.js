@@ -15,10 +15,12 @@ define([
                 type:'line' ,
                 cols:[
                     {
-                        template:'Review Shortlisted Metadata  ' ,
+                        template:'Review' ,
                         height:35 ,
                         css:'carter-grid-meta-shortlist-header'
-                    },
+                    }
+
+                    /*,
                     {
                         view:'button',
                         height:35 ,
@@ -33,19 +35,68 @@ define([
                             app.callEvent('CARTER_STEP_CLICKED', ["step3",null,null, null]);
 
                         }
-                    }
+                    }*/
 
                 ]
             } ,
+            {
+                view:"pager" , id:"pagerC" ,
+                animate:true ,
+                size:15 ,
+                height:32 ,
+                template:function ( data , common ) {
+                    var start = data.page * data.size;
+                    var end = start + data.size;
+                    var html = " <div class='usr-sel-metadata-type-list-pager' style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " +common.first() + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + common.last() +"</div> ";
+                    return html;
+                }
+            },
+            {
+                height:35 , type:"line" , cols:[
+                {
+                    view:"search" ,
+                    id:'userSelectedItemsPreviewFilter',
+                    css:'carter-filter-modified-by' ,
+                    placeholder:"search" ,
+                    borderless:true ,
+                    on:{
+                        onTimedKeyPress:function (  ) {
+                            var value = this.getValue().trim().toLowerCase();
+
+                            /* function(obj){ //here it filters data!
+                             return obj['xmlName'].toLowerCase().indexOf(value)>=0;
+                             }*/
+                            $$("userSelectionsForValidationPreview").filter(function(obj) {
+                                return AppDataFormattingUtils.carterDefaultSearchComparator( value ,obj);
+                            });
+                        }
+                    }
+                } ,
+                {view:"combo",id:'selectedItemsPreviewFilterByTypeCombo',
+                    css:'carter-filter-by-type-combo',
+                    placeholder:'type',
+                    options:[],
+                    on:{
+                        onChange:function (  )
+                        {
+                            var typeValue = this.getValue();
+                            $$("userSelectionsForValidationPreview").filter('itemType',typeValue);
+
+                        }
+                    }
+
+                }
+
+            ]
+            },
             {
                 view:"datatable" ,
                 id:'userSelectionsForValidationPreview' ,
                 type:'material' ,
                 css:'carter-user-selected-list-for-validation' ,
-                scroll:'xy' ,
-                header:true ,
+                scroll:false ,
+                header:false ,
                 pager:'pagerC' ,
-                headerRowHeight:45 ,
                 checkboxRefresh:true ,
                 resizeColumn:true ,
                 scrollAlignY:true ,
@@ -59,7 +110,7 @@ define([
                             contentid:'masterCheckBoxUserSelection'
                         }] ,
                         css:"left" ,
-                        template:"{common.checkbox()}",
+                        template:'<div class="rounded-checkbox">{common.checkbox()} <label for="rounded-checkbox"></label></div>',
                         checkValue:true,
                         uncheckValue:false
                     } ,
@@ -73,22 +124,36 @@ define([
                     {
                         id:"itemType" ,
                         header:["Meta Data Type" , { content:"selectFilter" }] ,
-                        template:"#itemType#" ,
+                        template:"<div class='carter-source-grid-row-obj-name'>#itemType#</div>" ,
                         fillspace:1
                     }
                 ] ,
-                data:[]
-            } ,
-            {
-                view:"pager" , id:"pagerC" ,
-                animate:true ,
-                size:15 ,
-                height:25 ,
-                template:function ( data , common ) {
-                    var start = data.page * data.size;
-                    var end = start + data.size;
-                    var html = " <div style='width:100%; text-align:center; line-height:20px; font-size:10pt; float:left'> " + common.prev() + "&nbsp;" + (start + 1) + " - " + (end < data.count ? end : data.count) + " of " + (data.count) + "&nbsp;" + common.next() + "</div> ";
-                    return html;
+                data:[],
+
+                refreshFilterItems:function (  ) {
+
+                    var userSelectionGrid = $$( 'userSelectionsForValidationPreview' );
+
+                    var selTypeCombo=$$('selectedItemsPreviewFilterByTypeCombo');
+                    selTypeCombo.getList().clearAll();
+                    var itemTypes=userSelectionGrid.collectValues("itemType");
+                    selTypeCombo.getList().parse( itemTypes );
+                    selTypeCombo.refresh();
+                },
+                on:{
+                    onCheck:function ( row , col , state ) {
+
+                        var me=this;
+                        var sourceGrid = $$( 'sourceGrid' );
+                        var sourceItem = sourceGrid.getItem( row );
+                        AppSharedState.removeUserSelection(sourceItem.id);
+                        return;
+                    },
+                    onItemClick:function ( id , e , node ) {
+                        var me = this;
+                        AppSharedState.removeUserSelection(id.row);
+                        return;
+                    }
                 }
             }
         ]
@@ -96,7 +161,10 @@ define([
 
     return {
 
-        $ui:layout
+        $ui:layout,
+        $oninit:function(view, $scope){
+            //debugger;
+        }
 
     };
 

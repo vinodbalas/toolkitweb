@@ -12,6 +12,63 @@ define([
 ],function(app,CarterHomeView,MetaDataTypesList,CarterUserObjectSelection,CarterLoggedInView,AppSharedState,AppDataFormattingUtils){
 
 
+
+    webix.ui({
+        view:"popup",
+        id:"carterSourceAdvFilterWindow",
+        height:400,
+        width:200,
+        //modal:true,
+        //position:"right",
+        body:{
+            rows:[
+
+                { view:"template", css:'', template:"Last modified Between", type:"section" },
+                {
+                    view:"datepicker" ,
+                    type:"material" ,
+                    id:'filterByLmdFrom',
+                    borderless:true ,
+                    css:'carter-filter-datepicker-from' ,
+                    placeholder:"From: mm/dd/yyyy" ,
+                    timepicker:false,
+                    icon:''
+                } ,
+                {
+                    view:"datepicker" ,
+                    type:"material" ,
+                    id:'filterByLmdTo',
+                    borderless:true ,
+                    css:'carter-filter-datepicker-to' ,
+                    placeholder:"To: mm/dd/yyyy" ,
+                    timepicker:false,
+                    icon:'',
+                    on:{
+                        onChange:function (  ) {
+                            //debugger;
+                            var toDateValue = this.getValue();//.toLowerCase();
+                            var fromDateValue=$$('filterByLmdFrom').getValue();
+                            if(!fromDateValue) return;
+
+                            /* function(obj){ //here it filters data!
+                             return obj['xmlName'].toLowerCase().indexOf(value)>=0;
+                             }*/
+                            $$("sourceGrid").filter(function(obj) {
+                                return AppDataFormattingUtils.filterByDateRange( fromDateValue,toDateValue ,obj);
+                            });
+                        }
+                    }
+                },
+                { view:"template", template:"Last modified By", type:"section" },
+
+                {view:"combo",id:'lastModifiedByUserForFilter',
+                     options:[]}
+
+
+            ]
+        }
+    });
+
     var layout = {
         type:'plain' ,
         rows:[
@@ -55,103 +112,17 @@ define([
                         }
                     }
                 } ,
-                {
-                    view:"datepicker" ,
-                    type:"material" ,
-                    id:'filterByLmdFrom',
-                    borderless:true ,
-                    css:'carter-filter-datepicker-from' ,
-                    placeholder:"From: mm/dd/yyyy" ,
-                    timepicker:false,
-                    icon:''
-                } ,
-                {
-                    view:"datepicker" ,
-                    type:"material" ,
-                    id:'filterByLmdTo',
-                    borderless:true ,
-                    css:'carter-filter-datepicker-to' ,
-                    placeholder:"To: mm/dd/yyyy" ,
-                    timepicker:false,
-                    on:{
-                        onChange:function (  ) {
-                            //debugger;
-                            var toDateValue = this.getValue();//.toLowerCase();
-                            var fromDateValue=$$('filterByLmdFrom').getValue();
-                            if(!fromDateValue) return;
 
-                            /* function(obj){ //here it filters data!
-                             return obj['xmlName'].toLowerCase().indexOf(value)>=0;
-                             }*/
-                            $$("sourceGrid").filter(function(obj) {
-                                return AppDataFormattingUtils.filterByDateRange( fromDateValue,toDateValue ,obj);
-                            });
-                        }
-                    }
-                },
                  {
                  view:'button',
+                 id:'carterSourceAdvancedFilterBtn',
                  type:"icon",
-                 icon:"filter",
-                 css:'components_list_filter_btn',
-                 width:40,
-                 click:function (  ) {
-                     var sourceGrid=$$('sourceGrid')
-
-                     var filterValueLmby=$$('filterbylastmodifiedcombo').getValue();
-                     var filterByLmdFrom=$$('filterByLmdFrom').getValue();
-                     var filterByLmdTo=$$('filterByLmdTo').getValue();
-
-                     if(filterValueLmby)
-                     {
-                         //filter by lmby
-                         //sourceGridvar text = node.previousSibling.value;
-                         //if (!text) return grid.filter();
-
-                         sourceGrid.filter(function(obj){  //grid is a dataTable instance
-                             var conditionLMBy=false;
-                             var conditionLMD=false;
-
-                             if(obj.modifiedBy === filterValueLmby)
-                             {
-                                 conditionLMBy=true;
-                             }
-                             //new Date(obj.modifiedOn)
-                             if(filterByLmdFrom && filterByLmdTo)
-                             {
-
-                                 var fromDate=new Date(filterByLmdFrom);
-                                 var toDate=new Date(filterByLmdTo);
-                                 var curObjDate=new Date(obj.modifiedOn);
-
-                                 if(curObjDate>=fromDate && curObjDate <=toDate)
-                                 {
-
-                                     console.log("curObjDate:"+curObjDate+" :fromDate:"+fromDate+": :toDate:"+toDate);
-                                     conditionLMD=true;
-                                 }
-                             }
-                             //debugger;
-                             var finalFilterApplied=conditionLMBy && conditionLMD;
-                             return finalFilterApplied;
-                         });
-
-
-                         if(filterByLmdFrom && filterByLmdTo)
-                         {
-                             //filter by and filter
-                         }
-                     }else
-                     {
-                         return sourceGrid.filter();
-                     }
-
-                        //last modified by  var sourceGrid=$$('sourceGrid');
-                     //lastmodifiedon modifiedBy
-
-
-                    }
-                 }
+                 icon:"fa fa-angle-down",
+                 css:'carter-adv-filter',
+                 width:30,
+                 popup:"carterSourceAdvFilterWindow"
+                 },
+                {width:8}
             ]
             } ,
             /*{ view:"search", placeholder:"Search here" ,id:"sourceObjectSearch"},*/
@@ -159,14 +130,14 @@ define([
                 view:"datatable" ,
                 id:'sourceGrid' ,
                 css:'carter-user-selected-list-of-meta-components' ,
-                scroll:'native-y' ,
-                scrollAlignY:true ,
+               // scroll:'native-y' ,
+                scroll:false,
+                //scrollAlignY:false ,
                 checkboxRefresh:true ,
                 select:"row" ,
-                rowLineHeight:35,
-                rowHeight:35,
+                rowLineHeight:40,
+                rowHeight:40,
                 gravity:5 ,
-                headerRowHeight:45 ,
                 multiselect:true ,
                 currentType:null ,
                 header:false,
@@ -234,9 +205,24 @@ define([
 
                         metaDataTypeList.markSorting("xmlName", "asc");
 
-                        /*var sourceGrid=$$('sourceGrid');
+                        /** Update Filters **/
 
-                        var filterByCombo=$$('filterbylastmodifiedcombo');
+                        var sourceGrid=$$('sourceGrid');
+                        var filterByCombo=$$('lastModifiedByUserForFilter');
+                        filterByCombo.getList().clearAll();
+                        filterByCombo.getList().parse( sourceGrid.collectValues("modifiedBy") );
+                        filterByCombo.refresh();
+
+                        $$('filterByLmdFrom').setValue('');
+                        $$('filterByLmdTo').setValue('');
+
+
+
+                        /** **/
+
+                        /*
+
+                        var filterByCombo=$$('lastModifiedByUserForFilter');
                         filterByCombo.getList().clearAll();
                         filterByCombo.getList().parse( sourceGrid.collectValues("modifiedBy") );
                         filterByCombo.refresh();*/
@@ -250,6 +236,9 @@ define([
                         var userSelectionGrid = $$( 'userSelectionsForValidation' );
                         var isSelectedAlready = userSelectionGrid.exists( row );
 
+                        AppSharedState.addOrRemoveUserSelection(this.getItem( row ));
+                        return;
+                        //var userSelectionGrid = $$( 'userSelectionsForValidation' );
                         if ( state ) {
                             //currentItem.selectedByUser=true;
                             //var isSelectedAlready = userSelectionGrid.exists( row );
@@ -277,6 +266,8 @@ define([
                         var currentItem = me.getItem( id );
                         var isSelectedByUser = !currentItem.selectedByUser;
                         var isSelectedAlready = userSelectionToValidate.exists( id );
+                        AppSharedState.addOrRemoveUserSelection(currentItem);
+                        return;
                         //me.refresh(id.row);
                         /**/
                         //var selectedTypeItem=me.getItem(id);
@@ -298,7 +289,8 @@ define([
                         userSelectionToValidate.refreshFilter(); //all filters
                         //$$("userSelectionsForValidation").getFilter("itemType").setValue(me.config.currentType);
                         //$$("userSelectionsForValidation").group("itemType");
-                        //
+
+
                     } ,
                     "data->onParse":function ( driver , data ) {
                         var me = this;
@@ -315,6 +307,16 @@ define([
                             item.selectedByUser = isSelectedAlready?true:false;
                             return item;
                         } );
+
+
+
+                        /*var selTypeCombo=$$('selectedItemsFilterByTypeCombo');
+                        selTypeCombo.getList().clearAll();
+                        var itemTypes=userSelectionGrid.collectValues("itemType");
+                        debugger;
+                        selTypeCombo.getList().parse( itemTypes );
+                        selTypeCombo.refresh();*/
+
                         //webix.message("Count of records "+data.length);
                     }
                 }

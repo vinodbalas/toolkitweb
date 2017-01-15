@@ -245,10 +245,11 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     border: 0px;
 }
 
+
 .usr-sel-metadata-type-list-pager .webix_pager_item:hover{
     color: #000000;
-    background: #faa541 !important;
-    border: 0px;
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
 }
 
 
@@ -319,7 +320,37 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 }
 
 
+.carter-adv-filter .webix_el_box .webix_img_btn {
+    border: 1px solid #cccccc !important;
+    border-radius: 0px;
+    margin-left: -3px;
+}
 
+.carter-user-selected-list-for-validation {
+    border: 0px !important;
+}
+
+.carter-adv-filter .webix_img_btn:active, .carter-adv-filter.webix_img_btn_top:active {
+    background-color: #ffffff !important;
+     box-shadow: none !important;
+}
+
+.carter-filter-modified-by .webix_el_box,
+.carter-filter-modified-by .webix_el_box input
+{
+    border-radius: 0px !important;
+    /*border-right: 0px !important;*/
+}
+
+.webix_list_item {
+    font-size: 12px !important;
+}
+
+.carter-filter-modified-by
+{
+    margin-right: -1px;
+
+}
 .metadata-type-list-pager{
 
     padding: 0px !important;
@@ -543,7 +574,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 
 
 .webix_accordionitem .webix_accordionitem_header .webix_accordionitem_button:before {
-    content: '\f0c5';
+    content: "\f0c9";
 }
 
 
@@ -722,6 +753,21 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     background: none !important;
 }
 
+.carter-grid-header-meta-data-name > div.webix_row_select {
+    color: #1b1919 !important;
+    background: #e2be93 !important;
+}
+
+
+.carter-filter-by-type-combo .webix_el_box .webix_input_icon {
+    background: #ffffff !important;
+    height: 20.5px !important;
+    /* padding-top: 5px !important; */
+    color: #777575;
+    margin-top: 2px;
+    margin-right: 1px;
+    border-left: 1px solid #cfcfcf;
+}
 
 .carter-user-login-menu-list .webix_list_item:hover ,
 .carter-user-login-menu-list .webix_list_item:hover
@@ -735,15 +781,30 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 }
 
 .carter-grid-sub-info {
-    margin-top: -18px;
-    font-size: 8px;
+    margin-top: -16px;
+    font-size: 10px;
     height: 10px;
-    float: right;
+    float: left;
+    font-weight: 200;
 }
 
+.carter_left_resizer
+{
+    border: 1px solid #ffffff !important;
+}
 
-.carter-source-grid-row-obj-modby{
-    font-size: 8px;
+.carter_left_resizer_line {
+    border-right: 0px solid #d0cccc !important;
+    border-bottom: 0px !important;
+    border-left: 1px solid #d0cccc !important;
+    border-top: 0px !important;
+}
+.carter-source-grid-row-obj-modby {
+    font-size: 10px;
+}
+
+.carter-user-selected-list-of-meta-components {
+    border: 0px !important;
 }
 
 .carter-source-grid-row-obj-mod-date
@@ -790,6 +851,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 {
 
     border-right: 0px !important;
+    border: 0px !important;
 }
 .retrieve_progress_bar_container .webix_template,
 .retrieve_progress_status_text_container .webix_template,

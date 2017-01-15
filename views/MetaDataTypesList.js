@@ -23,7 +23,7 @@ define([
                     view:"pager" , id:"pagerMetaDataTypeList" ,
                     css:'pager-meta-data-type-list',
                     animate:true ,
-                    size:30 ,
+                    size:10,
                     height:25 ,
                     template:function ( data , common ) {
                         var start = data.page * data.size;
@@ -49,12 +49,13 @@ define([
                     view:"datatable" ,
                     id:'metaDataTypesList',
                     css:'carter-left-bar-container carter-available-meta-data-types-list',
-                    scroll:'platform-y',
+                   // scroll:'platform-y',
+                    scroll:false,
                     adjust:true ,
                     fillspace:true,
                     hover:"meta-data-type-list-hover",
                     pager:'pagerMetaDataTypeList',
-                    scrollAlignY:true,
+                    //scrollAlignY:true,
                     select:"row" ,
                     multiselect:false ,
                     header:false ,
@@ -139,11 +140,12 @@ define([
 		    var metaDataTypesListUrl=app.config.getCarterApiUrl('getMetadataObjects?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }');
 
             var result = webix.ajax().get(metaDataTypesListUrl, function (text) {
-                debugger;
+               // debugger;
                 $$("metaDataTypesList").parse(text);
+                AppSharedState.resetUserSelection();
             });
 
-            $$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
+            //$$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
 		}
 	};
 	

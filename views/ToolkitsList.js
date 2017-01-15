@@ -43,7 +43,7 @@ define([
                         }else if(toolkitToLaunch == 'Analyser'){
                             toolkitToLaunch = toolkitToLaunch + "/" + trg.id
                         }
-                        app.show("/top/"+toolkitToLaunch);
+                        app.show("forceput/"+toolkitToLaunch);
                     }
                 },
                 template:('<div id="'+toolKitInfo.id+'" class="toolkit_item_wrapper">' +

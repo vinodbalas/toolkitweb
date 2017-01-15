@@ -3,9 +3,56 @@ define(["app"],function(app){
 	var state={
 	    SOURCE_LOGIN:{},
 	    TARGET_LOGIN:{},
+
         retrieveAsyncProcessId:null,
+        retrieveStatusAsyncProcessId:null,
+        retrieveAsyncProcessStatus:false,
+
         validateAsyncProcessId:null,
-        deployAsyncProcessId:null
+        validateStatusAsyncProcessId:null,
+        validateAsyncProcessStatus:false,
+
+        deployAsyncProcessId:null,
+        deployStatusAsyncProcessId:null,
+        deployAsyncProcessStatus:false,
+
+        processStatusInfo:{
+
+	        retrieve:{
+	            processId:null,
+                processStatusId:null,
+                processStatus:false
+            },
+            validate:{
+                processId:null,
+                processStatusId:null,
+                processStatus:false
+            },
+            deploy:{
+                processId:null,
+                processStatusId:null,
+                processStatus:false
+            }
+
+        },
+        userSelection: new webix.DataCollection({ data:[] ,
+        on:{
+            onAfterAdd:function ( id, index ) {
+
+                //app.call
+                this.sort('name','asc');
+                app.callEvent('CARTER_USER_SELECTION_CHANGED', [id, index]);
+                console.log("Selection Added");
+            },
+            onAfterDelete:function ( id ) {
+
+                var deletedItem=this.getItem(id);
+               // app.callEvent('CARTER_USER_SELECTION_CHANGED', [id,deletedItem]);
+                app.callEvent('CARTER_USER_SELECTION_REMOVED', [id,deletedItem]);
+                console.log("Selection Removed");
+            }
+        }
+        })
 
     };
 
@@ -53,6 +100,47 @@ define(["app"],function(app){
 
             var orgLoginInfo = me.STATE[prefix];
             return orgLoginInfo;
+        },
+        addOrRemoveUserSelection:function ( item ) {
+            var isExistAlready=state.userSelection.exists( item.id )
+            if(!isExistAlready) {
+                item.selectedByUser = true;
+                state.userSelection.add( item );
+            }else{
+                item.selectedByUser = false;
+                this.removeUserSelection(item.id);
+            }
+        },
+        removeUserSelection:function ( id ) {
+            var isExistAlready=state.userSelection.exists(id )
+            if(isExistAlready) {
+                state.userSelection.remove( id );
+            }
+        },
+        resetUserSelection:function (  ) {
+            state.userSelection.clearAll();
+        },
+        getUserSelection:function (  ) {
+            return state.userSelection;
+
+        },
+        setProcessStatusFieldValue:function ( processKey, field, value ) {
+
+            this.STATE.processStatusInfo[processKey][field]=value;
+
+        },
+        isProcessCompleted:function ( processKey ,skipProcessIdCheck) {
+
+            var processInfo=this.STATE.processStatusInfo[processKey];
+
+            if((skipProcessIdCheck || processInfo.processId) && processInfo.processStatus){
+                return true;
+            }else{
+                return false;
+            }
+        },
+        getProcessStatusFieldValue:function (processKey, field  ) {
+            return this.STATE.processStatusInfo[processKey][field];
         }
     }
 

@@ -27,7 +27,7 @@ define([
             return finalParams;
 
         },
-        doUntilFinalStatus:function ( url, resolveDefOnLastCall,statusFieldToCheck, finalStatusValue, params,processPrefix, pollInterval ,finalCallback,progressStatusCallback) {
+        doUntilFinalStatus:function ( url, resolveDefOnLastCall,statusFieldToCheck, finalStatusValue, params,processPrefix, pollInterval ,finalCallback,progressStatusCallback,failedStatusValue) {
 
 
             var stepCounter=1;
@@ -45,13 +45,16 @@ define([
 
                     try {
                         var jsonResponse = resData.json();
+                        var dataField=jsonResponse.data;
                         console.log( "Response Counter:" + stepCounter , jsonResponse );
-                        if ( jsonResponse ) {
-                            var responseFinalFieldValue = jsonResponse[statusFieldToCheck];
-                            if ( responseFinalFieldValue === finalStatusValue ) {
+                        if ( dataField ) {
+
+                            var responseFinalFieldValue = dataField[statusFieldToCheck];
+                            //var failValue=dataField[failedStatusValue];
+                            if ( responseFinalFieldValue === finalStatusValue  || responseFinalFieldValue===failedStatusValue) {
                                 console.log( processPrefix + " Response has:" + statusFieldToCheck + " with Value:" + finalStatusValue );
                                 console.log( processPrefix + " Response Counter Coming to end:" );
-                                finalCallback && finalCallback( jsonResponse );
+                                finalCallback && finalCallback( dataField );
                                 if(intervalId) {
                                     clearInterval( intervalId );
                                 }
@@ -122,7 +125,10 @@ define([
                 var jsonResponse=resData.json();
                 if(jsonResponse) {
                     var asyncProcessId =jsonResponse.data.id;
-                    AppSharedState.retrieveAsyncProcessId=asyncProcessId;
+
+                    AppSharedState.setProcessStatusFieldValue('retrieve','processId',asyncProcessId);
+                    /*AppSharedState.retrieveAsyncProcessStatus=false;
+                    AppSharedState.retrieveAsyncProcessId=asyncProcessId;*/
                     console.log("Retrieve Status Id:"+asyncProcessId);
                     var retrieveStatusUrl=me.getRetrieveStatusUrl(asyncProcessId);
                     me.doUntilFinalStatus( retrieveStatusUrl , null , "status" , "Succeeded" , {} , ":RetrieveFromSource:",null, finalStatusCallback,progressStatusCallback );
@@ -163,6 +169,7 @@ define([
             var sessionId = sourceOrgInfo.sessionId;
             var instanceUrl = sourceOrgInfo.instanceUrl;
 
+            debugger;
             //if deploy
             var statusUrl=app.config.getCarterApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"');
             return statusUrl;
@@ -173,21 +180,19 @@ define([
             //var stopPromise = new Promise(function () {});
 
             var me=this;
-            var asyncId= AppSharedState.retrieveAsyncProcessId;
+            var asyncId=  AppSharedState.getProcessStatusFieldValue('retrieve','processId') ;//|| AppSharedState.getProcessStatusFieldValue('validate','processId');
             var deployUrl=me.getDeployUrl(asyncId);
-
-
             var promise = webix.ajax(deployUrl);
             promise.then(function(resData){
-
-
                 var jsonResponse=resData.json();
-                if(jsonResponse) {
-                    var asyncProcessId = jsonResponse.id;
-                    AppSharedState.deployStatusAsyncId = asyncProcessId;
+                var resData=jsonResponse.data;
+
+                if(resData) {
+                    var asyncProcessId = resData.id;
+                    //AppSharedState.deployStatusAsyncId = asyncProcessId;
                     console.log("Deploy Status Id:"+asyncProcessId);
                    // var deployStatusUrl=this.getDeployStatusUrl(AppSharedState.validateAsyncProcessId);
-                    var deployStatusUrl=me.getDeployStatusUrl(asyncProcessId || AppSharedState.deployStatusAsyncId);
+                    var deployStatusUrl=me.getDeployStatusUrl(asyncProcessId );
                     me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,deployFinalStatusCallback,deployProgressCallback);
                 }else
                 {
@@ -220,7 +225,7 @@ define([
             var identityOrgId = sourceOrgInfo.identityOrgId;
             var sessionId = sourceOrgInfo.sessionId;
             var instanceUrl = sourceOrgInfo.instanceUrl;
-
+            debugger;
             //if deploy
             var statusUrl=app.config.getCarterApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
             return statusUrl;
@@ -243,7 +248,7 @@ define([
             //var stopPromise = new Promise(function () {});
 
             var me=this;
-            var asyncId=AppSharedState.retrieveAsyncProcessId;
+            var asyncId=AppSharedState.getProcessStatusFieldValue('retrieve','processId');//.retrieveAsyncProcessId;
             var validateUrl=me.getValidateUrl(asyncId);
 
 
@@ -251,13 +256,18 @@ define([
             promise.then(function(resData){
 
                 var jsonResponse=resData.json();
-                if(jsonResponse) {
-                    var asyncProcessId = jsonResponse.id;
-                    AppSharedState.validateAsyncProcessId = asyncProcessId;
+                var resItem=jsonResponse.data;
+                if(resItem) {
+                    var asyncProcessId = resItem.id;
+
+                    AppSharedState.setProcessStatusFieldValue('validate','processId',asyncProcessId);
+
+                    //AppSharedState.validateAsyncProcessId = asyncProcessId;
+                    //debugger;
                     console.log("validateAsyncProcessId Status Id:"+asyncProcessId);
                     // var deployStatusUrl=this.getDeployStatusUrl(AppSharedState.validateAsyncProcessId);
-                    var deployStatusUrl=me.getValidateStatusUrl(asyncProcessId || AppSharedState.validateAsyncProcessId);
-                    me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,validateFinalStatusCallback,validateProgressCallback);
+                    var deployStatusUrl=me.getValidateStatusUrl(asyncProcessId);
+                    me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Validate in  Target:" ,null,validateFinalStatusCallback,validateProgressCallback);
                 }else
                 {
                     console.log("No Data returned");
