@@ -2,8 +2,9 @@
  * Created by prakash on 12/25/16.
  */
 define([
-    "app"
-],function(app){
+    "app",
+    "models/AppSharedState"
+],function(app,AppSharedState){
 
     webix.ui({
         view:"popup",
@@ -27,7 +28,9 @@ define([
 
                         if(id==="1"){
                             webix.storage.local.remove('source_status');
-                            window.location.reload();
+                            AppSharedState.loadLoginState('TARGET_LOGIN');
+                            app.show("forceput/CarterNotLoggedInView");
+                           // window.location.reload();
                         }
                         else if(id==="2"){
                             //SPH remove this

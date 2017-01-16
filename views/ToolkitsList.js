@@ -10,10 +10,10 @@ define([
 
 
     var toolkitsList=[
-        {id:'CarterNotLoggedInView', loggedInView:'CarterLoggedInView', name: "CARTER"},
-        {id:'Auditor', name: "AUDITOR", },
-        {id:'Analyser', name: "ANALYSER", },
-        {id:'Documenter', name: "DOCUMENTER", }
+        {id:'CarterNotLoggedInView', toolkitPageBodyCss:'carter_page_wrapper', loggedInView:'CarterLoggedInView', name: "CARTER"},
+        {id:'Auditor', toolkitPageBodyCss:'auditor_body_wrapper',name: "AUDITOR", },
+        {id:'Analyser', toolkitPageBodyCss:'analyser_body_wrapper',name: "ANALYSER", },
+        {id:'Documenter', toolkitPageBodyCss:'documenter_body_wrapper',name: "DOCUMENTER", }
     ];
 
     function createToolkitItem(toolKitInfo){
@@ -26,9 +26,20 @@ define([
                 onClick:{
                     'toolkit_item_wrapper':function(e, id, trg){
 
+                        var toolkitToLaunch=trg.id;
+                        var currentToolkit=toolkitsList.filter(function ( item ) {
+                            if(item.id===toolkitToLaunch){
+                                return true;
+                            }
+                        });
+
+                        if(currentToolkit.length>0) {
+                            $( 'body' ).addClass( currentToolkit[0].toolkitPageBodyCss )
+                        }
+
                         AppSharedState.loadLoginState('SOURCE_LOGIN');
                         AppSharedState.loadLoginState('TARGET_LOGIN');
-                        var toolkitToLaunch=trg.id;
+
                         if(toolkitToLaunch==="CarterNotLoggedInView"){
 
                             var loggedIn=AppSharedState.isLoggedIn('SOURCE_LOGIN');

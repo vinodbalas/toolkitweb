@@ -9,11 +9,12 @@ define([
     var layout = {
         type:'plain',
         css:'carter_not_logged_in_left_container',
+        width:'100%',
         rows:[
         {type:'plain',
 
             borderless:true,
-            template:'<div class="carter-toolkit-title">CARTER</div>', height:50,css:'carter_not_logged_in_left_title'},
+            template:'<div class="carter-toolkit-title">CARTER</div>', height:48 ,css:'meta-data-type-header-not-logged-in'},
         {type:'plain',
             borderless:true,
             template:'<div class="carter-toolkit-desc">' +

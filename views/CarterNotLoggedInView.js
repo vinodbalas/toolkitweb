@@ -27,7 +27,7 @@ define([
         responsive:"carterHomeInitial"
     };
 
-
+    $('body').addClass('carter_page_wrapper');
 
     return {
         $ui:cmpToRender,

@@ -26,6 +26,8 @@ define([
         responsive:"carterHomeInitial"
     };
 
+    $('body').addClass('carter_page_wrapper');
+
     var layout = {
         type: "clean",
         css:'carter_logged_in_view carter_abstract_container',

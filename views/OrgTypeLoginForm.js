@@ -20,7 +20,7 @@ define([
                     {
                         borderless:true,
                         type:'plain',
-                        template:'<div class="carter_login_source_org_select_title">Select Org Type to login to source</div>',
+                        template:'<div class="carter_login_source_org_select_title">Select source org type</div>',
                         css:'carter_login_source_org_panel_header'
                     },
                     {}

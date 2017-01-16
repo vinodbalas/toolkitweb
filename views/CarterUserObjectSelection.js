@@ -59,7 +59,7 @@ define([
                 "onAfterSelect":function(id){
                         if(id==="1"){
                             webix.storage.local.remove('SOURCE_LOGIN');
-                            app.show("top/CarterNotLoggedInView")
+                            app.show("forceput/CarterLoggedInView")
                             //window.location.reload();
                             //trigger source logout event.
                             //clear index db
@@ -361,7 +361,36 @@ define([
                 },
                 isTargetAlreadyLoggedIn:function (  ) {
                     var loginStatus=false;
-                    loginStatus=AppSharedState.isLoggedIn("TARGET_LOGIN")
+                    loginStatus=AppSharedState.isLoggedIn("TARGET_LOGIN");
+
+                    //TODO PING
+                    /*webix.ajax(metaDataTypesListUrl,{
+                        error:function(text, data, XmlHttpRequest){
+                            //alert("error");
+                        },
+                        success:function(text, data, XmlHttpRequest){
+                            if(XmlHttpRequest.status===204){
+
+                                webix.alert({
+                                    type:"alert-error",
+                                    title:"Session Time out",
+                                    text:"Your source org session timed out. </br>Please login again.",
+                                    callback:function(){
+                                        debugger;
+                                        webix.storage.local.remove('SOURCE_LOGIN');
+                                        app.show("forceput/CarterNotLoggedInView")
+                                    }
+                                });
+
+
+                            }else if(XmlHttpRequest.status===200){
+
+                                debugger;
+                                $$("metaDataTypesList").parse(text);
+                                AppSharedState.resetUserSelection();
+                            }
+                        }
+                    });*/
                     return loginStatus;
                 },
                 confirmAlreadyLoggedInTarget:function ( callback ) {

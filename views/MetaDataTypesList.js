@@ -139,11 +139,38 @@ define([
 
 		    var metaDataTypesListUrl=app.config.getCarterApiUrl('getMetadataObjects?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }');
 
-            var result = webix.ajax().get(metaDataTypesListUrl, function (text) {
-               // debugger;
-                $$("metaDataTypesList").parse(text);
-                AppSharedState.resetUserSelection();
+            webix.ajax(metaDataTypesListUrl,{
+                error:function(text, data, XmlHttpRequest){
+                    //alert("error");
+                },
+                success:function(text, data, XmlHttpRequest){
+                    if(XmlHttpRequest.status===204){
+
+                        webix.alert({
+                            type:"alert-error",
+                            title:"Session Time out",
+                            text:"Your source org session timed out. </br>Please login again.",
+                            callback:function(){
+                                webix.storage.local.remove('SOURCE_LOGIN');
+                                app.show("forceput/CarterNotLoggedInView")
+                            }
+                        });
+
+
+                    }else if(XmlHttpRequest.status===200){
+
+                        debugger;
+                        $$("metaDataTypesList").parse(text);
+                        AppSharedState.resetUserSelection();
+                    }
+                }
             });
+
+
+            /*var result = webix.ajax().get(metaDataTypesListUrl, function (text) {
+               // debugger;
+
+            });*/
 
             //$$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
 		}

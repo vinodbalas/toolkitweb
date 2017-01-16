@@ -10,8 +10,14 @@ define([
 
 	var carterStepClickHandler=function ( prefix ,e,id, trg)
     {
+
+        var currentNumericIndex=parseInt(prefix.substr(4));
+        if(currentNumericIndex===0 || currentNumericIndex===1){
+            currentNumericIndex=1;
+        }
+
     	var preConditionRes=StepPreConditionHelper.commonStepPreConditionHelper();
-    	if(!preConditionRes){
+    	if(!preConditionRes && currentNumericIndex!=1){
     		return;
 		}
 
@@ -21,11 +27,9 @@ define([
             $("#"+prefix).addClass('active');
         }
 
-        var currentNumericIndex=parseInt(prefix.substr(4));
 
-        if(currentNumericIndex===0 || currentNumericIndex===1){
-            currentNumericIndex=1;
-        }
+
+
 
 
         if(prevIndex > currentNumericIndex){

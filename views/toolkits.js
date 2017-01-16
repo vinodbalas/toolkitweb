@@ -15,6 +15,10 @@ define([
         ]
     };
 
+    $('body').removeClass('carter_page_wrapper');
+    $('body').removeClass('auditor_body_wrapper');
+    $('body').removeClass('analyser_body_wrapper');
+    $('body').removeClass('documenter_body_wrapper');
 
 
 	return {

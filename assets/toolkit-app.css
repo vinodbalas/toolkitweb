@@ -1,9 +1,12 @@
 
 body{
     font-family: Gotham !important;
-    background: url(images/design/body_bg.jpg) !important;
+    background: url(images/design/body_bg.png) !important;
 }
 
+.carter_page_wrapper{
+    background:#ffffff !important;
+}
 
 .webix_view {
  background: transparent;
@@ -11,6 +14,26 @@ body{
 
 .abstract_container {
     overflow-y: auto;
+}
+
+.carter-source-login-header {
+    text-align: center;
+    vertical-align: text-bottom;
+    padding-top: 11px;
+    text-transform: uppercase;
+    color: #000000;
+}
+
+.meta-data-type-header-not-logged-in {
+    border: none !important;
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 30px;
+    text-align: left;
+    /* padding-left: 18px; */
+    height: 47px !important;
+    /* padding-top: 10px; */
+    background: #faa541;
 }
 
 
@@ -566,13 +589,17 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     line-height: 34px;
     text-align: center;
     font-size: 16px;
+    color: #ffffff;
 }
 
 .webixbutton:hover{
     background-color: red !important;
 }
 
-
+.carter-source-org-selection-radios .webix_el_box .webix_el_group .webix_radio_option .webix_label_right
+{
+    color: #000000 !important;
+}
 .webix_accordionitem .webix_accordionitem_header .webix_accordionitem_button:before {
     content: "\f0c9";
 }
@@ -712,16 +739,29 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 .webix_accordionitem_header{
     border: 0px !important;
 }
-.webix_el_radio .webix_custom_radio {
-    border: 1px solid #faa540;
-    background-color: #FEFEFE;
+.webix_el_radio .webix_custom_radio, .webix_el_radio .webix_custom_radio:hover {
+    border: 1px solid #cac3c3;
+    background-color: #ffffff;
+    height: 25px;
+    width: 25px;
+    padding: 3px;
 }
 
 .webix_el_radio .webix_custom_radio:before {
-    background-color: #faa540;
+    background-color: #000000;
+    width: 17px !important;
+    height: 17px !important;
 }
 
 
+.carter_login_source_org {
+    background: #ffffff;
+}
+
+.carter-source-org-sing-in-btn .webix_el_box button:hover{
+    background: #faa540 !important;
+    color: #ffffff !important;
+}
 
 .webix_el_button input, .webix_el_toggle input, .webix_el_button button, .webix_el_toggle button, .webixbutton {
 
