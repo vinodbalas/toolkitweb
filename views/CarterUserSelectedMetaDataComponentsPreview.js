@@ -42,7 +42,7 @@ define([
             {
                 view:"pager" , id:"pagerC" ,
                 animate:true ,
-                size:15 ,
+                size:10 ,
                 height:32 ,
                 template:function ( data , common ) {
                     var start = data.page * data.size;

@@ -225,8 +225,6 @@ define([
             var identityOrgId = sourceOrgInfo.identityOrgId;
             var sessionId = sourceOrgInfo.sessionId;
             var instanceUrl = sourceOrgInfo.instanceUrl;
-            debugger;
-            //if deploy
             var statusUrl=app.config.getCarterApiUrl('deployStatus?targetSession={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true"}');
             return statusUrl;
         },

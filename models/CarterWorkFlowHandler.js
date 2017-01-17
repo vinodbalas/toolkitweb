@@ -18,8 +18,31 @@ define([
 
     	var preConditionRes=StepPreConditionHelper.commonStepPreConditionHelper();
     	if(!preConditionRes && currentNumericIndex!=1){
+
+            webix.alert({
+                type:"alert-error",
+                title:"Step Pre Condition",
+                ok:"OK",
+                text: 'Please Select minimum of 1 component'
+            });
+
     		return;
 		}
+
+		if(currentNumericIndex===4){
+    	    if(!AppSharedState.getProcessStatusFieldValue('retrieve','processStatus')){
+
+                webix.alert({
+                    type:"alert-error",
+                    title:"Retrieve Step :Pre Condition",
+                    ok:"OK",
+                    text: 'Please Complete Retrieve Step to continue logging in to target'
+                });
+
+    	        return;
+
+            }
+        }
 
         var prevIndex=$$('carterLoggedInUserWorkFlowViews').config.activeStepIndex;
 

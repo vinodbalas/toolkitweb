@@ -80,7 +80,7 @@ define([
             {
                 view:"pager" , id:"pagerA" ,
                 animate:true ,
-                size:15 ,
+                size:10 ,
                 height:32 ,
                 template:function ( data , common ) {
                     //debugger;
