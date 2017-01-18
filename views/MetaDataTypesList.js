@@ -23,7 +23,7 @@ define([
                     view:"pager" , id:"pagerMetaDataTypeList" ,
                     css:'pager-meta-data-type-list',
                     animate:true ,
-                    size:10,
+                    size:15,
                     height:25 ,
                     template:function ( data , common ) {
                         var start = data.page * data.size;
@@ -50,7 +50,7 @@ define([
                     id:'metaDataTypesList',
                     css:'carter-left-bar-container carter-available-meta-data-types-list',
                    // scroll:'platform-y',
-                    scroll:false,
+                    scroll:true,
                     adjust:true ,
                     fillspace:true,
                     hover:"meta-data-type-list-hover",
@@ -76,9 +76,6 @@ define([
                             //AppSharedState.loadLoginState('TARGET_LOGIN');
                            // debugger;
                             this.showOverlay("Loading...");
-                            $$("metaDataTypesList").showProgress({
-                                type:"bottom"
-                            });
                         },
                         onAfterLoad:function(){
                             //debugger;

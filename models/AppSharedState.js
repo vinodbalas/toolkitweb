@@ -35,6 +35,11 @@ define(["app"],function(app){
             }
 
         },
+        settings:{
+	        paging:{
+	            size:15
+            }
+        },
         userSelection: new webix.DataCollection({ data:[] ,
         on:{
             onAfterAdd:function ( id, index ) {
@@ -141,6 +146,10 @@ define(["app"],function(app){
         },
         getProcessStatusFieldValue:function (processKey, field  ) {
             return this.STATE.processStatusInfo[processKey][field];
+        },
+        getSettingValue:function ( key ) {
+
+            return this.STATE.settings[key] || { };
         }
     }
 

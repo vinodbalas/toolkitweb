@@ -80,7 +80,7 @@ define([
             {
                 view:"pager" , id:"pagerA" ,
                 animate:true ,
-                size:10 ,
+                size:15 ,
                 height:32 ,
                 template:function ( data , common ) {
                     //debugger;
@@ -131,7 +131,7 @@ define([
                 id:'sourceGrid' ,
                 css:'carter-user-selected-list-of-meta-components' ,
                // scroll:'native-y' ,
-                scroll:false,
+                scroll:true,
                 //scrollAlignY:false ,
                 checkboxRefresh:true ,
                 select:"row" ,

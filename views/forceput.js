@@ -5,6 +5,9 @@ define([
 ],function(app,AppSharedState,AppEventHandlers){
 
 
+    if (!webix.env.touch && webix.ui.scrollSize) {
+        webix.CustomScroll.init();
+    }
     /*webix.protoUI( {
         name:"resizer" ,
         defaults:{

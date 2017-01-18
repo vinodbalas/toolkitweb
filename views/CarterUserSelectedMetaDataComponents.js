@@ -30,7 +30,7 @@ define([
             {
                 view:"pager" , id:"pagerB" ,
                 animate:true ,
-                size:10 ,
+                size:15 ,
                 height:32 ,
                 template:function ( data , common ) {
                     var start = data.page * data.size;
@@ -83,7 +83,7 @@ define([
                 type:'material' ,
                 css:'carter-user-selected-list-for-validation' ,
                 //scroll:'xy' ,
-                scroll:false,
+                scroll:true,
                 header:false ,
                 pager:'pagerB' ,
                 headerRowHeight:45 ,

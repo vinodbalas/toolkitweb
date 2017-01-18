@@ -42,7 +42,7 @@ define([
             {
                 view:"pager" , id:"pagerC" ,
                 animate:true ,
-                size:10 ,
+                size:15 ,
                 height:32 ,
                 template:function ( data , common ) {
                     var start = data.page * data.size;
@@ -94,7 +94,7 @@ define([
                 id:'userSelectionsForValidationPreview' ,
                 type:'material' ,
                 css:'carter-user-selected-list-for-validation' ,
-                scroll:false ,
+                scroll:true ,
                 header:false ,
                 pager:'pagerC' ,
                 checkboxRefresh:true ,
