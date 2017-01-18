@@ -23,7 +23,7 @@ define([
                     view:"pager" , id:"pagerMetaDataTypeList" ,
                     css:'pager-meta-data-type-list',
                     animate:true ,
-                    size:15,
+                    size:10,
                     height:25 ,
                     template:function ( data , common ) {
                         var start = data.page * data.size;
@@ -175,5 +175,5 @@ define([
             //$$('userSelectionsForValidationPreview').data.sync($$('userSelectionsForValidation'));
 		}
 	};
-
+	
 });
