@@ -27,15 +27,15 @@ define([
                 "onAfterSelect":function(id){
 
                         if(id==="1"){
-                            webix.storage.local.remove('source_status');
+                            webix.storage.local.remove('SOURCE_LOGIN');
                             AppSharedState.loadLoginState('TARGET_LOGIN');
-                            app.show("forceput/CarterNotLoggedInView");
+                            app.show("forceput/toolkits");
                            // window.location.reload();
                         }
                         else if(id==="2"){
                             //SPH remove this
                         }
-                        $$("userLoginMenu").hide();
+                        $$("userLoginMenu_Auditor").hide();
                 }
             }
         }

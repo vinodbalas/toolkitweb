@@ -46,6 +46,8 @@ define([
                     if(id==="1"){
                         webix.storage.local.remove('SOURCE_LOGIN');
                         //app.show("forceput/CarterLoggedInView")
+                        AppSharedState.loadLoginState('TARGET_LOGIN');
+                        app.show("forceput/toolkits");
                         document.location.reload();
                         //trigger source logout event.
                         //clear index db
@@ -220,7 +222,15 @@ var toolKitUiList=toolkitsList.map(function ( toolkitConfig ) {
 
     return {
         type:"toolkits_list",
-        $ui:toolkits
+        $ui:toolkits,
+        $oninit:function (  ) {
+        //debugger;
+        $('body').removeClass('carter_page_wrapper');
+        $('body').removeClass('auditor_body_wrapper');
+        $('body').removeClass('analyser_body_wrapper');
+        $('body').removeClass('documenter_body_wrapper');
+
+    }
     }
 
 });
