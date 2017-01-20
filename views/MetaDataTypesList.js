@@ -50,7 +50,7 @@ define([
                     id:'metaDataTypesList',
                     css:'carter-left-bar-container carter-available-meta-data-types-list',
                    // scroll:'platform-y',
-                    scroll:false,
+                    scroll:true,
                     adjust:true ,
                     fillspace:true,
                     hover:"meta-data-type-list-hover",
@@ -80,13 +80,17 @@ define([
                         onAfterLoad:function(){
                             //debugger;
                             this.hideOverlay();
-                            if (!this.count()) {
+                            var totalCount=this.count();
+                            if (!totalCount) {
                                // app.show('top/CarterNotLoggedInView');
-                                this.showOverlay( "Sorry, there is no data. Please logout and login again. " );
+                                this.showOverlay( "Sorry, there is no data. " );
                             }
 
                             this.data.sort("xmlName", "asc");
-                            $$('metaDataTypesList').markSorting("xmlName", "asc");
+                            var mdList=$$('metaDataTypesList');
+                            mdList.markSorting("xmlName", "asc");
+
+
 
                         },
                         onItemClick: function(id, e, node){
@@ -158,8 +162,6 @@ define([
 
 
                     }else if(XmlHttpRequest.status===200){
-
-                        debugger;
                         $$("metaDataTypesList").parse(text);
                         AppSharedState.resetUserSelection();
                     }
