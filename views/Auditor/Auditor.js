@@ -6,11 +6,13 @@ define([
     "views/Auditor/AuditorHomeViewLeftBar",
     "views/Auditor/Login",
     "views/Auditor/MetaDataTypesList",
-    "views/Auditor/AuditActionDetails"
-],function(app,AuditorHomeViewLeftBar, Login, MetaDataTypesList, AuditActionDetails){
-    var lsSourceLoginObj=localStorage.getItem('SOURCE_LOGIN');
-    var objSourceLoginObj=JSON.parse(lsSourceLoginObj);
-    var access_token=(objSourceLoginObj&& objSourceLoginObj.source_info && objSourceLoginObj.source_info.access_token)?objSourceLoginObj.source_info['access_token']:null;
+    "views/Auditor/AuditActionDetails",
+    "models/AppSharedState"
+],function(app,AuditorHomeViewLeftBar, Login, MetaDataTypesList, AuditActionDetails,AppSharedState){
+
+
+    var access_token=AppSharedState.isLoggedIn('SOURCE_LOGIN');
+
     var cmpToRender={};
 
     if(access_token)
@@ -30,12 +32,7 @@ define([
             responsive:"auditorHomeInitial"
         };
 
-        var identityServiceUrl=objSourceLoginObj.source_info.id;
-        var identityOrgId=identityServiceUrl.split("/id/")[1].split("/")[0];
 
-        webix.proxy.indexdb.create(identityOrgId, {}, null, function (  ) {
-          //Check with SPH if this is required.
-        });
     }else{
         cmpToRender={
             cols:[

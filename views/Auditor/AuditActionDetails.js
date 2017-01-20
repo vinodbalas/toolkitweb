@@ -8,7 +8,7 @@ define([
 
     webix.ui({
         view:"popup",
-        id:"userLoginMenu",
+        id:"userLoginMenu_Auditor",
         css:'carter-user-login-menu-list-popup',
         head:false,
         width: 300,
@@ -48,7 +48,7 @@ define([
                 type:'material',
                 height: 46,
                 elements:[
-                    {},  {view:"icon",width: 40, icon:"user", popup: "userLoginMenu" }
+                    {},  {view:"icon",width: 40, icon:"user", popup: "userLoginMenu_Auditor" }
 
                 ]},
                 {

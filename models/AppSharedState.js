@@ -16,6 +16,7 @@ define(["app"],function(app){
         deployStatusAsyncProcessId:null,
         deployAsyncProcessStatus:false,
 
+        currentToolkitInfo:null,
         processStatusInfo:{
 
 	        retrieve:{
@@ -150,6 +151,12 @@ define(["app"],function(app){
         getSettingValue:function ( key ) {
 
             return this.STATE.settings[key] || { };
+        },
+        setCurrentToolKitInfo:function ( tookitInfo ) {
+            this.STATE.currentToolkitInfo=tookitInfo;
+        },
+        getCurrentToolKitInfo:function (  ) {
+            return this.STATE.currentToolkitInfo;
         }
     }
 

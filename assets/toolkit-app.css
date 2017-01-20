@@ -4,7 +4,9 @@ body{
     background: url(images/design/body_bg.png) !important;
 }
 
-.carter_page_wrapper{
+.carter_page_wrapper,
+.auditor_page_wrapper
+{
     background:#ffffff !important;
 }
 

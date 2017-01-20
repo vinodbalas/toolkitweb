@@ -9,11 +9,68 @@ define([
 
 
 
+    webix.ui({
+        view:"popup",
+        id:"userLoginMenu",
+        css:'carter-user-login-menu-list-popup',
+        head:false,
+        width: 300,
+        body:{
+            view:"list" ,
+            css:'carter-user-login-menu-list' ,
+            scroll:false ,
+            yCount:2 ,
+            select:true ,
+            borderless:true ,
+            template:"#menuItemText#" ,
+            data:[
+                {
+                    id:1 ,
+                    menuItemText:"<div class='source_logout_menu'>" +
+                    "<span class='source_logout_menu_icon'><i class='fa fa-cloud-download'></i></span>" +
+                    "<span class='source_logout_menu_text'>Source Logout</span>" +
+                    "</div>"
+                    , css:'carter-user-login-menu-item-source'
+                } ,
+                {
+                    id:2 ,
+                    menuItemText:"<div class='target_logout_menu'>" +
+                    "<span class='target_logout_menu_icon'><i class='fa fa-cloud-upload'></i></span>" +
+                    "<span class='target_logout_menu_text'>Target Logout</span>" +
+                    "</div>" ,
+                    css:'carter-user-login-menu-list-target'
+                }
+            ] ,
+            on:{
+                "onAfterSelect":function(id){
+                    if(id==="1"){
+                        webix.storage.local.remove('SOURCE_LOGIN');
+                        //app.show("forceput/CarterLoggedInView")
+                        document.location.reload();
+                        //trigger source logout event.
+                        //clear index db
+                    }
+                    else if(id==="2"){
+                        webix.storage.local.remove('TARGET_LOGIN');
+                        //TODO..
+                        //trigger target logout event.
+                        // window.location.reload();
+                        //clear index db
+                    }
+                    $$("userLoginMenu").hide();
+                }
+            }
+        }
+    });
+
+
+
+
     var toolkitsList=[
         {id:'CarterNotLoggedInView', toolkitPageBodyCss:'carter_page_wrapper', loggedInView:'CarterLoggedInView', name: "CARTER"},
-        {id:'Auditor', toolkitPageBodyCss:'auditor_body_wrapper',name: "AUDITOR", },
-        {id:'Analyser', toolkitPageBodyCss:'analyser_body_wrapper',name: "ANALYSER", },
-        {id:'Documenter', toolkitPageBodyCss:'documenter_body_wrapper',name: "DOCUMENTER", }
+        {id:'Auditor', reloadOnLogin:true, toolkitPageBodyCss:'auditor_body_wrapper',loggedInView:'Auditor',name: "AUDITOR", },
+        {id:'Analyser', reloadOnLogin:true,toolkitPageBodyCss:'analyser_body_wrapper',loggedInView:'Analyser',name: "ANALYSER", },
+        {id:'Documenter', reloadOnLogin:true,toolkitPageBodyCss:'documenter_body_wrapper',loggedInView:'Documenter',name: "DOCUMENTER", }
     ];
 
     function createToolkitItem(toolKitInfo){
@@ -34,26 +91,53 @@ define([
                         });
 
                         if(currentToolkit.length>0) {
-                            $( 'body' ).addClass( currentToolkit[0].toolkitPageBodyCss )
+                            currentToolkit=currentToolkit[0];
+                            $( 'body' ).addClass( currentToolkit.toolkitPageBodyCss );
+                            AppSharedState.setCurrentToolKitInfo(currentToolkit);
+                        }else{
+                            currentToolkit={};
+                            AppSharedState.setCurrentToolKitInfo(currentToolkit);
+                            return;
                         }
+
+
 
                         AppSharedState.loadLoginState('SOURCE_LOGIN');
                         AppSharedState.loadLoginState('TARGET_LOGIN');
 
-                        if(toolkitToLaunch==="CarterNotLoggedInView"){
+                        var loggedIn=AppSharedState.isLoggedIn('SOURCE_LOGIN');
 
-                            var loggedIn=AppSharedState.isLoggedIn('SOURCE_LOGIN');
+                        if(toolkitToLaunch==="CarterNotLoggedInView"){
                             if(loggedIn){
-                                toolkitToLaunch="CarterLoggedInView";
+                                toolkitToLaunch=currentToolkit.loggedInView;
+                            }else{
+
+                                //webix.storage.local.put("TOOLKIT_TO_LOGIN",toolkitToLaunch);
                             }
 
                         }
                         // Bad hack, discuss with Prakash
                         if(toolkitToLaunch == 'Auditor'){
-                            toolkitToLaunch = toolkitToLaunch + "/" + trg.id
+                            //toolkitToLaunch =  trg.id
+                            if(loggedIn){
+                                toolkitToLaunch=currentToolkit.loggedInView;
+                            }else{
+
+                            }
+
+
                         }else if(toolkitToLaunch == 'Analyser'){
-                            toolkitToLaunch = toolkitToLaunch + "/" + trg.id
+
+                            if(loggedIn){
+                                toolkitToLaunch=currentToolkit.loggedInView;
+                            }else{
+
+                            }
+
+                            //toolkitToLaunch =  trg.id
                         }
+
+                        webix.storage.local.put("TOOLKIT_TO_LOGIN",currentToolkit.name);
                         app.show("forceput/"+toolkitToLaunch);
                     }
                 },

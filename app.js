@@ -22,27 +22,23 @@ define([
 		debug:      true,
 		start:      "/forceput/toolkits",
 		appConfig:{
-			apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/',
+			apiServer:'http://45.79.68.106:8080/Auditor/rest/AuditorService/',
+			AUDITOR:{
+                apiServer:'http://45.79.68.106:8080/Auditor/rest/AuditorService/',
+			},
 			CARTER:{
                 apiServer:'http://45.79.68.106:8080/Carter/rest/CarterService/'
 			}
-		},
-		urlList:{
-
-		},
-		sfdcLogins:{
-
-		},
-		sessionData:{
-
 		},
 		getApiUrl:function ( suffix ) {
 			return this.appConfig.apiServer+suffix
 
         },
 		getCarterApiUrl:function ( suffix ) {
-
             return this.appConfig.CARTER.apiServer+suffix
+        },
+		getAuditorApiUrl:function ( suffix ) {
+            return this.appConfig.AUDITOR.apiServer+suffix
         }
 	});
 
@@ -50,7 +46,6 @@ define([
     if (!webix.env.touch && webix.ui.scrollSize) {
         webix.CustomScroll.init();
     }
-
 	app.use(menu);
 	app.use(theme);
 	app.use(locale);

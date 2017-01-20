@@ -38,8 +38,24 @@ define([
                 AppSharedState.loadLoginState('SOURCE_LOGIN');
                 AppSharedState.loadLoginState('TARGET_LOGIN');
 
-                if(prefix==="SOURCE_LOGIN") {
-                    app.show( 'forceput/CarterLoggedInView' );
+                var toolKitToLogin=webix.storage.local.get("TOOLKIT_TO_LOGIN");
+
+
+                var currentToolKitInfo=AppSharedState.getCurrentToolKitInfo();
+
+                if(toolKitToLogin===currentToolKitInfo.name)
+                {
+                    if ( prefix === "SOURCE_LOGIN" ) {
+                        if ( currentToolKitInfo.loggedInView ) {
+                            if(currentToolKitInfo.reloadOnLogin){
+                                webix.storage.local.remove("TOOLKIT_TO_LOGIN");
+                                document.location.reload();
+                            }else {
+                                webix.storage.local.remove("TOOLKIT_TO_LOGIN");
+                                app.show( 'forceput/' + currentToolKitInfo.loggedInView );
+                            }
+                        }
+                    }
                 }
 
             }

@@ -1,16 +1,7 @@
 define([
-    "app"
-],function(app,records){
-
-  debugger;
-    var loginStatus=webix.storage.local.get('SOURCE_LOGIN');
-    if(loginStatus && loginStatus.source_info.id) {
-        var sourceLoginDetails = loginStatus.source_info;
-        var identityServiceUrl = sourceLoginDetails.id;
-        var identityOrgId = identityServiceUrl.split( "/id/" )[1].split( "/" )[0];
-        var sessionId = sourceLoginDetails.access_token;
-        var instanceUrl = sourceLoginDetails.instance_url;
-    }
+    "app",
+    "models/AppSharedState"
+],function(app,AppSharedState){
 
 	var ui = {
         header:'<div class="carter-toolkit-title">AUDITOR</div>',
@@ -50,7 +41,7 @@ define([
                         onAfterLoad:function(){
                             this.hideOverlay();
                             if (!this.count()) {
-                                this.showOverlay( "Sorry, there is no data. Please logout and login again. " );
+                                this.showOverlay( "Sorry, there is no data. " );
                             }
 
                             this.data.sort("xmlName", "asc");
@@ -62,7 +53,17 @@ define([
                             debugger;
                             var me=this;
                             var selectedType=me.getItem(id).xmlName;
-                            var metaDataTypesComponentsListUrl=loginStatus?app.config.getApiUrl('getAuditDetails?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" } &action="'+selectedType+'"'):""
+
+                            AppSharedState.loadLoginState('SOURCE_LOGIN');
+                            AppSharedState.loadLoginState('TARGET_LOGIN');
+
+                            var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
+
+                            var identityOrgId = sourceOrgInfo.identityOrgId;
+                            var sessionId = sourceOrgInfo.sessionId;
+                            var instanceUrl = sourceOrgInfo.instanceUrl;
+
+                            var metaDataTypesComponentsListUrl=app.config.getAuditorApiUrl('getAuditDetails?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" } &action="'+selectedType+'"')
 
                             $$('sourceGrid').clearAll();
                             $$("sourceGrid").define("currentType", selectedType);
@@ -74,8 +75,7 @@ define([
                         onLoadError:function (  ) {
                            //TODO ;
                         }
-                    },
-                    url:loginStatus?app.config.getApiUrl('getAuditActions?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }'):""
+                    }
                 },
                  {
                     view:"pager" , id:"pagerauditActionsList" ,
@@ -97,7 +97,45 @@ define([
 
 	return {
 		$ui: ui,
-		$oninit:function(view){
+        $oninit:function(view){
+
+            AppSharedState.loadLoginState('SOURCE_LOGIN');
+
+            var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
+
+            var identityOrgId = sourceOrgInfo.identityOrgId;
+            var sessionId = sourceOrgInfo.sessionId;
+            var instanceUrl = sourceOrgInfo.instanceUrl;
+
+
+
+            var metaDataTypesListUrl=app.config.getAuditorApiUrl('getAuditActions?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }');
+
+            webix.ajax(metaDataTypesListUrl,{
+                error:function(text, data, XmlHttpRequest){
+                    //alert("error");
+                },
+                success:function(text, data, XmlHttpRequest){
+                    if(XmlHttpRequest.status===204){
+
+                        webix.alert({
+                            type:"alert-error",
+                            title:"Session Time out",
+                            text:"Your source org session timed out. </br>Please login again. and refresh page",
+                            callback:function(){
+                                webix.storage.local.remove('SOURCE_LOGIN');
+                                document.location.reload();
+                                //app.show("forceput/CarterNotLoggedInView")
+                            }
+                        });
+
+
+                    }else if(XmlHttpRequest.status===200){
+                        $$("auditActionsList").parse(text);
+                    }
+                }
+            });
+
 		}
 	};
 
