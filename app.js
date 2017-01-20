@@ -46,6 +46,7 @@ define([
     if (!webix.env.touch && webix.ui.scrollSize) {
         webix.CustomScroll.init();
     }
+
 	app.use(menu);
 	app.use(theme);
 	app.use(locale);

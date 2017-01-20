@@ -131,7 +131,7 @@ define([
                 id:'sourceGrid' ,
                 css:'carter-user-selected-list-of-meta-components' ,
                // scroll:'native-y' ,
-                scroll:true,
+                scroll:false,
                 //scrollAlignY:false ,
                 checkboxRefresh:true ,
                 select:"row" ,

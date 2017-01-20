@@ -36,11 +36,6 @@ define(["app"],function(app){
             }
 
         },
-        settings:{
-	        paging:{
-	            size:15
-            }
-        },
         userSelection: new webix.DataCollection({ data:[] ,
         on:{
             onAfterAdd:function ( id, index ) {

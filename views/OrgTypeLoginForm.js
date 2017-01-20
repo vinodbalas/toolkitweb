@@ -46,7 +46,7 @@ define([
                 },{}]
             },{
 
-                cols:[{},{},{ view:"button", css: "button_primary button_raised carter-source-org-sing-in-btn",  value:"Sign In",  inputWidth:100 ,click:function (  ) {
+                cols:[{},{},{ view:"button", css: "button_primary button_raised carter-source-org-sing-in-btn", id:"my_button", value:"Sign In",  inputWidth:100 ,click:function (  ) {
 
 
                     var clickedMenuKey=$$('sourceOrgType').getValue();

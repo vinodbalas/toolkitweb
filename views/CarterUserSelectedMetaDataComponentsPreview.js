@@ -94,7 +94,7 @@ define([
                 id:'userSelectionsForValidationPreview' ,
                 type:'material' ,
                 css:'carter-user-selected-list-for-validation' ,
-                scroll:true ,
+                scroll:false ,
                 header:false ,
                 pager:'pagerC' ,
                 checkboxRefresh:true ,

@@ -83,7 +83,7 @@ define([
                 type:'material' ,
                 css:'carter-user-selected-list-for-validation' ,
                 //scroll:'xy' ,
-                scroll:true,
+                scroll:false,
                 header:false ,
                 pager:'pagerB' ,
                 headerRowHeight:45 ,

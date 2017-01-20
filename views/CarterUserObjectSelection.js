@@ -142,7 +142,7 @@ define([
                                 },
                                 {
                                     css:'retrieve_progress_status_btn_container' ,
-                                    template:'<div class=" retrieve_progress_status_text"> </div>'
+                                    template:'<div class=" retrieve_progress_status_text">Buttons for next</div>'
                                 }
                             ]
                         }
@@ -379,6 +379,7 @@ define([
         type:"material",
         $oninit:function(view, $scope){
            // $$('userSelectionsForValidation').data.sync($$('sourceGrid'));
+
 
 
 
