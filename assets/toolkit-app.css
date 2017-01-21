@@ -5,7 +5,7 @@ body{
 }
 
 .carter_page_wrapper,
-.auditor_page_wrapper
+.auditor_body_wrapper
 {
     background:#ffffff !important;
 }
@@ -18,6 +18,15 @@ body{
     overflow-y: auto;
 }
 
+.meta-data-type-header-not-logged-in-auditor
+{
+    height: 46px !important;
+    background: #faa541;
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 30px;
+
+}
 .carter-source-login-header {
     text-align: center;
     vertical-align: text-bottom;
@@ -38,7 +47,20 @@ body{
     background: #faa541;
 }
 
+.carter-available-meta-data-types-list{
+    margin-top:0px !important;
+    border-width: 0px !important;
+}
 
+.audit-actions-container {
+    background: #ffffff !important;
+}
+
+.audit-list .webix_ss_header,
+.audit-list .webix_ss_header TD
+{
+    background: #ffffff !important;
+}
 
 .app_container_toolkits_landing_title {
     text-align: center;

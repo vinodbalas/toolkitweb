@@ -59,7 +59,12 @@ define([
 
     return {
         type:"material",
-        $ui:layout
+        $ui:layout ,
+        $oninit:function (  ) {
+            //debugger;
+            $('body').addClass('auditor_body_wrapper');
+
+        }
     };
 
 });
