@@ -6,23 +6,17 @@ define([
     "views/CarterSourceMetaDataComponentsList",
     "views/CarterUserSelectedMetaDataComponents",
     "models/AppSharedState",
-    "models/CarterRetrieveValidateDeployProcess",
     "views/CarterUserSelectedMetaDataComponentsPreview",
     "views/TargetOrgLoginForm",
     "models/CarterWorkFlowHandler",
-    "models/ValidateDeployStepHelper"
+    "views/ValidateDeployView"
 
 ],function(app,CarterSourceMetaDataComponentsList,
            CarterUserSelectedMetaDataComponents,
            AppSharedState,
-           CarterRetrieveValidateDeployProcess,
            CarterUserSelectedMetaDataComponentsPreview,
            TargetOrgLoginForm,
-           CarterWorkFlowHandler,
-           ValidateDeployStepHelper){
-
-
-
+           CarterWorkFlowHandler,ValidateDeployView){
 
 
     var layout = {
@@ -115,17 +109,19 @@ define([
                             type:'plain' ,
                             cols:[
                                 {
-                                    template:(
-                                        '<div  class="cantering_inner c100 p#retrieveStatusValue# big">' +
-                                            '<span >#retrieveStatusValue#%</span>' +
+                                    template:function (data){
+                                        return (
+                                            '<div  class="cantering_inner c100 p'+data.retrieveStatusValue+" " +(data.retrieveStatusText==="Failed"?"failed_progress":"")+' big">' +
+                                            '<span >'+data.retrieveStatusValue+'%</span>' +
                                             '<div class="slice">' +
                                             '<div class="bar"></div>' +
                                             '<div class="fill"></div>' +
                                             '</div>' +
-                                        '</div>'
-
-                                    ) ,
-                                    data:[{ retrieveStatusValue:0 , retrieveStatusText:'Initializing...' }] ,
+                                            '</div>'
+                                        )
+                                    } ,
+                                    data:[{ retrieveStatusValue:0 , retrieveStatusText:'Initializing...',
+                                        complete:false }] ,
                                     id:'retrieveProgressTemplate' ,
                                     css:'retrieve_progress_bar_container '
                                 },
@@ -133,7 +129,12 @@ define([
                                     id:'retrieveProgressTextTemplate' ,
                                     align:'center' ,
                                     css:' retrieve_progress_status_text_container' ,
-                                    template:('<div class=" retrieve_progress_status_text"><span class="blink_me"> #retrieveStatusText# </span></div>') ,
+                                    template:function (data){
+                                        return(
+
+                                            '<div class=" retrieve_progress_status_text"><span class="blink_me '+(data.retrieveStatusText==="Failed"?"failed_progress_text":"")+'"> '+data.retrieveStatusText+' </span></div>'
+                                        )
+                                    },
                                     data:[{
                                         retrieveStatusValue:0 ,
                                         retrieveStatusText:'Initializing...' ,
@@ -158,73 +159,8 @@ define([
                     {
                         type:'plain',
                         id:'validateAndDeployToTargetView',
-                        rows:[{
-                            type:'plain' ,
-                            cols:[
-                                {
-                                    template:(
-                                        '<div  class="cantering_inner c100 p#statusValue# big">' +
-                                        '<span >#statusValue#%</span>' +
-                                        '<div class="slice">' +
-                                        '<div class="bar"></div>' +
-                                        '<div class="fill"></div>' +
-                                        '</div>' +
-                                        '</div>'
-
-                                    ) ,
-                                    data:[{ statusValue:0 , statusText:'Initializing...' }] ,
-                                    id:'validateDeployProgressTemplate' ,
-                                    css:'retrieve_progress_bar_container '
-                                },
-                                {
-                                    id:'validateDeployProgressTextTemplate' ,
-                                    align:'center' ,
-                                    css:' retrieve_progress_status_text_container' ,
-                                    template:('<div class=" retrieve_progress_status_text"><span class="blink_me"> #statusText# </span></div>') ,
-                                    data:[{
-                                        statusValue:0 ,
-                                        statusText:'Initializing...' ,
-                                        complete:false
-                                    }]
-                                },
-                                {
-                                    align:'center' ,
-                                    type:'plain',
-                                    fillspace:4,
-                                    css:'retrieve_progress_status_btn_container' ,
-                                    borderless:true,
-                                    rows:[{},{
-                                        view:'button' ,
-                                        label:'Validate',
-                                        click:function () {
-
-
-                                            if(ValidateDeployStepHelper.canValidate()) {
-                                                $$('carterHomeInitialLoggedInview').disable();
-                                                CarterRetrieveValidateDeployProcess.doValidate( ValidateDeployStepHelper.validateFinalCall,ValidateDeployStepHelper.validateProgressCall);
-                                            }
-                                            else{
-                                                //Alert to Retrieve
-                                            }
-
-                                        }
-                                    },
-                                        {
-                                            view:'button' ,
-                                            label:'Deploy',
-                                            css:'components_list_filter_btn' ,
-                                            click:function () {
-                                                if ( ValidateDeployStepHelper.canDeploy() ) {
-                                                    $$('carterHomeInitialLoggedInview').disable();
-                                                        CarterRetrieveValidateDeployProcess.doDeploy( ValidateDeployStepHelper.deployFinalCall,ValidateDeployStepHelper.deployProgressCall);
-                                                }else{
-                                                    //Alert to Retrieve
-                                                }
-                                            }
-                                        },{}]
-                                }
-                            ]
-                        }
+                        rows:[
+                            ValidateDeployView
                         ]
                     }
                 ],

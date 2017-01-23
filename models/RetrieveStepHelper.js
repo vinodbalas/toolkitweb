@@ -8,13 +8,16 @@ define([
 
         //progressPercent=100;
         var finalStatusValue=finalStatus.status;
+        var completedSuccessFully=true;
         if(finalStatusValue==="Failed"){
             //AppSharedState.retrieveAsyncProcessId=null;
             //AppSharedState.retrieveAsyncProcessStatus=false;
 
             AppSharedState.setProcessStatusFieldValue('retrieve','processStatus',false);
+             completedSuccessFully=false;
         }else if(finalStatusValue==="Succeeded"){
             AppSharedState.setProcessStatusFieldValue('retrieve','processStatus',true);
+             completedSuccessFully=true;
            // AppSharedState.retrieveAsyncProcessStatus=true;
         }
 
@@ -25,7 +28,7 @@ define([
             finalStatusValue="Completed...";
         }
         var retrieveProgressTemplate=$$('retrieveProgressTemplate');
-        var dataTobeUpdated=[{retrieveStatusValue:'100',retrieveStatusText:'Completed...',complete:true}];
+        var dataTobeUpdated=[{retrieveStatusValue:completedSuccessFully?'100':0,retrieveStatusText:finalStatusValue,complete:completedSuccessFully?true:false}];
         retrieveProgressTemplate.define("data",dataTobeUpdated);
         retrieveProgressTemplate.refresh();
 

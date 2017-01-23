@@ -113,6 +113,23 @@ body{
     background: #ffffff;
 }
 
+.visibility_hidden{
+    visibility: hidden;
+    display: none;
+}
+.visibility_show{
+    visibility: visible;
+    display: block;
+}
+
+.failed_progress {
+    background: red !important;
+}
+
+.failed_progress_text {
+    color: red;
+    background: #ffffff !important;
+}
 
 .webix_window, .webix_win_content, .webix_win_body, .webix_win_body > .webix_view {
     border-radius: 0px;

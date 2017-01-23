@@ -9,10 +9,13 @@ define([
         //progressPercent=100;
 
         var finalStatusValue=finalStatus.status;
+        var completedSuccessFully=true;
         if(finalStatusValue==="Failed"){
             AppSharedState.setProcessStatusFieldValue(processType,'processStatus',false);
+            completedSuccessFully=false;
         }else if(finalStatusValue==="Succeeded"){
             AppSharedState.setProcessStatusFieldValue(processType,'processStatus',true);
+            completedSuccessFully=true;
         }
         AppSharedState.setProcessStatusFieldValue(processType,'processStatusId',finalStatus.id);
 
@@ -23,7 +26,7 @@ define([
         }
         //{ statusValue:0 , statusText:'Initializing...' }
         var validateDeployProgressTemplate=$$('validateDeployProgressTemplate');
-        var dataTobeUpdated=[{statusValue:'100',statusText:'Completed...',complete:true}];
+        var dataTobeUpdated=[{statusValue:completedSuccessFully?'100':0,statusText:finalStatusValue,complete:completedSuccessFully?true:false}];
         validateDeployProgressTemplate.define("data",dataTobeUpdated);
         validateDeployProgressTemplate.refresh();
 
@@ -98,9 +101,8 @@ define([
         webix.alert({
             title:"Validate",
             ok:"OK",
-            text: 'Validate Completed Successfully',
+            text: 'Validate Completed with :'+finalStatus.status+" Status",
             callback:function(){
-
                 $$('carterHomeInitialLoggedInview').enable();
             }
         });
@@ -115,7 +117,7 @@ define([
         webix.alert({
             title:"Deploy",
             ok:"OK",
-            text: 'Deploy Completed Successfully',
+            text: 'Deploy Completed with :'+finalStatus.status+" Status",
             callback:function(){
                 $$('carterHomeInitialLoggedInview').enable();
             }
