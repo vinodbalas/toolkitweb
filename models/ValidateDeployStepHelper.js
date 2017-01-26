@@ -13,9 +13,15 @@ define([
         if(finalStatusValue==="Failed"){
             AppSharedState.setProcessStatusFieldValue(processType,'processStatus',false);
             completedSuccessFully=false;
+            if(processType==="deploy") {
+                app.callEvent( 'DO_DEPLOY_ERROR', [finalStatus]);
+            }
         }else if(finalStatusValue==="Succeeded"){
             AppSharedState.setProcessStatusFieldValue(processType,'processStatus',true);
             completedSuccessFully=true;
+            if(processType==="deploy") {
+                app.callEvent( 'DO_DEPLOY_COMPLETE' ,[finalStatus]);
+            }
         }
         AppSharedState.setProcessStatusFieldValue(processType,'processStatusId',finalStatus.id);
 
@@ -24,13 +30,14 @@ define([
         {
             finalStatusValue="Completed...";
         }
+        finalStatusValue=finalStatusValue.toLowerCase();
         //{ statusValue:0 , statusText:'Initializing...' }
-        var validateDeployProgressTemplate=$$('validateDeployProgressTemplate');
-        var dataTobeUpdated=[{statusValue:completedSuccessFully?'100':0,statusText:finalStatusValue,complete:completedSuccessFully?true:false}];
+        var validateDeployProgressTemplate=$$('stepProgressTemplate');
+        var dataTobeUpdated=[{statusValue:finalStatusValue==="failed"?0:100,statusText:("Deploy "+finalStatusValue), status:finalStatusValue,complete:completedSuccessFully?true:false}];
         validateDeployProgressTemplate.define("data",dataTobeUpdated);
         validateDeployProgressTemplate.refresh();
 
-        var validateDeployProgressTextTemplate=$$('validateDeployProgressTextTemplate');
+        var validateDeployProgressTextTemplate=$$('stepProgressTextTemplate');
         validateDeployProgressTextTemplate.define("data",dataTobeUpdated);
         validateDeployProgressTemplate.refresh();
         validateDeployProgressTextTemplate.refresh();
@@ -78,15 +85,17 @@ define([
         }else if(statusKey=="succeeded"){
             progressPercent=100;
         }else if(statusKey=="failed"){
-            progressPercent=100;
+            progressPercent=0;
         }
 
+        progressStatus=progressStatus.toLowerCase();
+
 //{ statusValue:0 , statusText:'Initializing...' }
-        var validateDeployProgressTemplate=$$('validateDeployProgressTemplate');
-        var dataTobeUpdate=[{statusValue:progressPercent,statusText:progressStatus,complete:false}];
+        var validateDeployProgressTemplate=$$('stepProgressTemplate');
+        var dataTobeUpdate=[{statusValue:progressPercent,statusText:("Deploy "+progressStatus), status:progressStatus,complete:false}];
         validateDeployProgressTemplate.define("data",dataTobeUpdate);
 
-        var validateDeployProgressTextTemplate=$$('validateDeployProgressTextTemplate');
+        var validateDeployProgressTextTemplate=$$('stepProgressTextTemplate');
         validateDeployProgressTextTemplate.define("data",dataTobeUpdate);
         validateDeployProgressTemplate.refresh();
         validateDeployProgressTextTemplate.refresh();
@@ -114,14 +123,15 @@ define([
     }
 
     function deployFinalCall ( finalStatus ) {
-        webix.alert({
+        /*webix.alert({
             title:"Deploy",
             ok:"OK",
             text: 'Deploy Completed with :'+finalStatus.status+" Status",
             callback:function(){
-                $$('carterHomeInitialLoggedInview').enable();
+
             }
-        });
+        });*/
+        $$('carterHomeInitialLoggedInview').enable();
 
 
         validateOrDeployFinalCall(finalStatus,'deploy');

@@ -138,14 +138,22 @@ define([
                         var sourceGrid = $$( 'sourceGrid' );
                         var sourceItem = sourceGrid.getItem( row );
                         AppSharedState.removeUserSelection(sourceItem.id);
-                        return;
                     },
                     onItemClick:function ( id , e , node ) {
                         var me = this;
                         AppSharedState.removeUserSelection(id.row);
-                        return;
+                    },
+
+                    "data->onParse":function ( driver , data ) {
+                        var me = this;
+                        if ( !data || !data.data ) {
+                            data.data = [];
+                        }
+                        return data;
                     }
-                }
+
+
+                    }
             }
         ]
     }

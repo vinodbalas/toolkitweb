@@ -12,12 +12,13 @@ define([
         if(finalStatusValue==="Failed"){
             //AppSharedState.retrieveAsyncProcessId=null;
             //AppSharedState.retrieveAsyncProcessStatus=false;
-
             AppSharedState.setProcessStatusFieldValue('retrieve','processStatus',false);
+            app.callEvent('DO_RETRIEVE_ERROR');
              completedSuccessFully=false;
         }else if(finalStatusValue==="Succeeded"){
             AppSharedState.setProcessStatusFieldValue('retrieve','processStatus',true);
              completedSuccessFully=true;
+            app.callEvent('DO_RETRIEVE_COMPLETE');
            // AppSharedState.retrieveAsyncProcessStatus=true;
         }
 
@@ -27,12 +28,13 @@ define([
         {
             finalStatusValue="Completed...";
         }
-        var retrieveProgressTemplate=$$('retrieveProgressTemplate');
-        var dataTobeUpdated=[{retrieveStatusValue:completedSuccessFully?'100':0,retrieveStatusText:finalStatusValue,complete:completedSuccessFully?true:false}];
+        finalStatusValue=finalStatusValue.toLowerCase();
+        var retrieveProgressTemplate=$$('stepProgressTemplate');
+        var dataTobeUpdated=[{statusValue:completedSuccessFully?'100':0,statusText:("Retrieve "+finalStatusValue), status:finalStatusValue, complete:completedSuccessFully?true:false}];
         retrieveProgressTemplate.define("data",dataTobeUpdated);
         retrieveProgressTemplate.refresh();
 
-        var retrieveProgressTextTemplate=$$('retrieveProgressTextTemplate');
+        var retrieveProgressTextTemplate=$$('stepProgressTextTemplate');
         retrieveProgressTextTemplate.define("data",dataTobeUpdated);
         retrieveProgressTemplate.refresh();
         retrieveProgressTextTemplate.refresh();
@@ -53,6 +55,8 @@ define([
 		 webix.html.setValue('retrieveStatusValue', finalStatus);
 		 webix.html.removeCss('retrieveStatusValue',("p"+(progressPercent)-1));
 		 webix.html.addCss('retrieveStatusValue',("p"+progressPercent));*/
+
+
 
     }
     function retrieveProgressCall ( progressStatus ) {
@@ -83,12 +87,12 @@ define([
             progressPercent=100;
         }
 
-
-        var retrieveProgressTemplate=$$('retrieveProgressTemplate');
-        var dataTobeUpdate=[{retrieveStatusValue:progressPercent,retrieveStatusText:progressStatus,complete:false}];
+        progressStatus=progressStatus.toLowerCase();
+        var retrieveProgressTemplate=$$('stepProgressTemplate');
+        var dataTobeUpdate=[{statusValue:progressPercent,statusText:("Retrieve "+progressStatus), status:progressStatus,complete:false}];
         retrieveProgressTemplate.define("data",dataTobeUpdate);
 
-        var retrieveProgressTextTemplate=$$('retrieveProgressTextTemplate');
+        var retrieveProgressTextTemplate=$$('stepProgressTextTemplate');
         retrieveProgressTextTemplate.define("data",dataTobeUpdate);
         retrieveProgressTemplate.refresh();
         retrieveProgressTextTemplate.refresh();

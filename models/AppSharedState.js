@@ -106,6 +106,11 @@ define(["app"],function(app){
             var isExistAlready=state.userSelection.exists( item.id )
             if(!isExistAlready) {
                 item.selectedByUser = true;
+                item.status='';
+                item.fileName='';
+                item.problem='';
+                item.problemType='';
+
                 state.userSelection.add( item );
             }else{
                 item.selectedByUser = false;
@@ -116,6 +121,19 @@ define(["app"],function(app){
             var isExistAlready=state.userSelection.exists(id )
             if(isExistAlready) {
                 state.userSelection.remove( id );
+            }
+        },
+        updateUserSelection:function ( id, objKeyValues ) {
+            var isExistAlready=state.userSelection.exists( id )
+            if(isExistAlready) {
+                var item=state.userSelection.getItem(id);
+                for(var key in objKeyValues){
+                    item[key]=objKeyValues[key];
+                }/*
+                item.status=status;
+                item.fileName='';
+                item.problem='';
+                item.problemType='';*/
             }
         },
         resetUserSelection:function (  ) {

@@ -30,7 +30,7 @@ define([
 		}
 
 		if(currentNumericIndex===4){
-    	    if(!AppSharedState.getProcessStatusFieldValue('retrieve','processStatus')){
+    	    /*if(!AppSharedState.getProcessStatusFieldValue('retrieve','processStatus')){
 
                 webix.alert({
                     type:"alert-error",
@@ -41,7 +41,7 @@ define([
 
     		return;
 
-            }
+            }*/
 		}
 
         var prevIndex=$$('carterLoggedInUserWorkFlowViews').config.activeStepIndex;
@@ -74,7 +74,7 @@ define([
             $$('retrieveFromSourceView').show();
 
 
-            CarterRetrieveValidateDeployProcess.doRetrieve(RetrieveStepHelper.retrieveFinalCall,RetrieveStepHelper.retrieveProgressCall);
+           // CarterRetrieveValidateDeployProcess.doRetrieve(RetrieveStepHelper.retrieveFinalCall,RetrieveStepHelper.retrieveProgressCall);
             //TODO Promise API
 			/*CarterRetrieveValidateDeployProcess.doRetrieve( function ( finalData ) {
 
@@ -104,8 +104,6 @@ define([
             });
             //$$('loginToTargetOrgView').show();
         }else if(prefix==="step5"){
-            ////if(count of user selected ret)
-            //get the step5 and make it active..
             $$('validateAndDeployToTargetView').show();
         }
 

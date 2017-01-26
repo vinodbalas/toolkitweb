@@ -6,17 +6,19 @@ define([
     "views/CarterSourceMetaDataComponentsList",
     "views/CarterUserSelectedMetaDataComponents",
     "models/AppSharedState",
-    "views/CarterUserSelectedMetaDataComponentsPreview",
+    //"views/CarterUserSelectedMetaDataComponentsPreview",
     "views/TargetOrgLoginForm",
     "models/CarterWorkFlowHandler",
-    "views/ValidateDeployView"
+    "views/ValidateDeployView",
+    "views/CarterDeployStatusView"
 
 ],function(app,CarterSourceMetaDataComponentsList,
            CarterUserSelectedMetaDataComponents,
            AppSharedState,
-           CarterUserSelectedMetaDataComponentsPreview,
+           //CarterUserSelectedMetaDataComponentsPreview,
            TargetOrgLoginForm,
-           CarterWorkFlowHandler,ValidateDeployView){
+           CarterWorkFlowHandler,ValidateDeployView,CarterDeployStatusView){
+
 
 
     var layout = {
@@ -47,10 +49,10 @@ define([
                     {
                         template:('<ul class="progressbar">' +
                                     '<li id="step1" class="progress_step_item active">Select from Source</li>' +
-                                    '<li id="step2" class="progress_step_item">Review </li>' +
-                                    '<li id="step3" class="progress_step_item">Retrieve </li>' +
+                                    /*'<li id="step2" class="progress_step_item">Review </li>' +
+                                    '<li id="step3" class="progress_step_item">Retrieve </li>' +*/
                                     '<li id="step4" class="progress_step_item">Login to Target</li>' +
-                                    '<li id="step5" class="progress_step_item">Validate & Deploy</li>' +
+                                    '<li id="step5" class="progress_step_item">Deploy</li>' +
                                 '</ul>'
                                 ),
                         css:'carter-workflow-bar',
@@ -97,60 +99,6 @@ define([
                     },
                     {
                         type:'plain',
-                        id:'objectSelectionPreView',
-                        rows:[
-                            CarterUserSelectedMetaDataComponentsPreview
-                        ]
-                    },
-                    {
-                        type:'plain' ,
-                        id:'retrieveFromSourceView' ,
-                        rows:[{
-                            type:'plain' ,
-                            cols:[
-                                {
-                                    template:function (data){
-                                        return (
-                                            '<div  class="cantering_inner c100 p'+data.retrieveStatusValue+" " +(data.retrieveStatusText==="Failed"?"failed_progress":"")+' big">' +
-                                            '<span >'+data.retrieveStatusValue+'%</span>' +
-                                            '<div class="slice">' +
-                                            '<div class="bar"></div>' +
-                                            '<div class="fill"></div>' +
-                                            '</div>' +
-                                            '</div>'
-                                        )
-                                    } ,
-                                    data:[{ retrieveStatusValue:0 , retrieveStatusText:'Initializing...',
-                                        complete:false }] ,
-                                    id:'retrieveProgressTemplate' ,
-                                    css:'retrieve_progress_bar_container '
-                                },
-                                {
-                                    id:'retrieveProgressTextTemplate' ,
-                                    align:'center' ,
-                                    css:' retrieve_progress_status_text_container' ,
-                                    template:function (data){
-                                        return(
-
-                                            '<div class=" retrieve_progress_status_text"><span class="blink_me '+(data.retrieveStatusText==="Failed"?"failed_progress_text":"")+'"> '+data.retrieveStatusText+' </span></div>'
-                                        )
-                                    },
-                                    data:[{
-                                        retrieveStatusValue:0 ,
-                                        retrieveStatusText:'Initializing...' ,
-                                        complete:false
-                                    }]
-                                },
-                                {
-                                    css:'retrieve_progress_status_btn_container' ,
-                                    template:'<div class=" retrieve_progress_status_text"> </div>'
-                                }
-                            ]
-                        }
-                        ]
-                    } ,
-                    {
-                        type:'plain',
                         id:'loginToTargetOrgView',
                         rows:[
                             TargetOrgLoginForm
@@ -175,6 +123,37 @@ define([
                 },
                 $onevent:{
 
+                    SHOW_DEPLOY_STATUS_IN_WINDOW:function(resData){
+
+
+                        var userSelectionGridPreview = $$( 'userSelectionsForValidationPreview' );
+                        var dataSource=AppSharedState.getUserSelection();
+                        userSelectionGridPreview.sync(dataSource);
+                        userSelectionGridPreview.config.refreshFilterItems();
+
+                        if(resData && resData.details && resData.details.componentFailures){
+
+                            var failedItems=resData.details.componentFailures;
+
+                            for(var i=0, len=failedItems.length; i<len;i++){
+                                var fItem=failedItems[i];
+                                var id=fItem.componentType+ "~~" +fItem.fullName;
+                                AppSharedState.updateUserSelection(id,
+                                    {
+                                        status:'failed',
+                                        fileName:fItem.fileName,
+                                        problem:fItem.problem,
+                                        problemType:fItem.problemType
+
+                                    })
+                            }
+
+                        }
+
+                        $$('statusViewWindow').show();
+
+
+                    },
                     CARTER_USER_SELECTION_CHANGED:function ( id, index ) {
 
                         var dataSource=AppSharedState.getUserSelection();
@@ -199,12 +178,16 @@ define([
                         }
 
                         //
+                        if(dataSource.count()){
+                            userSelectionGrid.sync(dataSource);
+                        }else{
 
-                        userSelectionGrid.sync(dataSource);
-                        userSelectionGridPreview.sync(dataSource);
+                        }
+
+                       // userSelectionGridPreview.sync(dataSource);
                         sourceGrid.refresh();
                         userSelectionGrid.config.refreshFilterItems();
-                        userSelectionGridPreview.config.refreshFilterItems();
+                        //userSelectionGridPreview.config.refreshFilterItems();
 
 
                     },
@@ -223,10 +206,10 @@ define([
                         var userSelectionGrid = $$( 'userSelectionsForValidation' );
                         var userSelectionGridPreview = $$( 'userSelectionsForValidationPreview' );
                         userSelectionGrid.sync(dataSource);
-                        userSelectionGridPreview.sync(dataSource);
+                       // userSelectionGridPreview.sync(dataSource);
                         sourceGrid.refresh();
                         userSelectionGrid.config.refreshFilterItems();
-                        userSelectionGridPreview.config.refreshFilterItems();
+                        //userSelectionGridPreview.config.refreshFilterItems();
 
 
                     },

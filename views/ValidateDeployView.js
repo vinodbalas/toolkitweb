@@ -1,8 +1,11 @@
 define([
     "app",
     "models/CarterRetrieveValidateDeployProcess",
+    'models/RetrieveStepHelper',
     "models/ValidateDeployStepHelper"
-],function(app,CarterRetrieveValidateDeployProcess,ValidateDeployStepHelper){
+],function(app,CarterRetrieveValidateDeployProcess,RetrieveStepHelper,ValidateDeployStepHelper){
+
+
 
 
     var layout = {
@@ -154,12 +157,12 @@ define([
                             ]
                         } ,
                         {
-                            id:'validateDeployProgressContainer' ,
+                            id:'stepProgressContainer' ,
                             rows:[
                                 {
                                     template:function (data){
                                         return (
-                                        '<div  class="cantering_inner c100 p'+data.statusValue+" " +(data.statusText==="Failed"?"failed_progress":"")+' big">' +
+                                        '<div  class="cantering_inner c100 p'+data.statusValue+" " +(data.status.toLowerCase()==="failed"?"failed_progress":"")+' big">' +
                                         '<span >'+data.statusValue+'%</span>' +
                                         '<div class="slice">' +
                                         '<div class="bar"></div>' +
@@ -168,25 +171,26 @@ define([
                                         '</div>'
                                         )
                                     },
-                                    data:[{ statusValue:0 , statusText:'' }] ,
-                                    id:'validateDeployProgressTemplate' ,
+                                    data:[{ statusValue:0 , statusText:'',status:'' }] ,
+                                    id:'stepProgressTemplate' ,
                                     css:'retrieve_progress_bar_container visibility_hidden'
                                 } ,
                                 {
-                                    id:'validateDeployProgressTextTemplate' ,
+                                    id:'stepProgressTextTemplate' ,
                                     align:'center' ,
                                     height:40 ,
                                     css:' retrieve_progress_status_text_container visibility_hidden' ,
                                     template:function (data){
                                         return(
 
-                                            '<div class=" retrieve_progress_status_text"><span class="blink_me '+(data.statusText==="Failed"?"failed_progress_text":"")+'"> '+data.statusText+' </span></div>'
+                                            '<div class=" retrieve_progress_status_text"><span class="blink_me '+(data.status.toLowerCase()==="failed"?"failed_progress_text":"")+'"> '+data.statusText+' </span></div>'
                                         )
                                     } ,
                                     data:[{
                                         statusValue:0 ,
                                         statusText:'' ,
-                                        complete:false
+                                        complete:false,
+                                        status:''
                                     }]
                                 }
                             ] ,
@@ -204,18 +208,18 @@ define([
                                 {} ,
                                 {
                                     view:'button' ,
-                                    label:'Validate' ,
+                                    label:'View Status' ,
+                                    id:'viewStatusButton',
+                                    hidden:true,
+                                    statusData:null,
                                     click:function () {
 
-                                        $( '.retrieve_progress_bar_container' ).addClass( 'visibility_show' );
-                                        $( '.retrieve_progress_status_text_container' ).addClass( 'visibility_show' );
-                                        if ( ValidateDeployStepHelper.canValidate() ) {
-                                            $$( 'carterHomeInitialLoggedInview' ).disable();
-                                            CarterRetrieveValidateDeployProcess.doValidate( ValidateDeployStepHelper.validateFinalCall , ValidateDeployStepHelper.validateProgressCall );
-                                        }
-                                        else {
-                                            //Alert to Retrieve
-                                        }
+                                        //debugger;
+                                        //console.log(this.statusData);
+                                        app.callEvent('SHOW_DEPLOY_STATUS_IN_WINDOW',[this.statusData]);
+
+
+                                        return;
                                     }
                                 } ,
                                 {
@@ -224,14 +228,11 @@ define([
                                     css:'components_list_filter_btn' ,
                                     click:function () {
 
-                                        $( '.retrieve_progress_bar_container' ).addClass( 'visibility_show' );
-                                        $( '.retrieve_progress_status_text_container' ).addClass( 'visibility_show' );
-                                        if ( ValidateDeployStepHelper.canDeploy() ) {
-                                            $$( 'carterHomeInitialLoggedInview' ).disable();
-                                            CarterRetrieveValidateDeployProcess.doDeploy( ValidateDeployStepHelper.deployFinalCall , ValidateDeployStepHelper.deployProgressCall );
-                                        } else {
-                                            //Alert to Retrieve
-                                        }
+                                         $( '.retrieve_progress_bar_container' ).addClass( 'visibility_show' );
+                                         $( '.retrieve_progress_status_text_container' ).addClass( 'visibility_show' );
+                                        app.callEvent('DO_RETRIEVE');
+
+
                                     }
                                 }
                             ]
@@ -250,6 +251,49 @@ define([
         css:'validate_deploy_abs_container',
         $oninit:function (  ) {
 
+        },$onevent:{
+            DO_RETRIEVE:function ( id , index ) {
+                $$( 'carterHomeInitialLoggedInview' ).disable();
+
+                CarterRetrieveValidateDeployProcess.doRetrieve(RetrieveStepHelper.retrieveFinalCall,RetrieveStepHelper.retrieveProgressCall);
+            },
+            DO_RETRIEVE_COMPLETE:function (  ) {
+
+                app.callEvent('DO_DEPLOY');
+
+            },
+            DO_RETRIEVE_ERROR:function ( finalStatus ) {
+                $$( 'carterHomeInitialLoggedInview' ).enable();
+                //TODO
+            },
+            DO_DEPLOY:function (  ) {
+
+                if ( ValidateDeployStepHelper.canDeploy() ) {
+
+                    CarterRetrieveValidateDeployProcess.doDeploy( ValidateDeployStepHelper.deployFinalCall , ValidateDeployStepHelper.deployProgressCall );
+                } else {
+                    //Alert to Retrieve
+                }
+
+            },
+            DO_DEPLOY_COMPLETE:function ( finalStatus ) {
+
+                $$('viewStatusButton').statusData=finalStatus;
+                $$( 'carterHomeInitialLoggedInview' ).enable();
+                //TODO
+                //1.Clear Selection.
+                //2.Clear process Status
+
+                //app.triggerEvent('DO_DEPLOY_COMPLETE');
+            },
+            DO_DEPLOY_ERROR:function ( finalStatus ) {
+
+                var statusButton=$$('viewStatusButton');
+                statusButton.statusData=finalStatus;
+                statusButton.show();
+                $$( 'carterHomeInitialLoggedInview' ).enable();
+                //app.triggerEvent('DO_DEPLOY_ERROR');
+            }
         }
 	};
 	

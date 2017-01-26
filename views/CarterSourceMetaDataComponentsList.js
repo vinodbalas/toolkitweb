@@ -117,7 +117,7 @@ define([
                  view:'button',
                  id:'carterSourceAdvancedFilterBtn',
                  type:"icon",
-                 icon:"fa fa-angle-down",
+                 icon:"angle-down",
                  css:'carter-adv-filter',
                  width:30,
                  popup:"carterSourceAdvFilterWindow"
@@ -168,15 +168,18 @@ define([
                     { id:"modifiedBy" , header:"" , hidden:true } ,
                     { id:"modifiedOn" , header:"" , hidden:true } ,
                     { id:"itemType" , header:"" , hidden:true } ,
-                    { id:"id" , header:"" , hidden:true } ,
+                    { id:"id" , header:"" , hidden:true }
                 ] ,
                 url:'' ,
-                ready:function () {
-                    if ( !this.count() ) { //if no data is available
-                        webix.extend( this , webix.OverlayBox );
-                        this.showOverlay( "<div style='...'>There is no data</div>" );
-                        this.refresh();
+                updateOverlay:function ( self ) {
+                    if ( self.count() <=0 ) { //if no data is available
+                        webix.extend( self , webix.OverlayBox );
+                        self.showOverlay( "<div style='...'>No data to display.<br>Select a meta data type</div>" );
+                        self.refresh();
                     }
+                },
+                ready:function () {
+                    this.config.updateOverlay(this);
                 } ,
                 on:{
                     /*"data->onStoreUpdated":function(){
@@ -227,6 +230,7 @@ define([
                         filterByCombo.getList().parse( sourceGrid.collectValues("modifiedBy") );
                         filterByCombo.refresh();*/
 
+                        this.config.updateOverlay(this);
 
 
                     } ,
@@ -294,18 +298,25 @@ define([
                     } ,
                     "data->onParse":function ( driver , data ) {
                         var me = this;
+                        if(!data || !data.data){
+                            data.data=[];
+                        }
+
                         //for json data
                         var userSelectionGrid = $$( 'userSelectionsForValidation' );
                         //var selectedItemTypeComponentIds=userSelectionGrid.collectValues('id');
                         data = data.data.map( function ( item ) {
-                            var itemType = me.config.currentType;
-                            item.itemType = itemType
-                            var itemId = itemType + "~~" + item["name"];
-                            item.id = itemId;
-                            var isSelectedAlready = userSelectionGrid.exists( itemId );
-                            //get from state and apply
-                            item.selectedByUser = isSelectedAlready?true:false;
-                            return item;
+
+                            if(item) {
+                                var itemType = me.config.currentType;
+                                item.itemType = itemType
+                                var itemId = itemType + "~~" + item["name"];
+                                item.id = itemId;
+                                var isSelectedAlready = userSelectionGrid.exists( itemId );
+                                //get from state and apply
+                                item.selectedByUser = isSelectedAlready ? true : false;
+                                return item;
+                            }
                         } );
 
 

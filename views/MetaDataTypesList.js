@@ -104,6 +104,7 @@ define([
                             var me=this;
                            // alert("you have clicked an item");
                             var selectedType=me.getItem(id).xmlName;
+                            //TODO - MAKE AN AJAX CALL.
                             var metaDataTypesComponentsListUrl=loginStatus?app.config.getCarterApiUrl('getMetadataObjectDetails?session={"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" } &metadataType="'+selectedType+'"'):""
                             //sourceGrid
                             $$('sourceGrid').clearAll();
@@ -133,6 +134,10 @@ define([
 
             AppSharedState.loadLoginState('SOURCE_LOGIN');
             AppSharedState.loadLoginState('TARGET_LOGIN');
+            $$("metaDataTypesList").parse("{}","json");
+            $$("sourceGrid").parse("{}","json");
+            $$("userSelectionsForValidation").parse("{}","json");
+            $$("userSelectionsForValidationPreview").parse("{}","json");
 
             var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
 

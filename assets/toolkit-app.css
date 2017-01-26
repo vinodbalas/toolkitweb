@@ -530,7 +530,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 }
 .progressbar li {
     list-style-type: none;
-    width: 18%;
+    width: 33%;
     float: left;
     font-size: 12px;
     position: relative;
@@ -559,7 +559,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     position: absolute;
     background-color: #faa540;
     top: 33%;
-    left: -41%;
+    left: -45%;
     z-index: -1;
 }
 

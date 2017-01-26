@@ -126,7 +126,6 @@ define([
                 success:function(text, data, XmlHttpRequest){
                     if(XmlHttpRequest.status===204){
 
-
                         finalStatusCallback({status:'Failed'});
 
                     }else if(XmlHttpRequest.status===200){
@@ -138,6 +137,14 @@ define([
                         }
 
                         if(jsonResponse) {
+
+                            if(jsonResponse.status==="Failed"){
+                                console.log("Retrieve Status Failed");
+                                finalStatusCallback(jsonResponse);
+                                return;
+                            }
+
+
                             var asyncProcessId =jsonResponse.data.id;
 
                             AppSharedState.setProcessStatusFieldValue('retrieve','processId',asyncProcessId);
@@ -197,7 +204,7 @@ define([
                 },
                 success:function(text, data, XmlHttpRequest){
                     if(XmlHttpRequest.status===204){
-                        deployFinalStatusCallback({status:'Failed'});
+                        deployFinalStatusCallback({status:'Failed',errorCode:204});
                     }else if(XmlHttpRequest.status===200){
 
                         var jsonResponse={};
@@ -209,13 +216,18 @@ define([
                         var resData=jsonResponse.data;
 
                         if(resData) {
+                            if(resData.status==="Failed"){
+                                console.log("Deploy Status Failed");
+                                deployFinalStatusCallback(jsonResponse);
+                                return;
+                            }
                             var asyncProcessId = resData.id;
                             //AppSharedState.deployStatusAsyncId = asyncProcessId;
                             console.log("Deploy Status Id:"+asyncProcessId);
                             // var deployStatusUrl=this.getDeployStatusUrl(AppSharedState.validateAsyncProcessId);
                             var deployStatusUrl=me.getDeployStatusUrl(asyncProcessId );
                             console.log(":API Call: Deploy Status:"+deployStatusUrl);
-                            me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,deployFinalStatusCallback,deployProgressCallback);
+                            me.doUntilFinalStatus( deployStatusUrl , null , "status" , "Succeeded" , {} , ":Deploy To Target:" ,null,deployFinalStatusCallback,deployProgressCallback,"Failed");
                         }else
                         {
                             console.log("No Data returned");
@@ -237,7 +249,7 @@ define([
             var findParams=this.getFindReplaceParams(true);
 
 
-            var retrieveUrl=app.config.getCarterApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"true" '+(findParams)+'}');
+            var retrieveUrl=app.config.getCarterApiUrl('deploy?targetSession={"sessionId":"'+escape(trgSessionId)+'","instanceUrl":"'+escape(trgInstanceUrl)+'","organizationId":"'+escape(trgIdentityOrgId)+'" }&asyncProcessId="'+escape(asyncProcessId)+'"&carterOptions={"checkOnly":"false" '+(findParams)+'}');
 
             return retrieveUrl;
         },
