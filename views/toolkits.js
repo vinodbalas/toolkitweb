@@ -8,7 +8,7 @@ define([
         css:'abstract_container',
         rows:[
             {template:'Forceput',height:'50px',css:'app_container_toolkits_landing_title'},
-            {template:'Salesforce Toolkit Services',height:'50px',css:'app_container_toolkits_landing_sub_title'},
+            {template:'Toolkit Service',height:'50px',css:'app_container_toolkits_landing_sub_title'},
             ToolkitsList,
 			{id:'forceput_abstract_app',$subview:true,css:'app_container_toolkits_container'}
 
@@ -29,5 +29,5 @@ define([
 
         }
 	};
-	
+
 });
