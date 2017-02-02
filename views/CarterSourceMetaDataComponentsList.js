@@ -78,7 +78,7 @@ define([
                 css:'carter-grid-meta-selection-list-header'
             } ,
             {
-                view:"pager" , id:"pagerA" ,
+                view:"pager" , id:"pagerSourceGrid" ,
                 animate:true ,
                 size:15 ,
                 height:32 ,
@@ -141,7 +141,7 @@ define([
                 multiselect:true ,
                 currentType:null ,
                 header:false,
-                pager:"pagerA" ,
+                pager:"pagerSourceGrid" ,
                 columns:[
                     {
                         id:"selectedByUser" ,

@@ -273,7 +273,7 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 {
     border: 0px !important;
     font-size: 12px;
-    color: #8d8d8d !important;
+    color: #8d8d8d ;
 }
 
 .meta-data-type-list-hover{
@@ -662,6 +662,14 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 .webix_accordionitem_header {
 
     background: #faa540;
+}
+
+.carter-available-meta-data-types-list .webix_ss_body .webix_c_scroll_y > div {
+    background: #f3b56c !important;
+}
+
+.carter-user-login-menu-list .webix_scroll_con .webix_list_item {
+    height: 200px !important;
 }
 
 .carter-toolkit-title {

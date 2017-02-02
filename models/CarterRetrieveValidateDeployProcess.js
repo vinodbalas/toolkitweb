@@ -295,8 +295,15 @@ define([
                     //findReplaces:[{findString:"", replaceString: ""}, {findString:"", replaceString: ""}]
             }
 
+            var stringFormat="";
+            var findReplacesStr=[];
+            for(var i=0,len=findReplaces.length;i<len;i++){
+                var fr=findReplaces[i];
+                stringFormat='{"findString":"'+fr.findString+'","replaceString":"'+fr.replaceString+'"}';
+                findReplacesStr.push(stringFormat);
+            }
             if(asJsonString && findReplaces.length>0){
-                return ",findReplaces:"+JSON.stringify(findReplaces)+"";
+                return ',"findReplaces":[+'+findReplacesStr.join(',')+']';
             }else{
                 return findReplaces;
             }

@@ -20,7 +20,7 @@ define([
                 id:'userSelectedMetaDataComponentsPreView' ,
                 rows:[
                     {
-                        view:"pager" , id:"pagerC" ,
+                        view:"pager" , id:"userSelectionsForValidationPreviewPager" ,
                         animate:true ,
                         size:15 ,
                         height:32 ,
@@ -73,7 +73,7 @@ define([
                         scroll:'xy' ,
                         header:true ,
                         tooltip:true ,
-                        pager:'pagerC' ,
+                        pager:'userSelectionsForValidationPreviewPager' ,
                         checkboxRefresh:true ,
                         resizeColumn:true ,
                         leftSplit:2 ,

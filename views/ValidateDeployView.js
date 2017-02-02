@@ -2,8 +2,9 @@ define([
     "app",
     "models/CarterRetrieveValidateDeployProcess",
     'models/RetrieveStepHelper',
-    "models/ValidateDeployStepHelper"
-],function(app,CarterRetrieveValidateDeployProcess,RetrieveStepHelper,ValidateDeployStepHelper){
+    "models/ValidateDeployStepHelper",
+    "models/AppSharedState"
+],function(app,CarterRetrieveValidateDeployProcess,RetrieveStepHelper,ValidateDeployStepHelper,AppSharedState){
 
 
 
@@ -280,6 +281,55 @@ define([
 
                 $$('viewStatusButton').statusData=finalStatus;
                 $$( 'carterHomeInitialLoggedInview' ).enable();
+
+                webix.confirm("Deployment Success </br> Do you want to download the list as PDF?", function(result){
+
+                    if(result) {
+                        webix.toPDF( $$( "userSelectionsForValidation" ) , {
+                            // orientation:"landscape",
+                            filename:"Deployment-Success-Report" ,
+                            filterHTML:true ,
+                            columns:{
+                                name:{ header:"Name" , template:webix.template( "#name#" ) } ,
+                                itemType:{ header:"Type" , template:webix.template( "#itemType#" ) }
+                            } ,
+                            docHeader:{
+                                text:"Deployment Success Report by forceput.com." ,
+                                textAlign:"center" ,
+                                color:0x663399
+                            }
+                        } ).then(function ( data ) {
+                            AppSharedState.resetUserSelection();
+
+                            $$('metaDataTypesList').clearSelection();
+                            $$('metaDataTypesList').refresh();
+                            $$('pagerMetaDataTypeList').refresh();
+
+                            $$('sourceGrid').clearAll();
+                            $$('sourceGrid').refresh();
+
+                            $$('pagerSourceGrid').refresh();
+
+                            $$('userSelectionsForValidation').refresh();
+                            $$('userSelectionsForValidationPager').refresh();
+
+                            $$('userSelectionsForValidationPreview').refresh();
+                            $$('userSelectionsForValidationPreviewPager').refresh();
+
+
+
+                            app.callEvent('CARTER_STEP_CLICKED', ["step1",null,null, null]);
+
+                        });
+                    }else{
+
+                    }
+
+
+
+                });
+
+
                 //TODO
                 //1.Clear Selection.
                 //2.Clear process Status
@@ -292,6 +342,34 @@ define([
                 statusButton.statusData=finalStatus;
                 statusButton.show();
                 $$( 'carterHomeInitialLoggedInview' ).enable();
+
+                app.callEvent('SHOW_DEPLOY_STATUS_IN_WINDOW',[finalStatus,true]);
+
+                webix.confirm("Deployment Failed </br> Do you want to download the list as PDF?", function(result){
+
+                    if(result) {
+                        webix.toPDF( $$( "userSelectionsForValidation" ) , {
+                            orientation:"landscape",
+                            filename:"Deployment-Failed-Report" ,
+                            filterHTML:true ,
+                            columns:{
+                                name:{ header:"Name", template:webix.template( "#name#" ) } ,
+                                itemType:{ header:"Type" ,width:'80' ,template:webix.template( "#itemType#" ) },
+                                problem:{ header:"Problem" , template:webix.template( "#problem#" ) },
+                                problemType:{ header:"Problem Type",width:'80' , template:webix.template( "#problemType#" ) }
+                            } ,
+                            docHeader:{
+                                text:"Deployment (Failed) Report. by forceput.com." ,
+                                textAlign:"center" ,
+                                color:0x663399
+                            }
+                        } );
+                    }else{
+
+                    }
+
+                });
+
                 //app.triggerEvent('DO_DEPLOY_ERROR');
             }
         }

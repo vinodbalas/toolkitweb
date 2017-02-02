@@ -10,14 +10,15 @@ define([
     "views/TargetOrgLoginForm",
     "models/CarterWorkFlowHandler",
     "views/ValidateDeployView",
-    "views/CarterDeployStatusView"
+    "views/CarterDeployStatusView",
+    "models/UserInfoUtils"
 
 ],function(app,CarterSourceMetaDataComponentsList,
            CarterUserSelectedMetaDataComponents,
            AppSharedState,
            //CarterUserSelectedMetaDataComponentsPreview,
            TargetOrgLoginForm,
-           CarterWorkFlowHandler,ValidateDeployView,CarterDeployStatusView){
+           CarterWorkFlowHandler,ValidateDeployView,CarterDeployStatusView,UserInfoUtils){
 
 
 
@@ -29,7 +30,7 @@ define([
                 height: 46,
                 css:'carter_app_toolbar',
                 elements:[
-                    {}, {view:"label", width:180,   label:'<div class="user_login_profile">' +
+                    {}, {view:"label", width:180, id:"userLoginMenuTrigger",  label:'<div class="user_login_profile">' +
                     '<span class="user_login_profile_icon">' +
                     '<i class="fa fa-user"></i>' +
                     '</span>' +
@@ -123,7 +124,7 @@ define([
                 },
                 $onevent:{
 
-                    SHOW_DEPLOY_STATUS_IN_WINDOW:function(resData){
+                    SHOW_DEPLOY_STATUS_IN_WINDOW:function(resData,silent){
 
 
                         var userSelectionGridPreview = $$( 'userSelectionsForValidationPreview' );
@@ -150,7 +151,9 @@ define([
 
                         }
 
-                        $$('statusViewWindow').show();
+                        if(!silent) {
+                            $$( 'statusViewWindow' ).show();
+                        }
 
 
                     },
@@ -217,6 +220,7 @@ define([
 
 
                         if(prefix==="TARGET_LOGIN") {
+                                UserInfoUtils.getTargetOrgUserInfo();
                             app.callEvent('CARTER_STEP_CLICKED', ["step5",null,null, null]);
                             //$$('validateAndDeployToTargetView').show();
                         }

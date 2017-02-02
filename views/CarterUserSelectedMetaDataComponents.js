@@ -28,7 +28,7 @@ define([
                 ]
             } ,
             {
-                view:"pager" , id:"pagerB" ,
+                view:"pager" , id:"userSelectionsForValidationPager" ,
                 animate:true ,
                 size:15 ,
                 height:32 ,
@@ -85,7 +85,7 @@ define([
                 //scroll:'xy' ,
                 scroll:true,
                 header:false ,
-                pager:'pagerB' ,
+                pager:'userSelectionsForValidationPager' ,
                 headerRowHeight:45 ,
                 checkboxRefresh:true ,
                 rowLineHeight:35,
@@ -96,11 +96,7 @@ define([
                     {
                         id:"selectedByUser" ,
                         width:40 ,
-                        header:["" , {
-                            content:"masterCheckbox" ,
-                            css:"center master_checkbox",
-                            contentid:'masterCheckBoxUserSelection'
-                        }] ,
+                        header:"" ,
                         css:"left" ,
                         template:'<div class="rounded-checkbox">{common.checkbox()} <label for="rounded-checkbox"></label></div>',
                         checkValue:true,
@@ -109,13 +105,13 @@ define([
                     {
                         id:"name" ,
                         sort:'string',
-                        header:["Shortlisted Metadata Component Names" , { content:"textFilter" ,
-                            compare:AppDataFormattingUtils.carterDefaultSearchComparator}] ,
+                        header:"Name",
                         template:AppDataFormattingUtils.carterDefaultColumnTemplateFn,
                         fillspace:3
                     } ,
                     {
                         id:"itemType" ,
+                        header:'Type',
                         sort:'string',
                         template:"<div class='carter-source-grid-row-obj-name'>#itemType#</div>" ,
                         fillspace:1

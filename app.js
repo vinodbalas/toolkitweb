@@ -12,7 +12,7 @@ define([
 ){
 
 
-
+    webix.cdn = "cdn-extras";
 
 	//configuration
 	var app = core.create({

@@ -1,7 +1,8 @@
 define([
     "app",
-    "models/AppSharedState"
-],function(app,AppSharedState){
+    "models/AppSharedState",
+    "models/UserInfoUtils"
+],function(app,AppSharedState,UserInfoUtils){
 
 
 
@@ -139,6 +140,8 @@ define([
             $$("userSelectionsForValidation").parse("{}","json");
             $$("userSelectionsForValidationPreview").parse("{}","json");
 
+            UserInfoUtils.getSourceOrgUserInfo();
+            UserInfoUtils.getTargetOrgUserInfo();
             var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
 
             var identityOrgId = sourceOrgInfo.identityOrgId;
@@ -167,8 +170,23 @@ define([
 
 
                     }else if(XmlHttpRequest.status===200){
-                        $$("metaDataTypesList").parse(text);
                         AppSharedState.resetUserSelection();
+                        //$$('metaDataTypesList').clearSelection();
+                        //$$('metaDataTypesList').refresh();
+                        //$$('pagerMetaDataTypeList').refresh();
+
+                        $$('sourceGrid').clearAll();
+                        $$("sourceGrid").parse("{}","json");
+                        $$('pagerSourceGrid').refresh();
+                        $$('sourceGrid').refresh();
+
+                        $$('userSelectionsForValidation').refresh();
+                        $$('userSelectionsForValidationPager').refresh();
+
+                        $$('userSelectionsForValidationPreview').refresh();
+                        $$('userSelectionsForValidationPreviewPager').refresh();
+                        $$("metaDataTypesList").parse(text);
+
                     }
                 }
             });

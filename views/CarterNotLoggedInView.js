@@ -6,8 +6,9 @@ define([
     "views/CarterHomeView",
     "views/CarterHomeViewLeftBar",
     "views/CarterHomeSourceLogin",
-    "models/AppSharedState"
-],function(app,CarterHomeView,CarterHomeViewLeftBar,CarterHomeSourceLogin,AppSharedState){
+    "models/AppSharedState",
+    "models/UserInfoUtils"
+],function(app,CarterHomeView,CarterHomeViewLeftBar,CarterHomeSourceLogin,AppSharedState,UserInfoUtils){
 
     var cmpToRender={
         type:'plain',
@@ -52,11 +53,13 @@ define([
                                 document.location.reload();
                             }else {
                                 webix.storage.local.remove("TOOLKIT_TO_LOGIN");
+                                //UserInfoUtils.getSourceOrgUserInfo();
                                 app.show( 'forceput/' + currentToolKitInfo.loggedInView );
                             }
                         }
                     }
                 }
+
 
             }
         }};

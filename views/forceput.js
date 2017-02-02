@@ -12,52 +12,99 @@ define([
         css:'carter-user-login-menu-list-popup',
         head:false,
         width: 300,
+        height:400,
+        scroll:true,
         body:{
             view:"list" ,
             css:'carter-user-login-menu-list' ,
-            scroll:false ,
+            scroll:true ,
             yCount:2 ,
-            select:true ,
+            select:false ,
+            width: 300,
+            height:400,
             borderless:true ,
             template:"#menuItemText#" ,
+
+            /*type:{
+                templateStart:"<div item_id='id' class='custom_item'>",
+                template:"#rank#. #title#<br><div style='text-align:right;'>#year#</div>",
+                templateEnd:"</div>"
+            },
+             "data" : {
+             "organizationName" : "BARCLAYS",
+             "userEmail" : "sph.prakash@gmail.com",
+             "userFullName" : "Prakash S",
+             "userType" : "Standard"
+             }
+            */
             data:[
                 {
                     id:1 ,
-                    menuItemText:"<div class='source_logout_menu'>" +
-                    "<span class='source_logout_menu_icon'><i class='fa fa-cloud-download'></i></span>" +
-                    "<span class='source_logout_menu_text'>Source Logout</span>" +
+                    menuItemText:"<div class='source_logout_menu' style='height: 200px !important;'>" +
+                    "<div class='source_info_menu_text'>" +
+                        "<div class='source_info_menu_text' id='sourceUserFullName'></div>"+
+                        "<div class='source_info_menu_text' id='sourceUserEmail'></div>"+
+                        "<div class='source_info_menu_text' id='sourceUserType'></div>"+
+                        "<div class='source_info_menu_text' id='sourceOrganizationName'></div>"+
+                    "</div>" +
+                    "<div class='source_logout_menu_logout_container'><span class='source_logout_menu_icon'><i class='fa fa-cloud-upload'></i></span>" +
+                    "<span class='source_logout_menu_text'><a href='javascript:void(0);' class='source_logout_link'>Source Logout</a></span> </div>" +
+
                     "</div>"
                     , css:'carter-user-login-menu-item-source'
                 } ,
                 {
                     id:2 ,
-                    menuItemText:"<div class='target_logout_menu'>" +
-                    "<span class='target_logout_menu_icon'><i class='fa fa-cloud-upload'></i></span>" +
-                    "<span class='target_logout_menu_text'>Target Logout</span>" +
-                    "</div>" ,
-                    css:'carter-user-login-menu-list-target'
+                    menuItemText:"<div class='target_logout_menu' style='height: 200px !important;'>" +
+                    "<div class='target_info_menu_text'>" +
+                    "<div class='target_info_menu_text' id='targetUserFullName'></div>"+
+                    "<div class='target_info_menu_text' id='targetUserEmail'></div>"+
+                    "<div class='target_info_menu_text' id='targetUserType'></div>"+
+                    "<div class='target_info_menu_text' id='targetOrganizationName'></div>"+
+                    "</div>" +
+                    "<div class='target_logout_menu_logout_container'><span class='target_logout_menu_icon'><i class='fa fa-cloud-download'></i></span>" +
+                    "<span class='target_logout_menu_text'><a href='javascript:void(0);' class='target_logout_link'>Target Logout</a></span> </div>" +
+
+                    "</div>"
+                    ,css:'carter-user-login-menu-list-target'
                 }
             ] ,
+            type:{
+                height:200
+            },
+            onClick:{
+                source_logout_link:function ( id , ev ) {
+                    var sourceOrgInfo=AppSharedState.getOrgLogInInfo("SOURCE_LOGIN");
+
+                    var identityOrgId = sourceOrgInfo.identityOrgId;
+                    var sessionId = sourceOrgInfo.sessionId;
+                    var instanceUrl = sourceOrgInfo.instanceUrl;
+                    var sourceSessionInfo='{"sessionId":"'+escape(sessionId)+'","instanceUrl":"'+escape(instanceUrl)+'","organizationId":"'+escape(identityOrgId)+'" }';
+
+                    var logoutUrl=app.config.getCarterApiUrl('logout?session='+sourceSessionInfo);
+
+
+                    var promise = webix.ajax(logoutUrl);
+                    promise.then(function(resData) {
+                        webix.storage.local.remove('SOURCE_LOGIN');
+                        app.show("forceput/toolkits");
+                        AppSharedState.loadLoginState('SOURCE_LOGIN');
+                        document.location.reload();
+
+                    });
+                    promise.fail(function(err){
+                    });
+
+                    $$("userLoginMenu").hide();
+
+                },
+                target_logout_link:function ( id , ev ) {
+                    webix.storage.local.remove('TARGET_LOGIN');
+                    $$("userLoginMenu").hide();
+                }
+            },
             on:{
                 "onAfterSelect":function(id){
-                    if(id==="1"){
-                        webix.storage.local.remove('SOURCE_LOGIN');
-                        //app.show("forceput/CarterLoggedInView")
-                        AppSharedState.loadLoginState('SOURCE_LOGIN');
-                        AppSharedState.loadLoginState('TARGET_LOGIN');
-                        app.show("forceput/toolkits");
-                        document.location.reload();
-                        //trigger source logout event.
-                        //clear index db
-                    }
-                    else if(id==="2"){
-                        webix.storage.local.remove('TARGET_LOGIN');
-                        //TODO..
-                        //trigger target logout event.
-                        // window.location.reload();
-                        //clear index db
-                    }
-                    $$("userLoginMenu").hide();
                 }
             }
         }
@@ -108,8 +155,51 @@ define([
             }
         }
     });
+
+ USER_INFO_
 /**/
         webix.detachEvent(webix.debug_load_event);
 
-    return { id:'forceput_abstract_app',$subview:true,css:'abstract_app'};
+    return { id:'forceput_abstract_app',$subview:true,css:'abstract_app', $onevent:{
+
+        USER_INFO_SOURCE:function ( data ) {
+
+            debugger;
+            /*"{
+             "success" : true,
+             "message" : null,
+             "data" : {
+             "organizationName" : "BARCLAYS",
+             "userEmail" : "sph.prakash@gmail.com",
+             "userFullName" : "Prakash S",
+             "userType" : "Standard"
+             }
+             }"*/
+            if(data && data.data) {
+                var info = data.data;
+                $( '#sourceOrganizationName' ).text( info.organizationName );
+                $( '#sourceUserEmail' ).text( info.userEmail );
+                $( '#sourceUserFullName' ).text( info.userFullName );
+                $( '#sourceUserType' ).text( info.userType );
+            }else{
+                app.show("forceput/CarterNotLoggedInView");
+            }
+
+        },
+        USER_INFO_TARGET:function ( data ) {
+
+            debugger;
+
+            if(data && data.data) {
+                var info=data.data;
+                $( '#targetOrganizationName' ).text( info.organizationName );
+                $( '#targetUserEmail' ).text( info.userEmail );
+                $( '#targetUserFullName' ).text( info.userFullName );
+                $( '#targetUserType' ).text( info.userType );
+            }else{
+
+            }
+
+        }
+    }};
 });
