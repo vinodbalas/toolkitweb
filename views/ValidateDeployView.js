@@ -25,7 +25,7 @@ define([
                                     cols:[{
                                         view:"checkbox" ,
                                         labelRight:"Allow Missing Files" ,
-                                        id:'chkAllowMissingFiles' ,
+                                        id:'allowMissingFiles' ,
                                         name:'allowMissingFiles' ,
                                         uncheckValue:"" ,
                                         checkValue:"true" ,
@@ -34,7 +34,7 @@ define([
                                         {
                                             view:"checkbox" ,
                                             labelRight:"Auto Update Package" ,
-                                            id:'chkAutoUpdatePackage' ,
+                                            id:'autoUpdatePackage' ,
                                             name:'autoUpdatePackage' ,
                                             uncheckValue:"" ,
                                             checkValue:"true" ,
@@ -47,7 +47,7 @@ define([
                                         view:"checkbox" ,
                                         labelRight:"Ignore Warnings" ,
                                         uncheckValue:"" ,
-                                        id:'chkIgnoreWarnings' ,
+                                        id:'ignoreWarnings' ,
                                         name:'ignoreWarnings' ,
                                         checkValue:"true" ,
                                         labelWidth:0
@@ -77,8 +77,19 @@ define([
                                             view:"checkbox" ,
                                             labelRight:"Rollback On Error" ,
                                             uncheckValue:"" ,
-                                            id:'chkRollbackOnError' ,
+                                            id:'rollbackOnError' ,
                                             name:'rollbackOnError' ,
+                                            checkValue:"true" ,
+                                            labelWidth:0
+                                        }]
+                                } ,{
+                                    cols:[
+                                        {
+                                            view:"checkbox" ,
+                                            labelRight:"Validate Only" ,
+                                            uncheckValue:"" ,
+                                            id:'checkOnly' ,
+                                            name:'checkOnly' ,
                                             checkValue:"true" ,
                                             labelWidth:0
                                         }]
@@ -87,7 +98,7 @@ define([
                                 {
                                     view:"scrollview" ,
                                     scroll:true ,
-                                    height:240 ,
+                                    height:200 ,
                                     borderless:true ,
                                     body:{
                                         borderless:true ,
