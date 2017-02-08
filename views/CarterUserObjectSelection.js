@@ -6,19 +6,21 @@ define([
     "views/CarterSourceMetaDataComponentsList",
     "views/CarterUserSelectedMetaDataComponents",
     "models/AppSharedState",
-    //"views/CarterUserSelectedMetaDataComponentsPreview",
+    "views/CarterUserSelectedMetaDataComponentsPreview",
     "views/TargetOrgLoginForm",
     "models/CarterWorkFlowHandler",
     "views/ValidateDeployView",
-    "views/CarterDeployStatusView",
+    /*"views/CarterDeployStatusView",*/
     "models/UserInfoUtils"
 
 ],function(app,CarterSourceMetaDataComponentsList,
            CarterUserSelectedMetaDataComponents,
            AppSharedState,
-           //CarterUserSelectedMetaDataComponentsPreview,
+           CarterUserSelectedMetaDataComponentsPreview,
            TargetOrgLoginForm,
-           CarterWorkFlowHandler,ValidateDeployView,CarterDeployStatusView,UserInfoUtils){
+           CarterWorkFlowHandler,ValidateDeployView,
+           /*CarterDeployStatusView,*/
+           UserInfoUtils){
 
 
 
@@ -50,9 +52,9 @@ define([
                     {
                         template:('<ul class="progressbar">' +
                                     '<li id="step1" class="progress_step_item active">Select from Source</li>' +
-                                    /*'<li id="step2" class="progress_step_item">Review </li>' +
-                                    '<li id="step3" class="progress_step_item">Retrieve </li>' +*/
-                                    '<li id="step4" class="progress_step_item">Login to Target</li>' +
+                                    '<li id="step2" class="progress_step_item">Review </li>' +
+                                    /*'<li id="step3" class="progress_step_item">Retrieve </li>' +*/
+                                    /*'<li id="step4" class="progress_step_item">Login to Target</li>' +*/
                                     '<li id="step5" class="progress_step_item">Deploy</li>' +
                                 '</ul>'
                                 ),
@@ -100,9 +102,9 @@ define([
                     },
                     {
                         type:'plain',
-                        id:'loginToTargetOrgView',
+                        id:'objectSelectionPreView',
                         rows:[
-                            TargetOrgLoginForm
+                            CarterUserSelectedMetaDataComponentsPreview
                         ]
                     },
                     {
@@ -187,10 +189,10 @@ define([
 
                         }
 
-                       // userSelectionGridPreview.sync(dataSource);
+                        userSelectionGridPreview.sync(dataSource);
                         sourceGrid.refresh();
                         userSelectionGrid.config.refreshFilterItems();
-                        //userSelectionGridPreview.config.refreshFilterItems();
+                        userSelectionGridPreview.config.refreshFilterItems();
 
 
                     },
@@ -221,7 +223,7 @@ define([
 
                         if(prefix==="TARGET_LOGIN") {
                                 UserInfoUtils.getTargetOrgUserInfo();
-                            app.callEvent('CARTER_STEP_CLICKED', ["step5",null,null, null]);
+                            //app.callEvent('CARTER_STEP_CLICKED', ["step5",null,null, null]);
                             //$$('validateAndDeployToTargetView').show();
                         }
 

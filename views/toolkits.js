@@ -1,7 +1,9 @@
 define([
     "app",
-    "views/ToolkitsList"
-],function(app,ToolkitsList){
+    "views/ToolkitsList",
+    "models/AppSharedState",
+    "models/AppEventHandlers"
+],function(app,ToolkitsList,AppSharedState,AppEventHandlers){
 
 
     var layout = {

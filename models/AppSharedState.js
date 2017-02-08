@@ -57,11 +57,75 @@ define(["app"],function(app){
 
     };
 
+    function getCurrentLoginItem ( keyItem ) {
+
+        var values = {},
+            keys = Object.keys(localStorage),
+            i = keys.length;
+
+        while ( i-- ) {
+            var key=keys[i];
+            var item=JSON.parse(localStorage.getItem(key));
+
+
+            if(item.prefix===keyItem) {
+                values[item.loggedInTime]=item;
+            }
+        }
+
+        var returnKeys=Object.keys(values);
+        if(returnKeys) {
+            return values[returnKeys[0]];
+        }else{
+            return null;
+        }
+
+
+
+
+    }
+
+    function getOrgLoggedInUserItems ( orgType ) {
+
+        var values = [],
+            keys = Object.keys(localStorage),
+            i = keys.length;
+
+        while ( i-- ) {
+            var key=keys[i];
+            if(key.indexOf(orgType+"_"+"USER_INFO_")!=-1) {
+                var item = JSON.parse( localStorage.getItem( key ) );
+                values.push(item);
+            }
+        }
+
+        return values;
+
+
+
+    }
+
+
+
 	function  loadLoginState ( prefix ) {
 
-        var loginStatus=webix.storage.local.get(prefix);
-        if(loginStatus && loginStatus.source_info && loginStatus.source_info.id) {
-            var sourceLoginDetails = loginStatus.source_info;
+        var loginStatus=null;
+        var typeKey=null;
+        if(prefix==="SOURCE_LOGIN"){
+
+            loginStatus=getCurrentLoginItem('SOURCE');
+            typeKey='source_info';
+
+        }else if(prefix==="TARGET_LOGIN"){
+
+            debugger;
+            loginStatus=getCurrentLoginItem('TARGET');
+            typeKey='target_info';
+        }
+
+	    //TODO
+        if(loginStatus && loginStatus[typeKey] && loginStatus[typeKey].id) {
+            var sourceLoginDetails = loginStatus[typeKey];
             var identityServiceUrl = sourceLoginDetails.id;
             var identityOrgId = identityServiceUrl.split( "/id/" )[1].split( "/" )[0];
             var sessionId = sourceLoginDetails["access_token"];
@@ -83,11 +147,17 @@ define(["app"],function(app){
 
     return {
         STATE:state ,
+        getOrgLoggedInUserItems:getOrgLoggedInUserItems,
         loadLoginState:loadLoginState,
         isLoggedIn:function ( prefix ) {
             var me=this;
             var returnValue = false;
             var loginStatus = me.STATE[prefix];
+            if(!loginStatus && !loginStatus.identityOrgId)//If exisiting
+            {
+                loadLoginState(prefix);//RELOAD and Check
+            }
+            loginStatus = me.STATE[prefix];
             if ( loginStatus && loginStatus.identityOrgId ) {
                 returnValue = true;
             }

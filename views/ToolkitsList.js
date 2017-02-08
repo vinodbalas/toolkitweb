@@ -12,7 +12,7 @@ define([
 
 
     var toolkitsList=[
-        {id:'CarterNotLoggedInView', toolkitPageBodyCss:'carter_page_wrapper', loggedInView:'CarterLoggedInView', name: "CARTER"},
+        {id:'Carter', toolkitPageBodyCss:'carter_page_wrapper', loggedInView:'Carter', name: "CARTER"},
         {id:'Auditor', reloadOnLogin:true, toolkitPageBodyCss:'auditor_body_wrapper',loggedInView:'Auditor',name: "AUDITOR", },
         {id:'Analyser', reloadOnLogin:true,toolkitPageBodyCss:'analyser_body_wrapper',loggedInView:'Analyser',name: "ANALYSER", },
         {id:'Documenter', reloadOnLogin:true,toolkitPageBodyCss:'documenter_body_wrapper',loggedInView:'Documenter',name: "DOCUMENTER", }
@@ -52,7 +52,7 @@ define([
 
                         var loggedIn=AppSharedState.isLoggedIn('SOURCE_LOGIN');
 
-                        if(toolkitToLaunch==="CarterNotLoggedInView"){
+                        if(toolkitToLaunch==="Carter"){
                             if(loggedIn){
                                 toolkitToLaunch=currentToolkit.loggedInView;
                             }else{
@@ -83,7 +83,7 @@ define([
                         }
 
                         webix.storage.local.put("TOOLKIT_TO_LOGIN",currentToolkit.name);
-                        app.show("forceput/"+toolkitToLaunch);
+                        app.show(""+toolkitToLaunch);
                     }
                 },
                 template:('<div id="'+toolKitInfo.id+'" class="toolkit_item_wrapper">' +

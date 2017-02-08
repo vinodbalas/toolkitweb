@@ -40,7 +40,7 @@ define([
                 ]
             } ,
             {
-                view:"pager" , id:"pagerC" ,
+                view:"pager" , id:"userSelectionsForValidationPreviewPager" ,
                 animate:true ,
                 size:15 ,
                 height:32 ,
@@ -96,7 +96,7 @@ define([
                 css:'carter-user-selected-list-for-validation' ,
                 scroll:true ,
                 header:false ,
-                pager:'pagerC' ,
+                pager:'userSelectionsForValidationPreviewPager' ,
                 checkboxRefresh:true ,
                 resizeColumn:true ,
                 scrollAlignY:true ,

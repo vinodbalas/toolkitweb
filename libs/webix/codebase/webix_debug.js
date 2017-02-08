@@ -35674,8 +35674,6 @@ webix.protoUI({ name:"checksuggest" },webix.ui.NonGPL);
 webix.protoUI({ name:"treemap" },webix.ui.NonGPL);
 webix.protoUI({ name:"rangeslider" },webix.ui.NonGPL);
 webix.protoUI({ name:"rangechart" },webix.ui.NonGPL);
-webix.protoUI({ name:"datalayout" },webix.ui.NonGPL);
-webix.protoUI({ name:"abslayout" },webix.ui.NonGPL);
 
 
 webix.protoUI({
@@ -36517,3 +36515,127 @@ webix.protoUI({
 		return this.config.value || "";
 	}
 }, webix.IdSpace, webix.ui.layout);
+
+
+
+/**Hacked to Death*/
+
+webix.protoUI({
+    name:"abslayout",
+    $init:function(){
+        this.$view.className += " webix_abslayout";
+        delete this.rows_setter;
+        delete this.cols_setter;
+    },
+    cells_setter:function(cells){
+        this._collection = cells;
+    },
+    _parse_cells:function(){
+        webix.ui.baselayout.prototype._parse_cells.call(this, this._collection);
+    },
+    $getSize:function(dx, dy){
+        return webix.ui.baseview.prototype.$getSize.call(this, 0, 0);
+    },
+    $setSize:function(x,y){
+        this._layout_sizes = [x,y];
+        webix.debug_size_box_start(this);
+
+        webix.ui.baseview.prototype.$setSize.call(this,x,y);
+        this._set_child_size(x,y);
+
+        webix.debug_size_box_end(this, [x,y]);
+    },
+    _set_child_size:function(x,y){
+        for (var i=0; i<this._cells.length; i++){
+            var view = this._cells[i];
+            var sizes = view.$getSize(0,0);
+            view.$setSize(sizes[0], sizes[2]);
+
+            var node = view.$view;
+            node.style.left = view._settings.left + "px";
+            node.style.top  = view._settings.top  + "px";
+        }
+    }
+}, webix.ui.baselayout);
+
+webix.protoUI({
+    name:"datalayout",
+    $init:function(){
+        this.data.provideApi(this, true);
+        this.data.attachEvent("onStoreUpdated", webix.bind(this.render, this));
+    },
+    _parse_cells:function(cells){
+        if (!this._origin_cells){
+            this._origin_cells = this._collection;
+            this._collection = [{}];
+        }
+
+        return webix.ui.layout.prototype._parse_cells.call(this, this._collection);
+    },
+    _fill_data:function(view, prop){
+        var obj, name = view._settings.name;
+        if (name){
+            if (name == "$value")
+                obj = prop;
+            else
+                obj = prop[name];
+
+            if (view.setValues) view.setValues(obj);
+            else if (view.setValue) view.setValue(obj);
+            else if (view.parse){
+                //make copy of data for treestore parsers
+                if (view.openAll)
+                    obj = webix.copy(obj);
+                view.parse(obj);
+            }
+        } else {
+            var collection = view._cells;
+            if (collection)
+                for (var i = 0; i < collection.length; i++)
+                    this._fill_data(collection[i], prop);
+        }
+    },
+    render:function(id, obj, mode){
+        if (id && mode === "update"){
+            //update mode, change only part of layout
+            var obj = this.getItem(id);
+            var index = this.getIndexById(id);
+
+            this._fill_data(this._cells[index], obj);
+            return;
+        }
+
+        //full repainting
+        var cells = this._collection = [];
+        var order = this.data.order;
+        var subcount = this._origin_cells.length;
+
+        for (var i = 0; i < order.length; i++) {
+            if (subcount)
+                for (var j = 0; j < subcount; j++)
+                    cells.push(webix.copy(this._origin_cells[j]));
+            else
+                cells.push(this.getItem(order[i]));
+        }
+
+        if (!cells.length) cells.push({});
+
+        this.reconstruct();
+
+        if (subcount)
+            for (var i = 0; i < order.length; i++) {
+                var prop = this.getItem(order[i]);
+                for (var j = 0; j < subcount; j++) {
+                    var view = this._cells[i*subcount + j];
+                    this._fill_data(view, prop);
+                }
+            }
+    }
+}, webix.DataLoader, webix.ui.layout);
+
+webix.protoUI({
+    $init:function(){
+        webix.extend(this, webix.FlexLayout, true);
+    },
+    name:"flexdatalayout"
+}, webix.ui.datalayout);

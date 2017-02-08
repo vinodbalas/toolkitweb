@@ -52,6 +52,27 @@ body{
     border-width: 0px !important;
 }
 
+
+.divider_line_cmp {
+    border-width: 0px;
+    /* border: 0px !important; */
+    padding: 0px !important;
+    width: 1px !important;
+    margin-top: 21px !important;
+}
+
+.carter_login_source_org_panel_header,
+.carter_login_target_org
+{
+    text-align: center;
+    padding-top: 30px;
+}
+
+.divider_line_cmp .webix_template{
+    width: 1px !important;
+    padding: 0px !important;
+}
+
 .audit-actions-container {
     background: #ffffff !important;
 }
@@ -608,9 +629,11 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 }
 
 
-.carter-toolkit-desc
-{
+.carter-toolkit-desc {
     line-height: 37px;
+    text-align: justify;
+    word-break: normal;
+    padding: 1px;
 }
 
 .carter_not_logged_in_center_container_title
@@ -668,6 +691,146 @@ carter-user-selected-list-of-meta-components >.webix_hcell
     background: #f3b56c !important;
 }
 
+.carter_not_logged_in_left_description_container  .webix_c_scroll_y > div {
+    background: #f3b56c !important;
+}
+
+.singn_up_type {
+    color: #ec8306;
+    font-weight: bold;
+}
+
+.singn_up_type:hover{
+
+   zoom: 1.2;
+    cursor: hand !important;
+    border: 1px solid #ec8306;
+
+}
+
+.register_link
+{
+    zoom:normal !important;
+
+    border: 0px solid #ec8306 !important;
+}
+.register_link:hover,
+.continue_link:hover{
+    text-decoration: underline !important;
+}
+
+.register_link,
+.continue_link
+{
+    zoom:normal !important;
+    text-decoration: none !important;
+    border: 0px solid #ec8306 !important;
+}
+
+.continue_link
+{
+    font-size: 20px;
+    margin-right: 30px;
+    margin-left: 74px;
+    text-decoration: underline !important;
+}
+.personalization_prompt_text
+{
+    font-size: 11px;
+    padding-left: 15px;
+    /* text-align: center; */
+}
+.signup_or_text{
+    font-size: 11px;
+}
+.signup_separator {
+    padding-left: 15px;
+}
+
+.source_logged_in_display_wrapper,
+.target_logged_in_display_wrapper
+{
+    border: 1px solid #d2caca;
+}
+.source_logged_in_display_wrapper:hover{
+    background: #d2caca;
+}
+
+.source_logged_in_info_field,
+.target_logged_in_info_field{
+    /*line-height: 35px;*/
+    padding: 10px;
+    height: 100%;
+    font-size: 12px;
+}
+
+.source_logged_in_display_header ,
+.target_logged_in_display_header{
+    line-height: 50px;
+    text-align: center;
+}
+.carter_disabled .webix_disabled {
+    opacity: 0.8 !important;
+    background: #ffffff !important;
+}
+
+
+.terms_continue_text_wrapper .webix_template{
+    padding-top: 21px;
+}
+
+.source_logout_login_form ,
+.target_logout_login_form
+{
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 11px;
+    float: right;
+}
+source_logout_login_form {
+    padding-right: 20px;
+}
+
+.terms_continue_button_wrapper {
+    padding-top: 11px;
+    line-height: 30px;
+    height: 40px;
+}
+
+.terms_continue_text
+{
+    font-size: 12px;
+}
+.register_link {
+    font-size: 11px;
+    padding-left: 15px !important;
+}
+
+.personalization_block_links{
+    line-height: 80px;
+    padding: 2px;
+    text-align: center;
+    margin-left: -50px;
+}
+.linkedin_link{
+    margin-left: 10px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    font-size: 30px;
+}
+.facebok_link{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    font-size: 30px;
+}
+
+.google_link{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    font-size: 30px;
+    margin-right: 10px !important;
+}
+
 .carter-user-login-menu-list .webix_scroll_con .webix_list_item {
     height: 200px !important;
 }
@@ -707,8 +870,18 @@ carter-user-selected-list-of-meta-components >.webix_hcell
 .webix_ss_vscroll_header{
     display: none !important;
 }
-
-
+#fixedOnPage {
+    top: 50%;
+    left: 87%;
+    width: 166px;
+    height: 290px;
+    /* margin-top: -9em; */
+    margin-left: -15px;
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+    position: fixed;
+    z-index: 99999999;
+}
 
 .webix_ss_header td {
      border-right: 0px solid #EBEBEB;
