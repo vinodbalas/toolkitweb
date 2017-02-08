@@ -3,35 +3,27 @@
  */
 define([
     "app",
-],function(app){
+    "views/CarterTargetLoggedInInfo",
+    "models/AppSharedState"
+],function(app,CarterTargetLoggedInInfo,AppSharedState){
 
     var layout =  {
         type:'plain',
+        id:'carterTargetOrgLoginForm',
+        borderless:true,
         css:'carter_login_target_org',
         rows:[
+
             {
-                borderless:true,
-                height:50,
-                cols:[
-                    {},
-                    {
-                        borderless:true,
-                        type:'plain',
-                        template:'<div class="carter_login_target_org_select_title">Select Org Type to login to Target</div>',
-                        css:'carter_login_target_org_panel_header'
-                    },
-                    {}
-                ]
-            },
-            {
-                css:'carter_login_target_org_select_org',
+
                 type:'plain',
-
-                template:''
+                borderless:true,
+                css:'carter_login_target_org_panel_header',
+                template:'Target org type'
             },
             {
 
-                cols:[{},{},{
+                cols:[{},{
                     borderless:true,
                     id:'targetOrgType',
                     css:'carter-target-org-selection-radios',
@@ -43,7 +35,7 @@ define([
                 },{}]
             },{
 
-                cols:[{},{},{ view:"button", css: "button_primary button_raised carter-target-org-sing-in-btn", id:"target_org_sing_in_btn", value:"Sign In",  inputWidth:100 ,click:function (  ) {
+                cols:[{},{ view:"button", css: "carter-source-org-sing-in-btn", id:"target_org_sing_in_btn", value:"Sign In",  inputWidth:100 ,click:function (  ) {
 
 
                     var clickedMenuKey=$$('targetOrgType').getValue();
@@ -65,9 +57,54 @@ define([
         ]
     };
 
+
+    var layoutView={
+        view:"multiview" ,
+        id:'carterTargetLoginMultiView',
+        css:'carter_target_login_multi_view carter_disabled',
+        fitBiggest:true,
+        disabled:true,
+        keepViews:true,
+        cells:[
+            layout,
+            { id:'targetLoggedInInfoView', rows:[CarterTargetLoggedInInfo]}
+
+        ],
+        on:{
+            onViewChange:function ( prev, next ) {
+                /*if(next==="carterTargetLoggedInInfo"){
+
+                    debugger;
+                    var loggedInItems=AppSharedState.getOrgLoggedInUserItems('SOURCE');
+                    //carterTargetLoggedInInfo
+                }*/
+                
+            }
+        }
+    };
+
     return {
 
-        $ui:layout
+        $ui:layoutView,
+        $onevent:{
+
+            /*TARGET_ORG_LOGIN_SUCCESS:function (  ) {
+
+                //$$('sourceNotLoggedInInfoViewSingInForm').hide();
+                if($$('targetLoggedInInfoView')) {
+                    $$( 'targetLoggedInInfoView' ).show();
+                }
+
+                $$('carterTargetLoginMultiView').enable();
+
+                $('.carter_target_login_multi_view').removeClass('carter_disabled');
+
+
+                app.callEvent('TARGET_ORG_LOGIN_COMPLETE',[])
+                //$$('sourceNotLoggedInInfoViewSingInBtn').hide();
+
+            }*/
+        }
     };
 
 });

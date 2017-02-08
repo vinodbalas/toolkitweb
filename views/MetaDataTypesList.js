@@ -164,7 +164,7 @@ define([
                             text:"Your source org session timed out. </br>Please login again.",
                             callback:function(){
                                 webix.storage.local.remove('SOURCE_LOGIN');
-                                app.show("forceput/CarterNotLoggedInView")
+                                app.show("/CarterNotLoggedInView")
                             }
                         });
 

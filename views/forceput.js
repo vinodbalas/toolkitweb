@@ -182,7 +182,7 @@ define([
                 $( '#sourceUserFullName' ).text( info.userFullName );
                 $( '#sourceUserType' ).text( info.userType );
             }else{
-                app.show("forceput/CarterNotLoggedInView");
+                //app.show("forceput/CarterNotLoggedInView");
             }
 
         },

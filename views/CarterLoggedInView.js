@@ -5,14 +5,17 @@ define([
     "app",
     "views/CarterHomeView",
     "views/MetaDataTypesList",
-    "views/CarterUserObjectSelection",
-    "models/AppSharedState"
-],function(app,CarterHomeView,MetaDataTypesList,CarterUserObjectSelection,AppSharedState){
+    "views/CarterUserObjectSelection"
+],function(app,CarterHomeView,MetaDataTypesList,CarterUserObjectSelection){
 
     var cmpToRender={
-        id:'carterLoggedInview',
-        css:'carter_logged_in_container carter_app_wrapper',
-        type:'line',
+
+
+        type:'plain',
+        rows:[{
+            id:'carterLoggedInview',
+            type:'plain',
+            css:'carter_logged_in_container carter_app_wrapper',
         cols:[
             MetaDataTypesList,/*border: 1px solid #ffffff;*/
             { view:"resizer" , css:'carter_left_resizer'},
@@ -24,6 +27,8 @@ define([
             }
         ],
         responsive:"carterHomeInitial"
+    },
+            {height:2}]
     };
 
     $('body').addClass('carter_page_wrapper');

@@ -13,14 +13,14 @@ var TARGET_LOGIN_STORE_KEY='TARGET_LOGIN';
 function sourceLogin(params)
 {
 
-    localStorage.setItem("SOURCE_LOGIN",JSON.stringify({appStateUrl:window.location.href,source_clicked:true}));
+    localStorage.setItem("SOURCE_LOGIN",JSON.stringify({appStateUrl:window.location.href,source_clicked:true,orgTypeKey:params.orgTypeKey}));
 
 
 
-        var url="https://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&display=touch&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
+        var url="https://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&display=touch&prompt=login%20consent&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
 
             var windowSize = "width=" + window.innerWidth + ",height=" + window.innerHeight + ",scrollbars=no";
-            window.open(url, "SOURCE_LOGIN", windowSize);
+            window.open(url, "_blank", windowSize);
 
 }
 
@@ -30,7 +30,7 @@ if(sourceObj) {
     var sourceUrl = sourceObj.source_info;
     var curLoc = window.location.href;
     var appStateUrl=sourceObj.appStateUrl;
-    //debugger;
+    var orgTypeKey=sourceObj.orgTypeKey;
     if ( !sourceUrl && sStatus && curLoc.indexOf( 'access_token=' ) !=1 ) {
 
         var oauthResponse = {};
@@ -45,8 +45,28 @@ if(sourceObj) {
 
         }
 
-        localStorage.setItem( "SOURCE_LOGIN" , JSON.stringify( { source_clicked:true ,appStateUrl:curLoc, source_info:oauthResponse,loggedInTime:new Date() } ) );
+        var now_date_value = new Date();
+        var utc_timestamp = Date.UTC(now_date_value.getFullYear(),now_date_value.getMonth(), now_date_value.getDate() ,
+            now_date_value.getHours(), now_date_value.getMinutes(), now_date_value.getSeconds(), now_date_value.getMilliseconds());
+        var keyToInsert="SOURCE_LOGIN_"+utc_timestamp;
 
+
+
+
+        var identityServiceUrl = oauthResponse.id;
+        var identityOrgId = identityServiceUrl.split( "/id/" )[1].split( "/" )[0];
+
+        localStorage.setItem("SOURCE_"+identityOrgId , JSON.stringify( {
+            source_clicked:true ,
+            orgTypeKey:orgTypeKey ,
+            prefix:'SOURCE',
+            appStateUrl:curLoc ,
+            identityOrgId:identityOrgId,
+            source_info:oauthResponse ,
+            loggedInTime:utc_timestamp
+        } ) );
+
+        localStorage.removeItem('SOURCE_LOGIN');
 
         if(window.opener) {
             window.opener.Toolkit.handleLoginResult( "SOURCE_LOGIN" );
@@ -61,12 +81,12 @@ if(sourceObj) {
 function targetLogin(params)
 {
 
-    localStorage.setItem("TARGET_LOGIN",JSON.stringify({appStateUrl:window.location.href,target_clicked:true}));
+    localStorage.setItem("TARGET_LOGIN",JSON.stringify({appStateUrl:window.location.href,target_clicked:true,orgTypeKey:params.orgTypeKey}));
 
-    var url="https://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&display=touch&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
+    var url="https://"+(params.orgTypeKey || "test")+'.salesforce.com/services/oauth2/authorize?client_id='+escape(clientID)+"&display=touch&prompt=login%20consent&scope=full&redirect_uri="+escape(CALLBACK_URL)+"&response_type=token"
 
     var windowSize = "width=" + window.innerWidth + ",height=" + window.innerHeight + ",scrollbars=no";
-    window.open(url, "TARGET_LOGIN", windowSize);
+    window.open(url, "_blank", windowSize);
 
     //window.open(url);
 }
@@ -77,6 +97,7 @@ if(tgtObj) {
     var tgtSaveUrl = tgtObj.target_info;
     var tgtUrl = window.location.href;
     var appStateUrl=tgtObj.appStateUrl;
+    var orgTypeKey=tgtObj.orgTypeKey;
 
     if ( !tgtSaveUrl && tgtStatus && tgtUrl.indexOf( 'access_token=' ) !=-1 ) {
 
@@ -92,7 +113,29 @@ if(tgtObj) {
 
         }
 
-        localStorage.setItem("TARGET_LOGIN" , JSON.stringify( { target_clicked:true , appStateUrl:tgtUrl,source_info:oauthResponse,loggedInTime:new Date()  } ) );
+
+        var now_date_value = new Date();
+        var utc_timestamp = Date.UTC(now_date_value.getFullYear(),now_date_value.getMonth(), now_date_value.getDate() ,
+            now_date_value.getHours(), now_date_value.getMinutes(), now_date_value.getSeconds(), now_date_value.getMilliseconds());
+        var keyToInsert="TARGET_LOGIN"+utc_timestamp;
+
+
+        var identityServiceUrl = oauthResponse.id;
+        var identityOrgId = identityServiceUrl.split( "/id/" )[1].split( "/" )[0];
+        //Query All - check org id , if org id , replace it.
+
+        localStorage.setItem("TARGET_"+identityOrgId , JSON.stringify( {
+            target_clicked:true ,
+            identityOrgId:identityOrgId,
+            prefix:'TARGET',
+            orgTypeKey:orgTypeKey,
+            appStateUrl:tgtUrl,
+            target_info:oauthResponse,
+            loggedInTime:utc_timestamp
+        } ) );
+
+        localStorage.removeItem('TARGET_LOGIN');
+
 
         if(window.opener) {
             window.opener.Toolkit.handleLoginResult( "TARGET_LOGIN" );
